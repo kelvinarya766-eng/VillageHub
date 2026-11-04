@@ -119,12 +119,21 @@ if (!empty($_SESSION['user'])) {
     .reg-form input:focus, .reg-form textarea:focus { outline: 3px solid var(--yellow); }
     .reg-form textarea { resize: vertical; min-height: 60px; }
     
-    .btn-daftar-submit {
-      align-self: center; min-width: 180px; margin-top: 24px;
-      padding: 12px 30px; background: var(--green); color: white;
-      border: 2px solid var(--green); border-radius: 12px;
-      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 16px;
-      cursor: pointer; transition: all 0.3s;
+        .btn-daftar-submit {
+      display: block; 
+      width: 100%; /* Dibuat 100% agar proporsional dengan input */
+      max-width: 250px; /* Tapi dibatasi lebarnya agar tidak terlalu panjang */
+      margin: 24px auto 0 auto; /* auto di kiri-kanan membuatnya ke tengah */
+      padding: 12px 30px; 
+      background: var(--green); 
+      color: white;
+      border: 2px solid var(--green); 
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif; 
+      font-weight: 700; 
+      font-size: 16px;
+      cursor: pointer; 
+      transition: all 0.3s;
     }
     .btn-daftar-submit:hover:not(:disabled) { background: #0f5c2f; transform: translateY(-2px); }
     .btn-daftar-submit:disabled { background: #999; border-color: #999; cursor: not-allowed; }
@@ -133,14 +142,15 @@ if (!empty($_SESSION['user'])) {
     .pesan.error { background: #ffebee; color: #c62828; display: block; }
     .pesan.success { background: #e8f5e9; color: #2e7d32; display: block; }
     .link-bawah { text-align: center; margin-top: 15px; font-size: 13px; color: #666; }
-    .link-bawah + .link-bawah { margin-top: -15px; }
+    /* Menghapus margin negatif agar teks tidak tumpang tindih */
+    .link-bawah:first-of-type { margin-bottom: 0; }
     .link-bawah a { color: var(--green); font-weight: 700; text-decoration: none; }
     .link-bawah a:hover { text-decoration: underline; }
 
-    /* ===== PERBAIKAN ERROR NOMOR TELEPON ===== */
+    /* ===== ERROR NOMOR TELEPON ===== */
     .error-telepon {
-      display: block; /* Tetap block agar ruangnya selalu ada */
-      visibility: hidden; /* Sembunyikan teks tapi sisakan ruangnya */
+      display: block;
+      visibility: hidden;
       color: #c62828;
       font-size: 12px;
       font-weight: 600;
@@ -148,11 +158,15 @@ if (!empty($_SESSION['user'])) {
       margin-bottom: 8px;
       padding-left: 4px;
       font-family: 'Nunito', sans-serif;
-      min-height: 18px; /* Kunci tinggi minimal agar tidak kolaps */
+      min-height: 18px;
     }
-    .error-telepon.show { 
-      visibility: visible; /* Munculkan teks tanpa merusak layout */
-    }
+    .error-telepon.show { visibility: visible; }
+
+    /* ===== SECTION OTP ===== */
+    #otpSection { display: none; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .otp-info { text-align: center; margin-bottom: 20px; font-size: 14px; color: #444; line-height: 1.5; }
+    .otp-info strong { color: var(--ink); }
 
     /* ===== FOOTER ===== */
     .footer {
@@ -204,50 +218,76 @@ if (!empty($_SESSION['user'])) {
     </section>
 
     <section class="reg-form">
-      <h1>Buat Account</h1>
+      <h1 id="formTitle">Buat Account</h1>
 
       <form id="formRegister" autocomplete="off">
-        <label>Nama Lengkap</label>
-        <input type="text" id="nama" placeholder="Nama lengkap Anda" autocomplete="off" readonly required>
+        
+        <!-- ================= FORM REGISTRASI ================= -->
+        <div id="registerSection">
+            <label>Nama Lengkap</label>
+            <input type="text" id="nama" placeholder="Nama lengkap Anda" autocomplete="off" readonly required>
 
-        <label>Email</label>
-        <input type="email" id="email" placeholder="email@contoh.com" autocomplete="off" readonly required>
+            <label>Email</label>
+            <input type="email" id="email" placeholder="email@contoh.com" autocomplete="off" readonly required>
 
-        <label>Nomor Telepon</label>
-        <input type="tel" id="telepon" placeholder="081234567890" autocomplete="off" readonly maxlength="12" required>
-        <small class="error-telepon" id="errorTelepon"></small>
+            <label>Nomor Telepon</label>
+            <input type="tel" id="telepon" placeholder="081234567890" autocomplete="off" readonly maxlength="12" required>
+            <small class="error-telepon" id="errorTelepon"></small>
 
-        <label>Alamat</label>
-        <textarea id="alamat" placeholder="Alamat lengkap" autocomplete="off" readonly></textarea>
+            <label>Alamat</label>
+            <textarea id="alamat" placeholder="Alamat lengkap" autocomplete="off" readonly></textarea>
 
-        <label>Password</label>
-        <div class="password-field">
-          <input type="password" id="password" placeholder="Minimal 6 karakter" autocomplete="new-password" readonly required>
-          <button type="button" class="toggle-password" id="togglePassword" aria-label="Tampilkan password" aria-pressed="false">
-            <svg class="icon-visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-            <svg class="icon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="m3 3 18 18"></path>
-              <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
-              <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"></path>
-              <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.2 0 2.3-.2 3.3-.6"></path>
-            </svg>
-          </button>
+            <label>Password</label>
+            <div class="password-field">
+              <input type="password" id="password" placeholder="Minimal 6 karakter" autocomplete="new-password" readonly required>
+              <button type="button" class="toggle-password" id="togglePassword" aria-label="Tampilkan password" aria-pressed="false">
+                <svg class="icon-visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg class="icon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m3 3 18 18"></path>
+                  <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                  <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"></path>
+                  <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.2 0 2.3-.2 3.3-.6"></path>
+                </svg>
+              </button>
+            </div>
+
+            <button type="submit" class="btn-daftar-submit" id="btnDaftar">Daftar Sekarang</button>
+            <div class="pesan" id="pesan"></div>
         </div>
 
-        <button type="submit" class="btn-daftar-submit" id="btnDaftar">Daftar Sekarang</button>
+        <!-- ================= FORM OTP ================= -->
+        <div id="otpSection">
+            <div class="otp-info">
+                Kode OTP telah dikirim ke email <br>
+                <strong id="emailTujuan"></strong>
+            </div>
+            
+            <label>Masukkan Kode OTP</label>
+            <!-- PERBAIKAN: Atribut 'required' DIHAPUS karena form ini tersembunyi -->
+            <input type="text" id="inputOtp" placeholder="6 Digit Angka" maxlength="6" autocomplete="off" style="text-align: center; letter-spacing: 5px; font-size: 20px; font-weight: 700;">
+            <small class="error-telepon" id="errorOtp"></small>
+            
+            <button type="button" class="btn-daftar-submit" id="btnVerifikasi" style="margin-top: 15px;">Verifikasi OTP</button>
+            <div class="pesan" id="pesanOtp"></div>
+            
+            <p class="link-bawah" style="margin-top: 15px;">
+                <a href="#" id="btnBatalOtp" style="color: #666; font-weight: 500;">Batal / Ganti Email</a>
+            </p>
+        </div>
 
-        <div class="pesan" id="pesan"></div>
       </form>
 
-      <p class="link-bawah">
-        Sudah punya akun? <a href="login.php">Login di sini</a>
-      </p>
-      <p class="link-bawah">
-        <a href="index.php">kembali ke beranda -&gt;</a>
-      </p>
+      <div id="linkBawahSection">
+          <p class="link-bawah">
+            Sudah punya akun? <a href="login.php">Login di sini</a>
+          </p>
+          <p class="link-bawah">
+            <a href="index.php">kembali ke beranda -&gt;</a>
+          </p>
+      </div>
     </section>
   </main>
 
@@ -258,9 +298,18 @@ if (!empty($_SESSION['user'])) {
   <script src="assets/api.js"></script>
   <script>
     const formRegister = document.getElementById('formRegister');
-    const registerFields = [...formRegister.querySelectorAll('input, textarea')];
+    const registerFields = [...formRegister.querySelectorAll('#registerSection input, #registerSection textarea')];
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
+    
+    const registerSection = document.getElementById('registerSection');
+    const otpSection = document.getElementById('otpSection');
+    const linkBawahSection = document.getElementById('linkBawahSection');
+    const formTitle = document.getElementById('formTitle');
+    const btnDaftar = document.getElementById('btnDaftar');
+    const btnVerifikasi = document.getElementById('btnVerifikasi');
+    const pesan = document.getElementById('pesan');
+    const pesanOtp = document.getElementById('pesanOtp');
 
     const clearRegisterFields = () => {
       registerFields.forEach((field) => {
@@ -269,9 +318,7 @@ if (!empty($_SESSION['user'])) {
       });
       passwordInput.type = 'password';
       togglePassword.setAttribute('aria-pressed', 'false');
-      togglePassword.setAttribute('aria-label', 'Tampilkan password');
     };
-
     clearRegisterFields();
     window.addEventListener('pageshow', clearRegisterFields);
     registerFields.forEach((field) => {
@@ -282,103 +329,118 @@ if (!empty($_SESSION['user'])) {
       const showPassword = passwordInput.type === 'password';
       passwordInput.type = showPassword ? 'text' : 'password';
       togglePassword.setAttribute('aria-pressed', String(showPassword));
-      togglePassword.setAttribute(
-        'aria-label',
-        showPassword ? 'Sembunyikan password' : 'Tampilkan password'
-      );
     });
 
-    // ===== VALIDASI NOMOR TELEPON =====
     const teleponInput = document.getElementById('telepon');
     const errorTelepon = document.getElementById('errorTelepon');
 
-    function tampilkanErrorTelepon(pesan) {
-      errorTelepon.textContent = pesan;
+    function tampilkanErrorTelepon(msg) {
+      errorTelepon.textContent = msg;
       errorTelepon.classList.add('show');
       teleponInput.style.borderColor = '#c62828';
     }
-
     function sembunyikanErrorTelepon() {
       errorTelepon.classList.remove('show');
-      errorTelepon.textContent = ''; // Kosongkan teks (tapi elemen tetap ada)
       teleponInput.style.borderColor = '';
     }
 
     teleponInput.addEventListener('input', function () {
-      this.value = this.value.replace(/\D/g, '');
-      if (this.value.length > 12) {
-        this.value = this.value.slice(0, 12);
-      }
+      this.value = this.value.replace(/\D/g, '').slice(0, 12);
       if (this.value.length > 0 && this.value.length < 12) {
-        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${this.value.length} angka.`);
-      } else if (this.value.length === 12) {
-        sembunyikanErrorTelepon();
+        tampilkanErrorTelepon(`Kurang lengkap! Harus 12 angka (baru ${this.value.length}).`);
       } else {
-        errorTelepon.classList.remove('show');
-        teleponInput.style.borderColor = '';
-      }
-    });
-
-    teleponInput.addEventListener('blur', function () {
-      if (this.value.length > 0 && this.value.length < 12) {
-        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${this.value.length} angka.`);
+        sembunyikanErrorTelepon();
       }
     });
 
     formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const pesan = document.getElementById('pesan');
-      const btn   = document.getElementById('btnDaftar');
-
-      const dataUser = {
-        nama:          document.getElementById('nama').value.trim(),
-        email:         document.getElementById('email').value.trim(),
-        nomor_telepon: teleponInput.value.trim(),
-        alamat:        document.getElementById('alamat').value.trim(),
-        password:      document.getElementById('password').value
-      };
-
-      // Validasi Nomor Telepon
-      if (!/^\d+$/.test(dataUser.nomor_telepon)) {
-        tampilkanErrorTelepon('Nomor telepon hanya boleh berisi angka!');
+      
+      if (teleponInput.value.length < 12) {
+        tampilkanErrorTelepon('Nomor telepon harus tepat 12 angka!');
         teleponInput.focus();
         return;
       }
-      if (dataUser.nomor_telepon.length < 12) {
-        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${dataUser.nomor_telepon.length} angka.`);
-        teleponInput.focus();
-        return;
-      }
-      if (dataUser.nomor_telepon.length > 12) {
-        tampilkanErrorTelepon(`Nomor telepon terlalu panjang! Maksimal 12 angka.`);
-        teleponInput.focus();
-        return;
-      }
-      sembunyikanErrorTelepon();
 
-      btn.disabled = true;
-      btn.textContent = 'Memproses...';
+      btnDaftar.disabled = true;
+      btnDaftar.textContent = 'Mengirim OTP...';
       pesan.className = 'pesan';
 
-      const result = await register(dataUser);
+      const dataUser = {
+        action: 'send_otp',
+        nama: document.getElementById('nama').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        nomor_telepon: teleponInput.value.trim(),
+        alamat: document.getElementById('alamat').value.trim(),
+        password: document.getElementById('password').value
+      };
+
+      const result = await apiFetch('/auth/register.php', {
+        method: 'POST',
+        body: JSON.stringify(dataUser)
+      });
 
       if (result.success) {
-        pesan.className = 'pesan success';
-        pesan.textContent = 'Registrasi berhasil! Mengalihkan ke login...';
-        setTimeout(() => {
-          window.location.href = 'login.php';
-        }, 1500);
+        registerSection.style.display = 'none';
+        linkBawahSection.style.display = 'none';
+        formTitle.textContent = 'Verifikasi Email';
+        
+        otpSection.style.display = 'block';
+        document.getElementById('emailTujuan').textContent = dataUser.email;
+        document.getElementById('inputOtp').focus();
       } else {
+        pesan.className = 'pesan error';
+        pesan.textContent = result.message || 'Gagal mengirim OTP';
         if (result.errors && result.errors.nomor_telepon) {
-          tampilkanErrorTelepon(result.errors.nomor_telepon);
-        } else {
-          pesan.className = 'pesan error';
-          pesan.textContent = result.message || 'Registrasi gagal';
+            tampilkanErrorTelepon(result.errors.nomor_telepon);
         }
-        btn.disabled = false;
-        btn.textContent = 'Daftar Sekarang';
+        btnDaftar.disabled = false;
+        btnDaftar.textContent = 'Daftar Sekarang';
       }
+    });
+
+    btnVerifikasi.addEventListener('click', async () => {
+      const otp = document.getElementById('inputOtp').value.trim();
+      const errorOtp = document.getElementById('errorOtp');
+
+      if (otp.length !== 6) {
+        errorOtp.textContent = 'Kode OTP harus 6 digit angka!';
+        errorOtp.classList.add('show');
+        return;
+      }
+      errorOtp.classList.remove('show');
+
+      btnVerifikasi.disabled = true;
+      btnVerifikasi.textContent = 'Memverifikasi...';
+      pesanOtp.className = 'pesan';
+
+      const result = await apiFetch('/auth/register.php', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'verify_otp', otp: otp })
+      });
+
+      if (result.success) {
+        pesanOtp.className = 'pesan success';
+        pesanOtp.textContent = 'Verifikasi berhasil! Mengalihkan ke login...';
+        setTimeout(() => window.location.href = 'login.php', 1500);
+      } else {
+        pesanOtp.className = 'pesan error';
+        pesanOtp.textContent = result.message || 'Verifikasi gagal';
+        btnVerifikasi.disabled = false;
+        btnVerifikasi.textContent = 'Verifikasi OTP';
+      }
+    });
+
+    document.getElementById('btnBatalOtp').addEventListener('click', (e) => {
+        e.preventDefault();
+        otpSection.style.display = 'none';
+        registerSection.style.display = 'block';
+        linkBawahSection.style.display = 'block';
+        formTitle.textContent = 'Buat Account';
+        document.getElementById('inputOtp').value = '';
+        pesanOtp.className = 'pesan';
+        btnDaftar.disabled = false;
+        btnDaftar.textContent = 'Daftar Sekarang';
     });
   </script>
 </body>
