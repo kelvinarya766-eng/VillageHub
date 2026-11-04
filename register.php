@@ -20,17 +20,22 @@ if (!empty($_SESSION['user'])) {
   <style>
     :root { --green: #1b7a2b; --yellow: #ffc107; --cream: #FFF8E7; --ink: #1F2A22; --white: #FFFFFF; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       min-height: 100vh; display: flex; flex-direction: column;
       font-family: 'Nunito', sans-serif; color: var(--ink);
       background: var(--cream);
+      padding-top: 74px; 
     }
 
+    /* NAVBAR FIXED */
     .navbar {
       background: linear-gradient(135deg, var(--green) 0%, #28a745 50%, #2d8f3e 100%);
       padding: 10px 5%; display: flex; align-items: center; justify-content: space-between;
       box-shadow: 0 3px 16px rgba(0,0,0,0.15); line-height: 1.6;
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
     }
+    
     .brand {
       display: flex; align-items: center; gap: 10px;
       text-decoration: none; font-family: 'Poppins', sans-serif;
@@ -41,6 +46,7 @@ if (!empty($_SESSION['user'])) {
     .brand-village { color: #fff; }
     .brand-hub { color: var(--yellow); }
     .nav-actions { display: flex; align-items: center; gap: 10px; }
+    
     .btn-masuk {
       padding: 10px 28px; border: 2px solid var(--yellow); border-radius: 8px;
       background: var(--yellow); color: #1a1a2e; font-size: 14px; font-weight: 600;
@@ -48,6 +54,7 @@ if (!empty($_SESSION['user'])) {
       text-decoration: none; display: inline-block;
     }
     .btn-masuk:hover { background: #e0a800; transform: translateY(-2px); }
+    
     .btn-daftar {
       padding: 10px 28px; border: 2px solid #ffffff; border-radius: 8px;
       background: #ffffff; color: #1a1a2e; font-size: 14px; font-weight: 600;
@@ -56,6 +63,7 @@ if (!empty($_SESSION['user'])) {
     }
     .btn-daftar:hover { background: #f0f0f0; transform: translateY(-2px); }
 
+    /* Layout Utama */
     .reg-page { flex: 1; display: flex; }
     .reg-photo {
       flex: 1; min-height: 420px;
@@ -110,6 +118,7 @@ if (!empty($_SESSION['user'])) {
     .toggle-password[aria-pressed="true"] .icon-hidden { display: block; }
     .reg-form input:focus, .reg-form textarea:focus { outline: 3px solid var(--yellow); }
     .reg-form textarea { resize: vertical; min-height: 60px; }
+    
     .btn-daftar-submit {
       align-self: center; min-width: 180px; margin-top: 24px;
       padding: 12px 30px; background: var(--green); color: white;
@@ -119,6 +128,7 @@ if (!empty($_SESSION['user'])) {
     }
     .btn-daftar-submit:hover:not(:disabled) { background: #0f5c2f; transform: translateY(-2px); }
     .btn-daftar-submit:disabled { background: #999; border-color: #999; cursor: not-allowed; }
+    
     .pesan { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 10px; display: none; text-align: center; }
     .pesan.error { background: #ffebee; color: #c62828; display: block; }
     .pesan.success { background: #e8f5e9; color: #2e7d32; display: block; }
@@ -127,47 +137,48 @@ if (!empty($_SESSION['user'])) {
     .link-bawah a { color: var(--green); font-weight: 700; text-decoration: none; }
     .link-bawah a:hover { text-decoration: underline; }
 
+    /* ===== PERBAIKAN ERROR NOMOR TELEPON ===== */
+    .error-telepon {
+      display: block; /* Tetap block agar ruangnya selalu ada */
+      visibility: hidden; /* Sembunyikan teks tapi sisakan ruangnya */
+      color: #c62828;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: -6px;
+      margin-bottom: 8px;
+      padding-left: 4px;
+      font-family: 'Nunito', sans-serif;
+      min-height: 18px; /* Kunci tinggi minimal agar tidak kolaps */
+    }
+    .error-telepon.show { 
+      visibility: visible; /* Munculkan teks tanpa merusak layout */
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+        background: #1a1a2e;
+        color: #a0a0b0;
+        text-align: center;
+        padding: 24px 5%;
+        margin-top: 0;
+        font-size: 13px;
+    }
+    .footer .brand-village { color: #fff; }
+    .footer .brand-hub { color: var(--yellow); }
+
+    /* Responsive */
     @media (max-width: 800px) {
       .reg-page { flex-direction: column; }
       .reg-photo { flex: none; min-height: 200px; justify-content: center; padding: 24px; }
       .reg-form h1 { text-align: center; }
     }
     @media (max-width: 768px) {
-      .navbar { padding: 10px 5%; }
+      body { padding-top: 64px; }
+      .navbar { padding: 8px 5%; }
       .brand { font-size: 18px; }
       .brand img { width: 36px; height: 36px; }
       .btn-masuk, .btn-daftar { padding: 8px 16px; font-size: 12px; }
     }
-    
-    .reg-photo {
-      background-size: cover;
-      background-position: center;
-      align-self: flex-start;
-      position: sticky; top: 0;
-      height: calc(100vh - 64px);   /* 64px = tinggi footer */
-      min-height: 420px;
-    }
-    /* Footer terkunci di dasar layar (tidak ikut ter-scroll) */
-    .footer {
-      position: fixed; left: 0; right: 0; bottom: 0;
-      z-index: 50; height: 64px; line-height: 64px;
-      padding-top: 0; padding-bottom: 0;
-    }
-    body { padding-bottom: 64px; }   /* agar isi halaman paling bawah tidak tertutup footer */
-    @media (max-width: 800px) {
-      .reg-photo { position: static; height: auto; min-height: 200px; align-self: stretch; }
-    }
-    /* ====== FOOTER (Sama seperti index.php) ====== */
-.footer {
-    background: #1a1a2e;
-    color: #a0a0b0;
-    text-align: center;
-    padding: 24px 5%;
-    margin-top: 0;   /* sebelumnya 50px: celah krem antara konten dan footer */
-    font-size: 13px;
-}
-.footer .brand-village { color: #fff; }
-.footer .brand-hub { color: var(--yellow); }
   </style>
   <link rel="stylesheet" href="assets/auth.css">
 </head>
@@ -203,7 +214,8 @@ if (!empty($_SESSION['user'])) {
         <input type="email" id="email" placeholder="email@contoh.com" autocomplete="off" readonly required>
 
         <label>Nomor Telepon</label>
-        <input type="tel" id="telepon" placeholder="08123456789" autocomplete="off" readonly>
+        <input type="tel" id="telepon" placeholder="081234567890" autocomplete="off" readonly maxlength="12" required>
+        <small class="error-telepon" id="errorTelepon"></small>
 
         <label>Alamat</label>
         <textarea id="alamat" placeholder="Alamat lengkap" autocomplete="off" readonly></textarea>
@@ -239,6 +251,10 @@ if (!empty($_SESSION['user'])) {
     </section>
   </main>
 
+  <footer class="footer">
+      &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+  </footer>
+
   <script src="assets/api.js"></script>
   <script>
     const formRegister = document.getElementById('formRegister');
@@ -272,19 +288,74 @@ if (!empty($_SESSION['user'])) {
       );
     });
 
+    // ===== VALIDASI NOMOR TELEPON =====
+    const teleponInput = document.getElementById('telepon');
+    const errorTelepon = document.getElementById('errorTelepon');
+
+    function tampilkanErrorTelepon(pesan) {
+      errorTelepon.textContent = pesan;
+      errorTelepon.classList.add('show');
+      teleponInput.style.borderColor = '#c62828';
+    }
+
+    function sembunyikanErrorTelepon() {
+      errorTelepon.classList.remove('show');
+      errorTelepon.textContent = ''; // Kosongkan teks (tapi elemen tetap ada)
+      teleponInput.style.borderColor = '';
+    }
+
+    teleponInput.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '');
+      if (this.value.length > 12) {
+        this.value = this.value.slice(0, 12);
+      }
+      if (this.value.length > 0 && this.value.length < 12) {
+        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${this.value.length} angka.`);
+      } else if (this.value.length === 12) {
+        sembunyikanErrorTelepon();
+      } else {
+        errorTelepon.classList.remove('show');
+        teleponInput.style.borderColor = '';
+      }
+    });
+
+    teleponInput.addEventListener('blur', function () {
+      if (this.value.length > 0 && this.value.length < 12) {
+        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${this.value.length} angka.`);
+      }
+    });
+
     formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const pesan = document.getElementById('pesan');
+      const btn   = document.getElementById('btnDaftar');
 
       const dataUser = {
         nama:          document.getElementById('nama').value.trim(),
         email:         document.getElementById('email').value.trim(),
-        nomor_telepon: document.getElementById('telepon').value.trim(),
+        nomor_telepon: teleponInput.value.trim(),
         alamat:        document.getElementById('alamat').value.trim(),
         password:      document.getElementById('password').value
       };
 
-      const pesan = document.getElementById('pesan');
-      const btn   = document.getElementById('btnDaftar');
+      // Validasi Nomor Telepon
+      if (!/^\d+$/.test(dataUser.nomor_telepon)) {
+        tampilkanErrorTelepon('Nomor telepon hanya boleh berisi angka!');
+        teleponInput.focus();
+        return;
+      }
+      if (dataUser.nomor_telepon.length < 12) {
+        tampilkanErrorTelepon(`Nomor telepon kurang lengkap! Harus 12 angka, Anda baru memasukkan ${dataUser.nomor_telepon.length} angka.`);
+        teleponInput.focus();
+        return;
+      }
+      if (dataUser.nomor_telepon.length > 12) {
+        tampilkanErrorTelepon(`Nomor telepon terlalu panjang! Maksimal 12 angka.`);
+        teleponInput.focus();
+        return;
+      }
+      sembunyikanErrorTelepon();
 
       btn.disabled = true;
       btn.textContent = 'Memproses...';
@@ -299,16 +370,16 @@ if (!empty($_SESSION['user'])) {
           window.location.href = 'login.php';
         }, 1500);
       } else {
-        pesan.className = 'pesan error';
-        pesan.textContent = result.message || 'Registrasi gagal';
+        if (result.errors && result.errors.nomor_telepon) {
+          tampilkanErrorTelepon(result.errors.nomor_telepon);
+        } else {
+          pesan.className = 'pesan error';
+          pesan.textContent = result.message || 'Registrasi gagal';
+        }
         btn.disabled = false;
         btn.textContent = 'Daftar Sekarang';
       }
     });
   </script>
-<!-- ====== FOOTER ====== -->
-<footer class="footer">
-    &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
-</footer>
 </body>
 </html>
