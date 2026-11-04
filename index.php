@@ -179,7 +179,7 @@ $userData   = $_SESSION['user'] ?? null;
                 <img class="hero-brand-logo" src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo VillageHub">
                 <h1 class="brand-name hero-brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></h1>
             </div>
-            <p>Sampaikan aduanmu dan pantau balasan dari pihak desa.</p>
+            <p>Sampaikan aduanmu dan pantau balasan dari pihak desa kami.</p>
         </div>
     </section>
 

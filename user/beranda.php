@@ -578,12 +578,12 @@ $userData = $stmt->fetch();
                         </div>
                     </div>
                 `;
-            }).join('');
+            }).join('')
         }
 
         // =============================================
         // 4. AUTO-REFRESH
-        // =============================================
+        // ===================f==========================
         async function refreshAll() {
             await Promise.all([loadStatistik(), loadCuplikanRiwayat(), loadCardGrid()]);
         }
