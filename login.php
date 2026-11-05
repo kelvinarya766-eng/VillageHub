@@ -236,9 +236,12 @@ if (!empty($_SESSION['user'])) {
           </button>
         </div>
 
-        <label class="remember">
-          <input type="checkbox" name="remember" value="1"> Remember me
-        </label>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+          <label class="remember" style="margin-bottom: 0;">
+            <input type="checkbox" name="remember" value="1"> Remember me
+          </label>
+          <a href="lupa_sandi.php" style="font-size: 13px; color: var(--green); font-weight: 700; text-decoration: none;">Lupa Sandi?</a>
+        </div>
 
         <button type="submit" class="btn-login" id="btnLogin">Login</button>
 

@@ -210,7 +210,7 @@ $userData = $stmt->fetch();
         }
         .btn-cta:hover { background: #146c24; }
 
-        /* Warna Kategori (Sesuai Lampiran) */
+        /* Warna Kategori */
         .cat-Infrastruktur { background: #29b6f6; border: 2px solid #0288d1; color: #fff; }
         .cat-Kesehatan { background: #e53935; border: 2px solid #b71c1c; color: #fff; }
         .cat-Kebersihan { background: #8bc34a; border: 2px solid #558b2f; color: #fff; }
@@ -344,7 +344,6 @@ $userData = $stmt->fetch();
             }
 
             // Hitung Statistik
-            const total = res.data.length;
             const dibalas = res.data.filter(a => a.status === 'dibalas').length;
             const menunggu = res.data.filter(a => a.status === 'menunggu').length;
 
@@ -382,12 +381,23 @@ $userData = $stmt->fetch();
 
             // Tampilkan List Card
             let cardHtml = '';
+            
+            // Ambil nama user dari PHP yang sedang login
+            const currentUserName = "<?= htmlspecialchars($user['nama']) ?>";
+
             // Looping ambil detail balasan
             for (const [index, a] of listDibalas.entries()) {
                 const detailRes = await getAduanDetail(a.id_aduan);
+                
                 let teksBalasan = "Balasan belum tersedia.";
+                let namaAdmin = "-";
+                let tglBalas = "-";
+                
                 if (detailRes.success && detailRes.data.balasan && detailRes.data.balasan.length > 0) {
-                    teksBalasan = detailRes.data.balasan[0].balasan;
+                    const b = detailRes.data.balasan[0]; // Ambil balasan pertama
+                    teksBalasan = b.balasan;
+                    namaAdmin = b.admin_nama;
+                    tglBalas = new Date(b.tanggal_waktu).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
                 }
 
                 const slug = (a.kategori || 'kebersihan').toLowerCase().split(' ')[0];
@@ -407,14 +417,14 @@ $userData = $stmt->fetch();
                                 </div>
                                 <img src="${foto}" class="img-thumb" alt="Foto">
                             </div>
-                            <div class="card-left-date">Adit S &nbsp;&nbsp; ${tgl}</div>
+                            <div class="card-left-date">${currentUserName} &nbsp;&nbsp; ${tgl}</div>
                         </div>
                         
                         <!-- Sisi Kanan -->
                         <div class="card-right">
                             <div class="card-right-title">ADUAN ${noAduan}</div>
                             <div class="balasan-box">
-                                <div class="balasan-header">Balasan Admin &nbsp;&nbsp; [nama admin] &nbsp;&nbsp; [tanggal dibalas]</div>
+                                <div class="balasan-header">Balasan Admin: ${namaAdmin} &nbsp;&nbsp; (${tglBalas})</div>
                                 <div class="balasan-text">"${teksBalasan}"</div>
                                 <a href="riwayat.php" class="link-detail">Lihat detail lengkap</a>
                             </div>
