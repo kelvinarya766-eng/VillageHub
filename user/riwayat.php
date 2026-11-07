@@ -14,7 +14,6 @@ if ($_SESSION['user']['role'] !== 'warga') {
 
 $user = $_SESSION['user'];
 
-// Ambil data lengkap user (termasuk foto) dari database
 require_once __DIR__ . '/../config/database.php';
 $db = (new Database())->getConnection();
 $stmt = $db->prepare("SELECT * FROM users WHERE id_user = :id");
@@ -31,25 +30,21 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ====== ROOT & RESET ====== */
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-              body {
+        body {
             font-family: 'Poppins', 'Segoe UI', sans-serif;
-            background-color: #f5f2eb;
-            color: #333;
+            background-color: #f5f2eb; color: #333;
             line-height: 1.6; overflow-x: hidden;
             min-height: 100vh; display: flex; flex-direction: column;
         }
         a { text-decoration: none; color: inherit; }
 
-        /* ====== NAVBAR ====== */
         .navbar {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 5%; box-shadow: 0 3px 16px rgba(0,0,0,0.15);
-            position: sticky; top: 0; z-index: 1000;
-            width: 100%;
+            position: sticky; top: 0; z-index: 1000; width: 100%;
         }
         .navbar-left { display: flex; align-items: center; gap: 20px; }
         .navbar-logo { display: flex; align-items: center; gap: 10px; }
@@ -89,29 +84,22 @@ $userData = $stmt->fetch();
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
             transition: transform 0.2s ease;
         }
-
-        /* Efek Hover Profil */
         a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
         
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
             cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap;
-            background: #c62828; border-color: #c62828; color: #fff;
+            display: inline-block; white-space: nowrap; text-align: center;
         }
-        .btn-header:hover { background: #a31515; transform: translateY(-2px); }
+        .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
+        .btn-red:hover { background: #a31515; transform: translateY(-2px); }
 
-        /* ====== CONTAINER ====== */
-               .main-content { 
-            max-width: 900px; 
-            width: 100%;
-            margin: 40px auto; 
-            padding: 0 20px; 
-            flex: 1; 
+        .main-content { 
+            max-width: 900px; width: 100%;
+            margin: 40px auto; padding: 0 20px; flex: 1; 
         }
 
-        /* Card Putih Besar */
         .riwayat-card {
             background: #fff; border-radius: 16px; padding: 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
@@ -123,7 +111,6 @@ $userData = $stmt->fetch();
             font-size: 24px; font-weight: 800; color: #1a1a2e; text-align: center; margin-bottom: 25px;
         }
 
-        /* Tabel Header (Warna-warni) */
         .table-header {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 100%);
             padding: 14px 20px; display: grid;
@@ -141,15 +128,11 @@ $userData = $stmt->fetch();
         .th-status      { background: #5cb85c; }
         .th-aksi        { background: #d9534f; }
 
-        /* List Data (Bisa discroll) */
         .table-body { 
             display: flex; flex-direction: column; gap: 12px;
-            max-height: 450px;
-            overflow-y: auto; 
-            padding-right: 10px;
+            max-height: 450px; overflow-y: auto; padding-right: 10px;
         }
 
-        /* Scrollbar Kustom */
         .table-body::-webkit-scrollbar { width: 8px; }
         .table-body::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .table-body::-webkit-scrollbar-thumb { background: #a8a8a8; border-radius: 10px; }
@@ -163,20 +146,11 @@ $userData = $stmt->fetch();
         }
         .table-row:hover { background: #f9fdfb; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        /* ====== STYLING BARU UNTUK KATEGORI ====== */
         .cell-kategori {
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center;
-            gap: 6px; 
-            padding: 6px 14px;
-            border-radius: 20px; 
-            font-size: 12px; 
-            font-weight: 700;
-            text-align: center; 
-            border: 2px solid;
-            width: max-content; 
-            min-width: 100%;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 12px; 
+            font-weight: 700; text-align: center; border: 2px solid;
+            width: max-content; min-width: 100%;
         }
 
         .chip-kebersihan { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
@@ -201,7 +175,6 @@ $userData = $stmt->fetch();
         .status-dibalas { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
         .status-menunggu { background: #fff3e0; border-color: #ff9800; color: #e65100; }
 
-        /* Tombol Hapus */
         .btn-hapus {
             display: inline-block; padding: 6px 14px;
             background: #ffebee; border: 2px solid #c62828;
@@ -210,11 +183,8 @@ $userData = $stmt->fetch();
         }
         .btn-hapus:hover { background: #c62828; color: #fff; }
 
-        .empty-row, .loading-row {
-            text-align: center; padding: 40px; color: #999; font-size: 14px;
-        }
+        .empty-row, .loading-row { text-align: center; padding: 40px; color: #999; font-size: 14px; }
 
-        /* ====== FOOTER ====== */
         .footer { 
             background: #1a1a2e; color: #a0a0b0; text-align: center; 
             padding: 24px 5%; margin-top: auto; font-size: 13px; width: 100%;
@@ -222,18 +192,10 @@ $userData = $stmt->fetch();
         .footer .brand-village { color: #fff; }
         .footer .brand-hub { color: var(--brand-yellow); }
 
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 1100px) {
-            .navbar-menu a { padding: 8px 10px; font-size: 12px; }
-        }
-        @media (max-width: 1000px) {
-            .navbar-menu { display: none; }
-        }
+        @media (max-width: 1100px) { .navbar-menu a { padding: 8px 10px; font-size: 12px; } }
+        @media (max-width: 1000px) { .navbar-menu { display: none; } }
         @media (max-width: 900px) {
-            .table-header, .table-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
+            .table-header, .table-row { grid-template-columns: 1fr; gap: 8px; }
             .table-header > div { text-align: left; }
             .cell-kategori { width: max-content; }
         }
@@ -248,7 +210,6 @@ $userData = $stmt->fetch();
 </head>
 <body>
 
-    <!-- ====== NAVBAR ====== -->
     <nav class="navbar">
         <div class="navbar-left">
             <a href="../index.php" class="navbar-logo">
@@ -264,7 +225,6 @@ $userData = $stmt->fetch();
             </ul>
         </div>
         <div class="navbar-actions">
-            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
             <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
                 <div class="nav-hello">
                     Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
@@ -275,16 +235,14 @@ $userData = $stmt->fetch();
                 ?>
                 <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
             </a>
-            <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
+            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
         </div>
     </nav>
 
-    <!-- ====== KONTEN ====== -->
     <main class="main-content">
         <div class="riwayat-card">
             <h2 class="section-title">Riwayat Aduan</h2>
 
-            <!-- Header Tabel -->
             <div class="table-header">
                 <div class="th-kategori">Kategori</div>
                 <div class="th-tanggal">Tanggal diajukan</div>
@@ -293,36 +251,25 @@ $userData = $stmt->fetch();
                 <div class="th-aksi">Aksi</div>
             </div>
 
-            <!-- Body Tabel (Bisa Discroll) -->
             <div class="table-body" id="tableBody">
                 <div class="loading-row">Memuat riwayat aduan...</div>
             </div>
         </div>
     </main>
 
-    <!-- ====== FOOTER ====== -->
     <footer class="footer">
         &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
     </footer>
 
     <script src="../assets/api.js?v=9"></script>
     <script>
-        // ===== MAPPING ICON KATEGORI (SAMA PERSIS BERANDA PUBLIK) =====
         const iconMap = {
-            'Kebersihan': '🧹',
-            'Infrastruktur': '🏗️',
-            'Kesehatan': '🏥',
-            'Keamanan dan Ketertiban': '🛡️',
-            'Keamanan': '🛡️',
-            'Pendidikan': '📚',
-            'Sosial': '🤝',
-            'Lingkungan': '🌿',
-            'Lingkungan Hidup': '🌿',
-            'Administrasi': '📋',
-            'Administrasi dan Pelayanan Publik': '📋'
+            'Kebersihan': '🧹', 'Infrastruktur': '🏗️', 'Kesehatan': '🏥',
+            'Keamanan dan Ketertiban': '🛡️', 'Keamanan': '🛡️', 'Pendidikan': '📚',
+            'Sosial': '🤝', 'Lingkungan': '🌿', 'Lingkungan Hidup': '🌿',
+            'Administrasi': '📋', 'Administrasi dan Pelayanan Publik': '📋'
         };
 
-        // ===== MAPPING WARNA CHIP =====
         const chipColorMap = {
             'Kebersihan': 'chip-kebersihan',
             'Infrastruktur': 'chip-infrastruktur',
@@ -337,9 +284,6 @@ $userData = $stmt->fetch();
             'Administrasi dan Pelayanan Publik': 'chip-administrasi'
         };
 
-        // =============================================
-        // 1. LOAD DATA RIWAYAT (MAKSIMAL 10 DATA)
-        // =============================================
         async function loadRiwayat() {
             const res = await getAduanSaya();
             const tbody = document.getElementById('tableBody');
@@ -382,9 +326,6 @@ $userData = $stmt->fetch();
             }).join('');
         }
 
-        // =============================================
-        // 2. FUNGSI KONFIRMASI & HAPUS ADUAN
-        // =============================================
         async function konfirmasiHapus(id) {
             if (!confirm('Yakin ingin menghapus aduan ini?')) return;
 
@@ -392,17 +333,16 @@ $userData = $stmt->fetch();
 
             if (res.success) {
                 alert('Aduan berhasil dihapus!');
-                loadRiwayat(); // Refresh tabel
+                loadRiwayat();
             } else {
                 alert('Gagal menghapus: ' + res.message);
             }
         }
 
-        // INIT
         document.addEventListener('DOMContentLoaded', () => {
             loadRiwayat();
         });
     </script>
 
 </body>
-</html> 
+</html>

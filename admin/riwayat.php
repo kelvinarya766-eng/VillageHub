@@ -192,7 +192,8 @@ $userData = $stmt->fetch();
 
         <div class="navbar-actions">
             <span class="role-text">Admin</span>
-            <a href="../logout.php" class="btn-header btn-red">Logout</a>
+            <!-- TOMBOL LOGOUT DENGAN FUNGSI JS -->
+            <button onclick="logoutDanRedirect()" class="btn-header btn-red" style="border: none; cursor: pointer;">Logout</button>
         </div>
     </nav>
 
@@ -200,7 +201,7 @@ $userData = $stmt->fetch();
     <div class="container">
         <div class="card-box">
             
-            <!-- Statistik (Teks "ADUAN" dihilangkan) -->
+            <!-- Statistik -->
             <div class="stats-grid">
                 <div class="stat-item border-blue">
                     <div class="stat-title">Total Aduan</div>
@@ -235,6 +236,7 @@ $userData = $stmt->fetch();
         </div>
     </div>
 
+    <!-- WAJIB: Panggil api.js agar fungsi logoutDanRedirect() jalan -->
     <script src="../assets/api.js?v=12"></script>
     <script>
         function getCatClass(kategori) {

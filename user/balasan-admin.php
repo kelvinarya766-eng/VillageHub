@@ -14,7 +14,6 @@ if ($_SESSION['user']['role'] !== 'warga') {
 
 $user = $_SESSION['user'];
 
-// Ambil data lengkap user (termasuk foto) dari database
 require_once __DIR__ . '/../config/database.php';
 $db = (new Database())->getConnection();
 $stmt = $db->prepare("SELECT * FROM users WHERE id_user = :id");
@@ -31,7 +30,6 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ====== ROOT & RESET ====== */
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -42,7 +40,6 @@ $userData = $stmt->fetch();
         }
         a { text-decoration: none; color: inherit; }
 
-        /* ====== NAVBAR ====== */
         .navbar {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             display: flex; justify-content: space-between; align-items: center;
@@ -87,134 +84,54 @@ $userData = $stmt->fetch();
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
             transition: transform 0.2s ease;
         }
-        
-        /* Efek Hover Profil */
         a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
             cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap;
+            display: inline-block; white-space: nowrap; text-align: center;
         }
         .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
         .btn-red:hover { background: #a31515; transform: translateY(-2px); }
 
-        /* ====== MAIN CONTENT ====== */
-        .main-content { 
-            max-width: 1300px; width: 100%;
-            margin: 30px auto; padding: 0 5%; flex: 1; 
-        }
-
-        /* Layout 2 Kolom */
-        .dashboard-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        /* Header Halaman */
-        .page-title {
-            font-size: 28px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin-bottom: 5px;
-        }
-        .page-subtitle {
-            font-size: 14px; color: #555; margin-bottom: 20px; font-weight: 500;
-        }
-        .filter-bar {
-            display: flex; gap: 10px; margin-bottom: 20px;
-        }
-        .filter-select {
-            padding: 8px 12px; border: 2px solid #ccc; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-size: 13px; background: #fff;
-        }
-
-        /* KARTU ADUAN (KIRI) */
-        .aduan-card-list {
-            display: flex; flex-direction: column; gap: 20px;
-        }
-
-        .aduan-card-detail {
-            background: #fff; border: 2px solid #e0e6ed; border-radius: 14px;
-            overflow: hidden; display: flex; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        
-        .card-left {
-            width: 200px; padding: 20px; border-right: 2px solid #eee;
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
+        .main-content { max-width: 1300px; width: 100%; margin: 30px auto; padding: 0 5%; flex: 1; }
+        .dashboard-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }
+        .page-title { font-size: 28px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin-bottom: 5px; }
+        .page-subtitle { font-size: 14px; color: #555; margin-bottom: 20px; font-weight: 500; }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .filter-select { padding: 8px 12px; border: 2px solid #ccc; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; background: #fff; }
+        .aduan-card-list { display: flex; flex-direction: column; gap: 20px; }
+        .aduan-card-detail { background: #fff; border: 2px solid #e0e6ed; border-radius: 14px; overflow: hidden; display: flex; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card-left { width: 200px; padding: 20px; border-right: 2px solid #eee; display: flex; flex-direction: column; justify-content: space-between; }
         .card-left .tag-kategori { margin-bottom: 10px; }
-        .img-thumb {
-            width: 100%; height: 100px; border-radius: 8px; object-fit: cover;
-            border: 1px dashed #ccc; background: #fafafa; margin-bottom: 10px;
-        }
+        .img-thumb { width: 100%; height: 100px; border-radius: 8px; object-fit: cover; border: 1px dashed #ccc; background: #fafafa; margin-bottom: 10px; }
         .card-left-date { font-size: 12px; color: #888; font-weight: 600; }
-
-        .card-right {
-            flex: 1; background: var(--brand-green); padding: 20px; color: #fff;
-            display: flex; flex-direction: column; gap: 15px;
-        }
+        .card-right { flex: 1; background: var(--brand-green); padding: 20px; color: #fff; display: flex; flex-direction: column; gap: 15px; }
         .card-right-title { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 5px; letter-spacing: 1px; }
-        
-        .balasan-box {
-            background: #fff; color: #333; border-radius: 8px; padding: 15px;
-            border-left: 6px solid var(--brand-yellow);
-        }
-        .balasan-header {
-            font-size: 12px; font-weight: 700; color: #1b7a2b; margin-bottom: 8px;
-        }
-        .balasan-text {
-            font-size: 13px; border-bottom: 1px solid #ccc; padding-bottom: 20px; margin-bottom: 10px;
-            font-style: italic;
-        }
-        .link-detail {
-            font-size: 12px; color: #28a745; font-weight: 700; text-decoration: underline;
-        }
-
-        /* SIDEBAR (KANAN) */
+        .balasan-box { background: #fff; color: #333; border-radius: 8px; padding: 15px; border-left: 6px solid var(--brand-yellow); }
+        .balasan-header { font-size: 12px; font-weight: 700; color: #1b7a2b; margin-bottom: 8px; }
+        .balasan-text { font-size: 13px; border-bottom: 1px solid #ccc; padding-bottom: 20px; margin-bottom: 10px; font-style: italic; }
+        .link-detail { font-size: 12px; color: #28a745; font-weight: 700; text-decoration: underline; }
         .sidebar { display: flex; flex-direction: column; gap: 20px; }
-        
-        .panel-card {
-            background: #fff; border: 2px solid #e0e6ed; border-radius: 14px; padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        .panel-card { background: #fff; border: 2px solid #e0e6ed; border-radius: 14px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .panel-title { font-size: 18px; font-weight: 800; text-align: center; text-transform: uppercase; margin-bottom: 15px; }
-
-        .summary-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-        }
-        .summary-box {
-            text-align: center; border-radius: 8px; padding: 15px 10px; color: #fff;
-        }
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .summary-box { text-align: center; border-radius: 8px; padding: 15px 10px; color: #fff; }
         .summary-box.bg-green { background: #1b7a2b; border: 3px solid #28a745; }
         .summary-box.bg-yellow { background: #ffc107; border: 3px solid #e0a800; color: #333; }
         .summary-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
         .summary-value { font-size: 28px; font-weight: 900; }
-
         .cat-stats-list { display: flex; flex-direction: column; gap: 10px; }
-        .cat-stat-item {
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .cat-badge {
-            padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
-            width: 60%; text-align: center;
-        }
+        .cat-stat-item { display: flex; justify-content: space-between; align-items: center; }
+        .cat-badge { padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; width: 60%; text-align: center; }
         .cat-count { font-size: 24px; font-weight: 900; }
-
-        .cta-card {
-            background: #ffc107; border: 3px solid #e0a800; border-radius: 14px;
-            padding: 20px; text-align: left;
-        }
+        .cta-card { background: #ffc107; border: 3px solid #e0a800; border-radius: 14px; padding: 20px; text-align: left; }
         .cta-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: #1a1a2e; }
         .cta-desc { font-size: 13px; color: #333; margin-bottom: 15px; font-weight: 600; }
-        .btn-cta {
-            display: block; width: 100%; padding: 12px; background: #1b7a2b; color: #fff;
-            text-align: center; border-radius: 20px; font-weight: 800; font-size: 14px;
-            text-transform: uppercase;
-        }
+        .btn-cta { display: block; width: 100%; padding: 12px; background: #1b7a2b; color: #fff; text-align: center; border-radius: 20px; font-weight: 800; font-size: 14px; text-transform: uppercase; }
         .btn-cta:hover { background: #146c24; }
 
-        /* Warna Kategori */
         .cat-Infrastruktur { background: #29b6f6; border: 2px solid #0288d1; color: #fff; }
         .cat-Kesehatan { background: #e53935; border: 2px solid #b71c1c; color: #fff; }
         .cat-Kebersihan { background: #8bc34a; border: 2px solid #558b2f; color: #fff; }
@@ -237,7 +154,6 @@ $userData = $stmt->fetch();
 </head>
 <body>
 
-    <!-- ====== NAVBAR ====== -->
     <nav class="navbar">
         <div class="navbar-left">
             <a href="../index.php" class="navbar-logo">
@@ -253,7 +169,6 @@ $userData = $stmt->fetch();
             </ul>
         </div>
         <div class="navbar-actions">
-            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
             <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
                 <div class="nav-hello">
                     Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
@@ -264,11 +179,10 @@ $userData = $stmt->fetch();
                 ?>
                 <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
             </a>
-           <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;">Logout</a>
+            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
         </div>
     </nav>
 
-    <!-- ====== KONTEN ====== -->
     <main class="main-content">
         <div class="page-title">ADUAN DIBALAS</div>
         <div class="page-subtitle">Seluruh aduan yang telah dibalas admin akan ditampilkan disini</div>
@@ -276,7 +190,6 @@ $userData = $stmt->fetch();
         <div class="filter-bar">
             <select class="filter-select" id="filterKategori">
                 <option value="0">Semua Kategori</option>
-                <!-- Opsi Kategori diisi via JS -->
             </select>
             <select class="filter-select">
                 <option>Terbaru Dibalas</option>
@@ -284,16 +197,11 @@ $userData = $stmt->fetch();
         </div>
 
         <div class="dashboard-layout">
-            
-            <!-- KOLOM KIRI: DAFTAR ADUAN -->
             <div class="aduan-card-list" id="aduanList">
                 <div style="text-align:center; padding:20px;">Memuat data...</div>
             </div>
 
-            <!-- KOLOM KANAN: SIDEBAR -->
             <div class="sidebar">
-                
-                <!-- Panel Ringkasan -->
                 <div class="panel-card">
                     <div class="panel-title">RINGKASAN</div>
                     <div class="summary-grid">
@@ -308,27 +216,21 @@ $userData = $stmt->fetch();
                     </div>
                 </div>
 
-                <!-- Panel Statistik Kategori -->
                 <div class="panel-card">
-                    <div class="cat-stats-list" id="statKategori">
-                        <!-- Diisi via JS -->
-                    </div>
+                    <div class="cat-stats-list" id="statKategori"></div>
                 </div>
 
-                <!-- Panel CTA -->
                 <div class="cta-card">
                     <div class="cta-title">Punya masalah di desa?</div>
                     <div class="cta-desc">Sampaikan masalahmu disini, admin desa akan membalasnya diwebsite ini.</div>
                     <a href="buat-aduan.php" class="btn-cta">BUAT ADUAN</a>
                 </div>
-
             </div>
         </div>
     </main>
 
     <script src="../assets/api.js?v=12"></script>
     <script>
-        // ===== MAPPING ICON & WARNA =====
         const iconMap = {
             'Kebersihan': '🧹', 'Infrastruktur': '🏗️', 'Kesehatan': '🏥',
             'Keamanan': '🛡️', 'Keamanan dan Ketertiban': '🛡️', 'Pendidikan': '📚',
@@ -346,20 +248,17 @@ $userData = $stmt->fetch();
                 return;
             }
 
-            // Hitung Statistik
             const dibalas = res.data.filter(a => a.status === 'dibalas').length;
             const menunggu = res.data.filter(a => a.status === 'menunggu').length;
 
             document.getElementById('totalDibalas').textContent = dibalas;
             document.getElementById('menungguBalasan').textContent = menunggu;
 
-            // Hitung Statistik Per Kategori
             const catCount = {};
             res.data.forEach(a => {
                 catCount[a.kategori] = (catCount[a.kategori] || 0) + 1;
             });
 
-            // Render Statistik Kategori
             let statHtml = '';
             const topCats = Object.entries(catCount).sort((a,b) => b[1] - a[1]).slice(0, 3);
             topCats.forEach(([nama, jumlah]) => {
@@ -374,7 +273,6 @@ $userData = $stmt->fetch();
             });
             statContainer.innerHTML = statHtml;
 
-            // Filter hanya yang dibalas untuk ditampilkan di kiri
             const listDibalas = res.data.filter(a => a.status === 'dibalas');
             
             if (listDibalas.length === 0) {
@@ -437,4 +335,4 @@ $userData = $stmt->fetch();
         });
     </script>
 </body>
-</html> 
+</html>

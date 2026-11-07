@@ -8,7 +8,6 @@ if (empty($_SESSION['user'])) {
 
 $user = $_SESSION['user'];
 
-// Ambil data dari database
 require_once __DIR__ . '/../config/database.php';
 $db = (new Database())->getConnection();
 $stmt = $db->prepare("SELECT * FROM users WHERE id_user = :id");
@@ -30,7 +29,6 @@ $userData = $stmt->fetch();
         body { font-family: 'Poppins', sans-serif; background-color: #f5f2eb; color: #333; }
         a { text-decoration: none; color: inherit; }
 
-        /* NAVBAR */
         .navbar {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             display: flex; justify-content: space-between; align-items: center;
@@ -78,20 +76,17 @@ $userData = $stmt->fetch();
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
             transition: transform 0.2s ease; 
         }
-
-        /* Efek Hover Profil */
         a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
             cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap;
-            background: #c62828; border-color: #c62828; color: #fff;
+            display: inline-block; white-space: nowrap; text-align: center;
         }
-        .btn-header:hover { background: #a31515; transform: translateY(-2px); }
+        .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
+        .btn-red:hover { background: #a31515; transform: translateY(-2px); }
 
-        /* KONTEN PROFIL */
         .container { max-width: 700px; margin: 40px auto; padding: 0 20px; }
         
         .profile-card {
@@ -100,7 +95,6 @@ $userData = $stmt->fetch();
             border: 1px solid #e2dcd0;
         }
 
-        /* Foto Profil */
         .profile-photo-wrapper {
             display: flex; justify-content: center; margin-bottom: 25px;
         }
@@ -110,7 +104,6 @@ $userData = $stmt->fetch();
             background-color: #f0f0f0; display: block; 
         }
 
-        /* Baris Data */
         .data-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 15px; border: 1px solid #e2dcd0; border-radius: 8px;
@@ -121,7 +114,6 @@ $userData = $stmt->fetch();
         .data-label { font-weight: 600; font-size: 14px; color: #555; }
         .data-value { font-weight: 600; font-size: 14px; color: #222; }
         
-        /* Inputan saat edit */
         .data-input {
             width: 100%; padding: 8px 12px; border: 2px solid #ccc; border-radius: 6px;
             font-family: 'Poppins', sans-serif; font-size: 14px; display: none;
@@ -132,14 +124,12 @@ $userData = $stmt->fetch();
         .data-row.editing .btn-edit-text { display: none !important; }
         .data-row.editing .data-label { display: none !important; }
 
-        /* Tombol Edit Teks */
         .btn-edit-text {
             background: transparent; border: none; color: #a0a0a0;
             font-size: 12px; font-weight: 600; cursor: pointer;
         }
         .btn-edit-text:hover { color: var(--brand-green); text-decoration: underline; }
 
-        /* Tombol Batal */
         .btn-batal-text {
             background: transparent; border: none; color: #c62828;
             font-size: 12px; font-weight: 600; cursor: pointer;
@@ -148,7 +138,6 @@ $userData = $stmt->fetch();
         .btn-batal-text:hover { text-decoration: underline; }
         .data-row.editing .btn-batal-text { display: inline-block; }
 
-        /* Tombol Simpan */
         .btn-simpan {
             display: block; margin: 30px 0 0 auto;
             padding: 12px 30px; background: #4caf50; color: #fff;
@@ -158,9 +147,7 @@ $userData = $stmt->fetch();
         .btn-simpan:hover:not(:disabled) { background: #388e3c; transform: translateY(-2px); }
         .btn-simpan:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
-        @media (max-width: 1000px) {
-            .navbar-menu { display: none; }
-        }
+        @media (max-width: 1000px) { .navbar-menu { display: none; } }
         @media (max-width: 768px) {
             .navbar-logo .brand-name { font-size: 18px; }
             .navbar-logo img { width: 40px; height: 40px; }
@@ -171,7 +158,6 @@ $userData = $stmt->fetch();
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-left">
             <a href="../index.php" class="navbar-logo">
@@ -188,7 +174,6 @@ $userData = $stmt->fetch();
         </div>
         
         <div class="navbar-actions">
-            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
             <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
                 <div class="nav-hello">
                     Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
@@ -199,16 +184,13 @@ $userData = $stmt->fetch();
                 ?>
                 <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
             </a>
-            
-            <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
+            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
         </div>
     </nav>
 
-    <!-- KONTEN -->
     <div class="container">
         <div class="profile-card">
             
-            <!-- FOTO PROFIL -->
             <div class="profile-photo-wrapper">
                 <label for="uploadFoto" style="cursor: pointer; position: relative;">
                     <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="profile-photo" id="previewProfil">
@@ -220,7 +202,6 @@ $userData = $stmt->fetch();
             </div>
 
             <form id="formProfil">
-                <!-- Username / Nama -->
                 <div class="data-row" id="row-nama">
                     <div style="width: 100%;">
                         <div class="data-label">Username / Nama</div>
@@ -231,7 +212,6 @@ $userData = $stmt->fetch();
                     <button type="button" class="btn-edit-text" onclick="aktifkanEdit('nama')">Edit ></button>
                 </div>
 
-                <!-- No HP -->
                 <div class="data-row" id="row-telepon">
                     <div style="width: 100%;">
                         <div class="data-label">No. Hp</div>
@@ -242,7 +222,6 @@ $userData = $stmt->fetch();
                     <button type="button" class="btn-edit-text" onclick="aktifkanEdit('telepon')">Edit ></button>
                 </div>
 
-                <!-- Email (Readonly) -->
                 <div class="data-row">
                     <div style="width: 100%;">
                         <div class="data-label">Email</div>
@@ -251,7 +230,6 @@ $userData = $stmt->fetch();
                     <span class="btn-edit-text" style="color:#ddd; cursor:not-allowed;">Edit ></span>
                 </div>
 
-                <!-- Password -->
                 <div class="data-row" id="row-password">
                     <div style="width: 100%;">
                         <div class="data-label">Kata Sandi (Kosongkan jika tidak diubah)</div>
@@ -262,7 +240,6 @@ $userData = $stmt->fetch();
                     <button type="button" class="btn-edit-text" onclick="aktifkanEdit('password')">Edit ></button>
                 </div>
 
-                <!-- Alamat -->
                 <div class="data-row" id="row-alamat">
                     <div style="width: 100%;">
                         <div class="data-label">Alamat</div>
@@ -273,7 +250,6 @@ $userData = $stmt->fetch();
                     <button type="button" class="btn-edit-text" onclick="aktifkanEdit('alamat')">Edit ></button>
                 </div>
 
-                <!-- Tombol Simpan (Disabled secara default) -->
                 <button type="submit" class="btn-simpan" id="btnSimpan" disabled>SIMPAN</button>
             </form>
 
@@ -282,42 +258,26 @@ $userData = $stmt->fetch();
 
     <script src="../assets/api.js?v=4"></script>
     <script>
-        // Menyimpan data asli sebelum diedit
         const dataAsli = {};
 
-        // --- FUNGSI MENGUBAH KE MODE EDIT ---
         function aktifkanEdit(field) {
             const inputEl = document.getElementById('input-' + field);
-            
-            if (dataAsli[field] === undefined) {
-                dataAsli[field] = inputEl.value;
-            }
-
+            if (dataAsli[field] === undefined) dataAsli[field] = inputEl.value;
             document.getElementById('row-' + field).classList.add('editing');
             inputEl.focus();
-            
-            // Tombol simpan menyala
             document.getElementById('btnSimpan').disabled = false;
         }
 
-        // --- FUNGSI MEMBATALKAN EDIT ---
         function batalEdit(field) {
             const inputEl = document.getElementById('input-' + field);
-            
-            if (dataAsli[field] !== undefined) {
-                inputEl.value = dataAsli[field];
-            }
-
+            if (dataAsli[field] !== undefined) inputEl.value = dataAsli[field];
             document.getElementById('row-' + field).classList.remove('editing');
             delete dataAsli[field];
 
             const adaYangDiedit = document.querySelectorAll('.data-row.editing').length > 0;
-            if (!adaYangDiedit) {
-                document.getElementById('btnSimpan').disabled = true;
-            }
+            if (!adaYangDiedit) document.getElementById('btnSimpan').disabled = true;
         }
 
-        // --- VALIDASI REAL-TIME (Alamat & Nama) ---
         function validasiTombol() {
             const btnSimpan = document.getElementById('btnSimpan');
             const namaVal = document.getElementById('input-nama').value.trim();
@@ -331,11 +291,9 @@ $userData = $stmt->fetch();
             }
         }
 
-        // Panggil validasi setiap kali user mengetik
         document.getElementById('input-nama').addEventListener('input', validasiTombol);
         document.getElementById('input-alamat').addEventListener('input', validasiTombol);
 
-        // --- FITUR UPLOAD FOTO ---
         document.getElementById('uploadFoto').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -356,7 +314,6 @@ $userData = $stmt->fetch();
             }
         });
 
-        // --- SUBMIT FORM SIMPAN DATA ---
         document.getElementById('formProfil').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -388,7 +345,7 @@ $userData = $stmt->fetch();
 
                     for (let key in dataAsli) delete dataAsli[key];
                 } else {
-                    alert('Gagal: ' + result.m  essage);
+                    alert('Gagal: ' + result.message);
                 }
             } catch (error) {
                 console.error(error);
@@ -401,4 +358,4 @@ $userData = $stmt->fetch();
     </script>
 
 </body>
-</html> 
+</html>

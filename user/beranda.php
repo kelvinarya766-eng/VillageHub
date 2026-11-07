@@ -78,14 +78,12 @@ $userData = $stmt->fetch();
 
         .navbar-actions { display: flex; align-items: center; gap: 10px; }
         
-        /* CSS TEKS SAPAAN */
         .nav-hello {
             color: #fff; font-weight: 600; font-size: 14px;
             margin-right: 6px; white-space: nowrap; line-height: 1.2;
         }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
 
-        /* CSS FOTO PROFIL (NAV AVATAR) */
         .nav-avatar {
             width: 42px; height: 42px; border-radius: 50%;
             object-fit: cover; border: 2px solid #fff;
@@ -93,14 +91,13 @@ $userData = $stmt->fetch();
             transition: transform 0.2s ease;
         }
 
-        /* Efek Hover Profil */
         a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
             cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap;
+            display: inline-block; white-space: nowrap; text-align: center;
         }
         .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
         .btn-red:hover { background: #a31515; transform: translateY(-2px); }
@@ -223,7 +220,6 @@ $userData = $stmt->fetch();
         .table-row:last-child { border-bottom: none; }
         .table-row:hover { background: #f9fdfb; }
 
-        /* ====== CHIP KATEGORI (PASTEL) ====== */
         .chip-kategori {
             display: inline-flex; align-items: center; justify-content: center; gap: 6px;
             padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
@@ -271,7 +267,6 @@ $userData = $stmt->fetch();
         }
         .lihat-semua:hover { text-decoration: underline; }
 
-        /* ====== CARD GRID ====== */
         .aduan-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -292,7 +287,6 @@ $userData = $stmt->fetch();
         .aduan-card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
         .aduan-card-tags { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
         
-        /* CHIP KATEGORI DI CARD */
         .tag-kategori-card { 
             display: inline-flex; align-items: center; gap: 6px;
             padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid;
@@ -308,7 +302,6 @@ $userData = $stmt->fetch();
         .link-balasan { font-size: 12px; color: #2196f3; font-weight: 600; text-decoration: underline; cursor: pointer; }
         .link-balasan:hover { color: #1565c0; }
 
-        /* ====== FOOTER ====== */
         .footer { 
             background: #1a1a2e; color: #a0a0b0; text-align: center; 
             padding: 24px 5%; margin-top: auto; font-size: 13px; width: 100%;
@@ -316,7 +309,6 @@ $userData = $stmt->fetch();
         .footer .brand-village { color: #fff; }
         .footer .brand-hub { color: var(--brand-yellow); }
 
-        /* ====== RESPONSIVE ====== */
         @media (max-width: 1100px) {
             .navbar-menu a { padding: 8px 10px; font-size: 12px; }
         }
@@ -366,7 +358,6 @@ $userData = $stmt->fetch();
         </div>
 
         <div class="navbar-actions">
-            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
             <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
                 <div class="nav-hello">
                     Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
@@ -377,7 +368,7 @@ $userData = $stmt->fetch();
                 ?>
                 <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar" title="<?= htmlspecialchars($user['nama']) ?>">
             </a>
-          <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;">Logout</a>
+            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
         </div>
     </nav>
 
@@ -387,7 +378,7 @@ $userData = $stmt->fetch();
         <div class="hero-overlay">
             <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
             <div class="hero-text">
-                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?></h1>
+                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?>! 👋</h1>
                 <p>Pantau aduanmu dan lihat balasan dari pihak desa di sini.</p>
             </div>
         </div>
@@ -459,7 +450,6 @@ $userData = $stmt->fetch();
 
     <script src="../assets/api.js?v=14"></script>
     <script>
-        // ===== MAPPING ICON & WARNA =====
         const iconMap = {
             'Kebersihan': '🧹', 'Infrastruktur': '🏗️', 'Kesehatan': '🏥',
             'Keamanan': '🛡️', 'Keamanan dan Ketertiban': '🛡️', 'Pendidikan': '📚',
@@ -481,9 +471,6 @@ $userData = $stmt->fetch();
             'Administrasi dan Pelayanan Publik': 'chip-administrasi'
         };
 
-        // =============================================
-        // 1. LOAD STATISTIK
-        // =============================================
         async function loadStatistik() {
             const res = await getDashboardUser();
             if (res.success) {
@@ -493,9 +480,6 @@ $userData = $stmt->fetch();
             }
         }
 
-        // =============================================
-        // 2. LOAD CUPLIKAN RIWAYAT (TABEL)
-        // =============================================
         async function loadCuplikanRiwayat() {
             const res = await getAduanSaya();
             const tbody = document.getElementById('tableBody');
@@ -533,9 +517,6 @@ $userData = $stmt->fetch();
             }).join('');
         }
 
-        // =============================================
-        // 3. LOAD CARD GRID
-        // =============================================
         const currentUserName = "<?= htmlspecialchars($user['nama']) ?>"; 
 
         async function loadCardGrid() {
@@ -586,16 +567,13 @@ $userData = $stmt->fetch();
             }).join('')
         }
 
-        // =============================================
-        // 4. AUTO-REFRESH
-        // =============================================
         async function refreshAll() {
             await Promise.all([loadStatistik(), loadCuplikanRiwayat(), loadCardGrid()]);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             refreshAll();
-            setInterval(refreshAll, 60000); // Diubah ke 60 detik agar tidak terlalu membebani server
+            setInterval(refreshAll, 60000);
         });
     </script>
 

@@ -14,7 +14,6 @@ if ($_SESSION['user']['role'] !== 'warga') {
 
 $user = $_SESSION['user'];
 
-// Ambil data lengkap user (termasuk foto) dari database
 require_once __DIR__ . '/../config/database.php';
 $db = (new Database())->getConnection();
 $stmt = $db->prepare("SELECT * FROM users WHERE id_user = :id");
@@ -31,7 +30,6 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ====== ROOT & RESET ====== */
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -41,7 +39,6 @@ $userData = $stmt->fetch();
         }
         a { text-decoration: none; color: inherit; }
 
-        /* ====== NAVBAR ====== */
         .navbar {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             display: flex; justify-content: space-between; align-items: center;
@@ -90,8 +87,6 @@ $userData = $stmt->fetch();
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
             transition: transform 0.2s ease;
         }
-
-        /* Efek Hover Profil */
         a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
@@ -103,7 +98,6 @@ $userData = $stmt->fetch();
         }
         .btn-header:hover { background: #a31515; transform: translateY(-2px); }
 
-        /* ====== MAIN CONTENT ====== */
         .main-content { max-width: 900px; margin: 40px auto; padding: 0 5%; }
         
         .form-header {
@@ -139,7 +133,6 @@ $userData = $stmt->fetch();
         textarea.form-control { resize: vertical; min-height: 120px; }
         select.form-control { cursor: pointer; }
 
-        /* Upload Foto */
         .upload-area {
             border: 2px dashed #cbd5e1; border-radius: 12px;
             padding: 30px; text-align: center; cursor: pointer;
@@ -159,7 +152,6 @@ $userData = $stmt->fetch();
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Button Submit */
         .btn-submit {
             width: 100%; padding: 14px; margin-top: 10px;
             background: var(--brand-green); color: #fff;
@@ -171,7 +163,6 @@ $userData = $stmt->fetch();
         .btn-submit:hover:not(:disabled) { background: #146c24; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27,122,43,0.3); }
         .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        /* ====== POPUP KUSTOM ====== */
         #popupKustom {
             display: none; position: fixed; top: 0; left: 0; 
             width: 100%; height: 100%; 
@@ -202,7 +193,6 @@ $userData = $stmt->fetch();
         }
         .popup-btn:hover { background: #146c24; }
 
-        /* Responsive */
         @media (max-width: 1000px) {
             .navbar-menu { display: none; }
         }
@@ -218,7 +208,6 @@ $userData = $stmt->fetch();
 </head>
 <body>
 
-    <!-- ====== NAVBAR ====== -->
     <nav class="navbar">
         <div class="navbar-left">
             <a href="../index.php" class="navbar-logo">
@@ -236,7 +225,6 @@ $userData = $stmt->fetch();
         </div>
 
         <div class="navbar-actions">
-            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
             <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
                 <div class="nav-hello">
                     Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
@@ -247,23 +235,19 @@ $userData = $stmt->fetch();
                 ?>
                 <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
             </a>
-           <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
+            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
         </div>
     </nav>
 
-    <!-- ====== MAIN CONTENT ====== -->
     <main class="main-content">
         
-        <!-- Header -->
         <div class="form-header">
             <h1>Sampaikan Aduanmu 📢</h1>
             <p>Isi form di bawah ini dengan detail agar pihak desa bisa segera menindaklanjuti.</p>
         </div>
 
-        <!-- Form Card -->
         <div class="form-card">
             <form id="formAduan" novalidate>
-                <!-- Kategori -->
                 <div class="form-group">
                     <label for="id_kategori">Kategori Aduan <span>*</span></label>
                     <select id="id_kategori" name="id_kategori" class="form-control">
@@ -271,14 +255,12 @@ $userData = $stmt->fetch();
                     </select>
                 </div>
 
-                <!-- Deskripsi -->
                 <div class="form-group">
                     <label for="deskripsi">Deskripsi Aduan <span>*</span></label>
                     <textarea id="deskripsi" name="deskripsi" class="form-control" 
                               placeholder="Ceritakan detail aduanmu di sini..." ></textarea>
                 </div>
 
-                <!-- Upload Foto -->
                 <div class="form-group">
                     <label>Foto Pendukung (Opsional)</label>
                     <div class="upload-area">
@@ -292,7 +274,6 @@ $userData = $stmt->fetch();
                     </div>
                 </div>
 
-                <!-- Tombol Submit -->
                 <button type="submit" class="btn-submit" id="btnSubmit">
                     🚀 Kirim Aduan Sekarang
                 </button>
@@ -301,7 +282,6 @@ $userData = $stmt->fetch();
 
     </main>
 
-    <!-- ====== POPUP KUSTOM ====== -->
     <div id="popupKustom">
         <div class="popup-box">
             <h3 class="popup-title" id="popupTitle">VillageHub</h3>
@@ -310,12 +290,8 @@ $userData = $stmt->fetch();
         </div>
     </div>
 
-    <!-- ====== SCRIPT ====== -->
     <script src="../assets/api.js?v=4"></script>
     <script>
-        // =============================================
-        // 0. FUNGSI POPUP KUSTOM
-        // =============================================
         function tampilkanPopup(pesan, isSuccess = true) {
             const popup = document.getElementById('popupKustom');
             const btn = popup.querySelector('.popup-btn');
@@ -339,9 +315,6 @@ $userData = $stmt->fetch();
             document.getElementById('popupKustom').style.display = 'none';
         }
 
-        // =============================================
-        // 1. LOAD KATEGORI DARI DATABASE
-        // =============================================
         async function loadKategori() {
             const res = await getKategori();
             const select = document.getElementById('id_kategori');
@@ -358,9 +331,6 @@ $userData = $stmt->fetch();
             }
         }
 
-        // =============================================
-        // 2. PREVIEW FOTO SEBELUM UPLOAD
-        // =============================================
         const fotoInput = document.getElementById('foto');
         const previewFoto = document.getElementById('previewFoto');
         const uploadText = document.getElementById('uploadText');
@@ -384,9 +354,6 @@ $userData = $stmt->fetch();
             }
         });
 
-        // =============================================
-        // 3. SUBMIT FORM ADUAN
-        // =============================================
         document.getElementById('formAduan').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -430,13 +397,10 @@ $userData = $stmt->fetch();
             }
         });
 
-        // =============================================
-        // INIT
-        // =============================================
         document.addEventListener('DOMContentLoaded', () => {
             loadKategori();
         });
     </script>
 
 </body>
-</html>s
+</html>

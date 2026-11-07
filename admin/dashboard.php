@@ -14,13 +14,13 @@ $db = (new Database())->getConnection();
 $admin_name = $_SESSION['user']['nama'] ?? 'Admin Desa';
 $user_id = $_SESSION['user']['id_user'];
 
-// Ambil data admin (walaupun foto tidak dipakai, data tetap diambil untuk jaga-jaga)
+// Ambil data admin
 $stmtUser = $db->prepare("SELECT * FROM users WHERE id_user = :id");
 $stmtUser->execute([':id' => $user_id]);
 $userData = $stmtUser->fetch();
 
 // ==========================================
-// 2. PROSES KIRIM BALASAN
+// 2. PROSES KIRIM / EDIT BALASAN
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kirim_balasan'])) {
     $balasan_teks = trim($_POST['balasan'] ?? '');
@@ -29,13 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kirim_balasan'])) {
     if (!empty($balasan_teks) && $id_balas > 0) {
         $db->beginTransaction();
         try {
-            $stmt = $db->prepare("INSERT INTO balasan (id_aduan, id_user, balasan) VALUES (:a, :u, :b)");
-            $stmt->execute([
-                ':a' => $id_balas, 
-                ':u' => $user_id, 
-                ':b' => $balasan_teks
-            ]);
+            $cekBalasan = $db->prepare("SELECT id_balasan FROM balasan WHERE id_aduan = :id LIMIT 1");
+            $cekBalasan->execute([':id' => $id_balas]);
+            $balasanLama = $cekBalasan->fetch();
+
+            if ($balasanLama) {
+                $stmt = $db->prepare("UPDATE balasan SET balasan = :b, id_user = :u WHERE id_balasan = :id_b");
+                $stmt->execute([':b' => $balasan_teks, ':u' => $user_id, ':id_b' => $balasanLama['id_balasan']]);
+            } else {
+                $stmt = $db->prepare("INSERT INTO balasan (id_aduan, id_user, balasan) VALUES (:a, :u, :b)");
+                $stmt->execute([':a' => $id_balas, ':u' => $user_id, ':b' => $balasan_teks]);
+            }
+
             $db->prepare("UPDATE aduan SET status='dibalas' WHERE id_aduan=:id")->execute([':id' => $id_balas]);
+            
             $db->commit();
             header("Location: dashboard.php?msg=success");
             exit;
@@ -47,13 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kirim_balasan'])) {
 }
 
 // ==========================================
-// 3. AMBIL DATA ADUAN
+// 3. AMBIL DATA ADUAN & BALASAN
 // ==========================================
 $filter_status = $_GET['status'] ?? '';
-$sql = "SELECT a.*, k.golongan AS kategori, u.nama AS nama_pengadu 
+$sql = "SELECT a.*, k.golongan AS kategori, u.nama AS nama_pengadu, 
+        (SELECT balasan FROM balasan b WHERE b.id_aduan = a.id_aduan ORDER BY b.id_balasan ASC LIMIT 1) AS isi_balasan
         FROM aduan a 
         JOIN kategori k ON k.id_kategori = a.id_kategori 
         JOIN users u ON u.id_user = a.id_user";
+
 if ($filter_status == 'menunggu' || $filter_status == 'dibalas') {
     $sql .= " WHERE a.status = :status";
 }
@@ -89,7 +98,6 @@ $aduan_list = $stmt->fetchAll();
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
-        /* BACKGROUND GAMBAR DESA */
         body {
             background: url('../assets/bg-desa.jpg') no-repeat center center fixed;
             background-size: cover;
@@ -114,18 +122,10 @@ $aduan_list = $stmt->fetchAll();
         .brand-village { color: #fff; }
         .brand-hub { color: var(--yellow); }
 
-        /* CSS AGAR MENU BERADA DI TENGAH */
         .navbar-menu { 
-            display: flex; 
-            align-items: center; 
-            gap: 20px; 
-            list-style: none; 
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
+            display: flex; align-items: center; gap: 20px; list-style: none; 
+            position: absolute; left: 50%; transform: translateX(-50%); z-index: 2;
         }
-
         .navbar-menu a {
             padding: 8px 14px; border-radius: 8px;
             color: #fff; font-size: 14px; font-weight: 600;
@@ -140,15 +140,8 @@ $aduan_list = $stmt->fetchAll();
             background: transparent;
         }
 
-        /* BAGIAN KANAN NAVBAR (HANYA ADMIN & LOGOUT) */
         .navbar-actions { display: flex; align-items: center; gap: 15px; z-index: 2; }
-        
-        .role-text {
-            color: #fff;
-            font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
+        .role-text { color: #fff; font-weight: 600; font-size: 14px; letter-spacing: 0.5px; }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
@@ -162,91 +155,75 @@ $aduan_list = $stmt->fetchAll();
 
         /* LAYOUT UTAMA */
         .container {
-            display: flex;
             flex: 1;
-            padding: 20px 30px;
-            gap: 20px;
-            max-width: 1200px;
+            padding: 30px 5%;
+            max-width: 1000px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* SIDEBAR KIRI */
-        .sidebar {
-            width: 200px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            height: fit-content;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .sidebar a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 700;
-            font-size: 15px;
-            padding: 8px 10px;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-        .sidebar a:hover { background: var(--green-light); color: var(--green-dark); padding-left: 15px; }
-        .sidebar a.active { background: var(--green-light); color: var(--green-dark); }
-
         /* KONTEN TENGAH */
         .main-list {
-            flex: 1;
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .main-title { text-align: center; font-size: 24px; font-weight: 800; color: #111; margin-bottom: 20px; }
+        .main-title { text-align: center; font-size: 28px; font-weight: 800; color: #111; margin-bottom: 25px; }
         
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 30px; justify-content: center; }
         .filter-btn {
-            padding: 8px 20px; border-radius: 8px; border: 2px solid transparent;
+            padding: 10px 24px; border-radius: 8px; border: 2px solid transparent;
             font-weight: 800; cursor: pointer; transition: 0.3s; text-decoration: none;
         }
         .filter-btn.menunggu { background: var(--yellow); color: #000; }
         .filter-btn.dibalas { background: var(--green-dark); color: white; }
         .filter-btn.semua { background: #00bcd4; color: white; }
-        .filter-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .filter-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
 
-        .list-container { display: flex; flex-direction: column; gap: 10px; }
+        .list-container { display: flex; flex-direction: column; gap: 15px; }
         
-        /* ITEM ADUAN */
+        /* ITEM ADUAN - MENGGUNAKAN GRID AGAR LURUS */
         .aduan-item {
-            display: flex; align-items: center; justify-content: space-between;
-            background: #f9fafb; padding: 12px 15px; border-radius: 10px;
+            display: grid;
+            grid-template-columns: 100px 150px 120px 110px 1fr;
+            align-items: center;
+            gap: 15px;
+            background: #f9fafb; padding: 15px 20px; border-radius: 12px;
             border: 1px solid #e5e7eb; transition: 0.3s;
         }
-        .aduan-item:hover { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: translateX(5px); border-color: var(--green-main); }
-        .aduan-info { display: flex; align-items: center; gap: 15px; flex: 1; }
-        .aduan-info span { font-size: 13px; font-weight: 700; color: #333; }
+        .aduan-item:hover { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-color: var(--green-main); }
+        
+        .cell-text { font-size: 14px; font-weight: 700; color: #333; }
+        .cell-center { text-align: center; }
+        .cell-right { text-align: right; }
         
         .kategori-badge {
-            padding: 6px 15px; border-radius: 6px; font-weight: 800; font-size: 13px;
-            border: 1px solid #ccc; text-align: center; min-width: 100px;
+            padding: 8px 12px; border-radius: 8px; font-weight: 800; font-size: 13px;
+            border: 1px solid #ccc; text-align: center; width: 100%;
         }
         .kategori-badge.hijau { background: #a5d6a7; color: #1b5e20; }
         .kategori-badge.kuning { background: var(--yellow); color: #000; }
         .kategori-badge.biru { background: #81d4fa; color: #01579b; }
         
         .status-badge {
-            padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 12px;
+            padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px;
+            width: 100%; display: inline-block;
         }
         .status-badge.menunggu { background: var(--yellow); color: #000; }
         .status-badge.dibalas { background: var(--green-dark); color: white; }
 
-        .btn-balas-trigger {
-            background: #fff; border: 1px solid #999; border-radius: 6px;
-            padding: 6px 15px; font-weight: 700; cursor: pointer; transition: 0.3s;
-            color: #333;
+        /* TOMBOL AKSI (BALAS / EDIT) */
+        .btn-aksi {
+            background: #fff; border: 2px solid #999; border-radius: 8px;
+            padding: 8px 15px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            color: #333; font-size: 13px; text-align: center; min-width: 80px;
+            display: inline-flex; justify-content: center; align-items: center; gap: 5px;
         }
-        .btn-balas-trigger:hover { background: var(--green-main); color: white; border-color: var(--green-main); }
+        .btn-aksi:hover { background: var(--green-main); color: white; border-color: var(--green-main); }
+        
+        .btn-aksi.edit { border-color: #e0a800; color: #e0a800; }
+        .btn-aksi.edit:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
 
         /* MODAL (EFEK BLUR) */
         .modal-overlay {
@@ -281,20 +258,17 @@ $aduan_list = $stmt->fetchAll();
         }
         .modal-content .btn-submit:hover { background: var(--green-dark); }
 
-        .alert-success { background: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; text-align: center; }
-        .alert-error { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; text-align: center; }
+        .alert-success { background: #d1fae5; color: #065f46; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
+        .alert-error { background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
         
-        /* Responsive */
         @media (max-width: 1000px) {
             .navbar { flex-direction: column; gap: 10px; padding: 10px; }
             .navbar-menu { position: static; transform: none; margin-top: 10px; }
-            .container { flex-direction: column; }
-            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; }
-            .sidebar a { white-space: nowrap; }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 800px) {
+            .aduan-item { grid-template-columns: 1fr; text-align: center; gap: 10px; }
+            .cell-right { text-align: center; }
             .role-text { display: none; }
-            .aduan-info { flex-wrap: wrap; gap: 5px; }
         }
     </style>
 </head>
@@ -309,69 +283,67 @@ $aduan_list = $stmt->fetchAll();
             </a>
         </div>
 
-        <!-- MENU BERADA DI TENGAH -->
         <ul class="navbar-menu">
             <li><a href="dashboard.php" class="active">Dashboard</a></li>
             <li><a href="riwayat.php">Riwayat</a></li>
         </ul>
 
-        <!-- BAGIAN KANAN: HANYA ADMIN & LOGOUT -->
         <div class="navbar-actions">
             <span class="role-text">Admin</span>
-            <a href="../logout.php" class="btn-header btn-red">Logout</a>
+            <!-- TOMBOL LOGOUT DENGAN FUNGSI JS -->
+            <button onclick="logoutDanRedirect()" class="btn-header btn-red" style="border: none; cursor: pointer;">Logout</button>
         </div>
     </nav>
 
     <!-- LAYOUT UTAMA -->
     <div class="container">
         
-        <!-- SIDEBAR KIRI (Menu Admin) -->
-        <div class="sidebar">
-            <a href="dashboard.php" class="active">Main Admin</a>
-            <a href="dashboard.php">Daftar Aduan</a>
-            <a href="riwayat.php">Riwayat</a>
-            <a href="#">Kategori</a>
-        </div>
-
-        <!-- KONTEN TENGAH -->
         <div class="main-list">
             <h2 class="main-title">Daftar Aduan</h2>
             
             <?php if (isset($_GET['msg']) && $_GET['msg'] == 'success'): ?>
-                <div class="alert-success">Balasan berhasil dikirim!</div>
+                <div class="alert-success">Balasan berhasil disimpan!</div>
             <?php endif; ?>
             
             <?php if (isset($error_msg)): ?>
                 <div class="alert-error"><?= htmlspecialchars($error_msg) ?></div>
             <?php endif; ?>
 
-            <!-- Filter Tombol -->
             <div class="filter-bar">
                 <a href="dashboard.php?status=menunggu" class="filter-btn menunggu">Menunggu</a>
                 <a href="dashboard.php?status=dibalas" class="filter-btn dibalas">Dibalas</a>
                 <a href="dashboard.php" class="filter-btn semua">Semua</a>
             </div>
 
-            <!-- List Aduan -->
             <div class="list-container">
                 <?php if (empty($aduan_list)): ?>
-                    <p style="text-align:center; color:#666; font-weight:bold;">Belum ada aduan.</p>
+                    <p style="text-align:center; color:#666; font-weight:bold; padding: 20px;">Belum ada aduan.</p>
                 <?php else: ?>
                     <?php foreach ($aduan_list as $aduan): ?>
                         <div class="aduan-item">
-                            <div class="aduan-info">
-                                <span><?= date('d/m/Y', strtotime($aduan['tanggal_waktu'])) ?></span>
-                                <span><?= htmlspecialchars($aduan['nama_pengadu']) ?></span>
-                                
+                            <div class="cell-text"><?= date('d/m/Y', strtotime($aduan['tanggal_waktu'])) ?></div>
+                            <div class="cell-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <?= htmlspecialchars($aduan['nama_pengadu']) ?>
+                            </div>
+                            <div class="cell-center">
                                 <div class="kategori-badge <?= strtolower($aduan['kategori']) == 'kebersihan' ? 'hijau' : (strtolower($aduan['kategori']) == 'infrastruktur' ? 'biru' : 'kuning') ?>">
                                     <?= htmlspecialchars($aduan['kategori']) ?>
                                 </div>
-                                
+                            </div>
+                            <div class="cell-center">
                                 <span class="status-badge <?= $aduan['status'] ?>"><?= strtoupper($aduan['status']) ?></span>
                             </div>
-                            <button class="btn-balas-trigger" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>')">
-                                Balas
-                            </button>
+                            <div class="cell-right">
+                                <?php if($aduan['status'] == 'dibalas'): ?>
+                                    <button class="btn-aksi edit" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '<?= htmlspecialchars(addslashes($aduan['isi_balasan'] ?? '')) ?>')">
+                                        ✏️ Edit
+                                    </button>
+                                <?php else: ?>
+                                    <button class="btn-aksi" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '')">
+                                        Balas
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -384,27 +356,36 @@ $aduan_list = $stmt->fetchAll();
     <div class="modal-overlay" id="modalBalas">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Balas Aduan</h3>
+                <h3 id="modalTitle">Balas Aduan</h3>
                 <button class="close-btn" onclick="tutupModal()">&times;</button>
             </div>
             
-            <p style="font-size: 14px; margin-bottom: 10px;">Balasan untuk: <strong id="modal-nama"></strong></p>
+            <p style="font-size: 14px; margin-bottom: 10px;">Aduan dari: <strong id="modal-nama"></strong></p>
             <div class="modal-desc" id="modal-deskripsi"></div>
             
             <form method="POST" action="">
                 <input type="hidden" name="id_aduan" id="modal-id-aduan">
-                <textarea name="balasan" placeholder="Ketik balasan atau tanggapan Anda untuk warga di sini..." required></textarea>
-                <button type="submit" name="kirim_balasan" class="btn-submit">Kirim Balasan</button>
+                <textarea name="balasan" id="modal-isi-balasan" placeholder="Ketik balasan atau tanggapan Anda untuk warga di sini..." required></textarea>
+                <button type="submit" name="kirim_balasan" class="btn-submit">Simpan Balasan</button>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT UNTUK MODAL -->
+    <!-- WAJIB: Panggil api.js agar fungsi logoutDanRedirect() jalan -->
+    <script src="../assets/api.js?v=12"></script>
     <script>
-        function bukaModal(id, deskripsi, nama) {
+        function bukaModal(id, deskripsi, nama, balasanLama) {
             document.getElementById('modal-id-aduan').value = id;
             document.getElementById('modal-deskripsi').innerText = deskripsi;
             document.getElementById('modal-nama').innerText = nama;
+            document.getElementById('modal-isi-balasan').value = balasanLama;
+            
+            if (balasanLama !== '') {
+                document.getElementById('modalTitle').innerText = 'Edit Balasan Aduan';
+            } else {
+                document.getElementById('modalTitle').innerText = 'Balas Aduan';
+            }
+
             document.getElementById('modalBalas').style.display = 'flex';
         }
 
