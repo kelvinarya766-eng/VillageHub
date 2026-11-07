@@ -149,46 +149,21 @@ function cekLoginAtauRedirect(roleYangDiizinkan = null) {
   });
 }
 
-// ✅ LOGOUT dengan ALERT + redirect ke BERANDA PUBLIK (index.php)
+// ✅ LOGOUT DENGAN SWEETALERT (DIARAHKAN KE LOGOUT.PHP)
 function logoutDanRedirect() {
   // Konfirmasi dulu
   if (!confirm('Yakin ingin logout?')) {
     return;
   }
 
-  logout().then((res) => {
-    // Sukses atau gagal, tetap logout
-    alert('Anda telah logout');
-    window.location.href = '/villagehub2/index.php';
-  }).catch((error) => {
-    console.error('Logout error:', error);
-    // Tetap redirect meskipun ada error
-    alert('Anda telah logout');
-    window.location.href = '/villagehub2/index.php';
-  });
+  // Alihkan ke halaman logout.php yang berisi animasi SweetAlert
+  // Hapus panggilan API logout() karena halaman logout.php sudah menghancurkan session PHP
+  window.location.href = '/villagehub2/logout.php';
 }
 
 // Logout tanpa konfirmasi (kalau ada tombol logout langsung)
 function logoutLangsung() {
-  logout().then(() => {
-    alert('Anda telah logout');
-    window.location.href = '/villagehub2/index.php';
-  });
-}
-
-// ============ UPLOAD FOTO PROFIL ============
-async function updateFotoProfil(formData) {
-  try {
-    const res = await fetch(API_BASE + '/user/update_foto.php', {
-      method: 'POST',
-      credentials: 'include',
-      body: formData
-    });
-    return await res.json();
-  } catch (error) {
-    console.error(error);
-    return { success: false, message: 'Gagal terhubung' };
-  }
+  window.location.href = '/villagehub2/logout.php';
 }
 
 // ============ UPDATE PROFIL ============

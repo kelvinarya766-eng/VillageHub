@@ -14,7 +14,7 @@ $db = (new Database())->getConnection();
 $admin_name = $_SESSION['user']['nama'] ?? 'Admin Desa';
 $user_id = $_SESSION['user']['id_user'];
 
-// Ambil data admin untuk foto profil
+// Ambil data admin (walaupun foto tidak dipakai, data tetap diambil untuk jaga-jaga)
 $stmtUser = $db->prepare("SELECT * FROM users WHERE id_user = :id");
 $stmtUser->execute([':id' => $user_id]);
 $userData = $stmtUser->fetch();
@@ -104,7 +104,7 @@ $aduan_list = $stmt->fetchAll();
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 5%; box-shadow: 0 3px 16px rgba(0,0,0,0.15);
             position: sticky; top: 0; z-index: 1000;
-            position: relative; /* Penting untuk posisi menu tengah */
+            position: relative;
         }
         
         .navbar-left { display: flex; align-items: center; gap: 20px; z-index: 2; }
@@ -120,8 +120,6 @@ $aduan_list = $stmt->fetchAll();
             align-items: center; 
             gap: 20px; 
             list-style: none; 
-            
-            /* Trik Absolute Center */
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -142,13 +140,15 @@ $aduan_list = $stmt->fetchAll();
             background: transparent;
         }
 
-        .navbar-actions { display: flex; align-items: center; gap: 10px; z-index: 2; }
-        .nav-hello {
-            color: #fff; font-weight: 600; font-size: 14px;
-            margin-right: 6px; white-space: nowrap; line-height: 1.2;
+        /* BAGIAN KANAN NAVBAR (HANYA ADMIN & LOGOUT) */
+        .navbar-actions { display: flex; align-items: center; gap: 15px; z-index: 2; }
+        
+        .role-text {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
-        .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
-        .nav-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
@@ -293,7 +293,7 @@ $aduan_list = $stmt->fetchAll();
             .sidebar a { white-space: nowrap; }
         }
         @media (max-width: 768px) {
-            .nav-hello { display: none; }
+            .role-text { display: none; }
             .aduan-info { flex-wrap: wrap; gap: 5px; }
         }
     </style>
@@ -312,21 +312,13 @@ $aduan_list = $stmt->fetchAll();
         <!-- MENU BERADA DI TENGAH -->
         <ul class="navbar-menu">
             <li><a href="dashboard.php" class="active">Dashboard</a></li>
-            <li><a href="#">Riwayat</a></li>
+            <li><a href="riwayat.php">Riwayat</a></li>
         </ul>
 
+        <!-- BAGIAN KANAN: HANYA ADMIN & LOGOUT -->
         <div class="navbar-actions">
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $admin_name)[0]) ?>
-                <small>Admin</small>
-            </div>
-            
-            <a href="../logout.php" class="btn-header btn-red" onclick="return confirm('Yakin ingin logout?')">Logout</a>
-            
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto Admin" class="nav-avatar" title="<?= htmlspecialchars($admin_name) ?>">
+            <span class="role-text">Admin</span>
+            <a href="../logout.php" class="btn-header btn-red">Logout</a>
         </div>
     </nav>
 
@@ -337,7 +329,7 @@ $aduan_list = $stmt->fetchAll();
         <div class="sidebar">
             <a href="dashboard.php" class="active">Main Admin</a>
             <a href="dashboard.php">Daftar Aduan</a>
-            <a href="#">Riwayat</a>
+            <a href="riwayat.php">Riwayat</a>
             <a href="#">Kategori</a>
         </div>
 

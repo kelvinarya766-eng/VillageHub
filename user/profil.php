@@ -30,7 +30,7 @@ $userData = $stmt->fetch();
         body { font-family: 'Poppins', sans-serif; background-color: #f5f2eb; color: #333; }
         a { text-decoration: none; color: inherit; }
 
-        /* NAVBAR (DISAMAKAN DENGAN BERANDA & BUAT ADUAN) */
+        /* NAVBAR */
         .navbar {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             display: flex; justify-content: space-between; align-items: center;
@@ -63,7 +63,6 @@ $userData = $stmt->fetch();
         }
         .navbar-actions { display: flex; align-items: center; gap: 10px; }
         
-        /* TAMBAHAN BARU: CSS UNTUK TEKS SAPAAN */
         .nav-hello {
             color: #fff; font-weight: 600; font-size: 14px;
             margin-right: 6px; white-space: nowrap; line-height: 1.2;
@@ -73,7 +72,16 @@ $userData = $stmt->fetch();
             font-size: 11px; opacity: 0.85;
         }
 
-        .nav-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; }
+        .nav-avatar { 
+            width: 42px; height: 42px; border-radius: 50%; 
+            object-fit: cover; border: 2px solid #fff; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
+            transition: transform 0.2s ease; 
+        }
+
+        /* Efek Hover Profil */
+        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
+
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
@@ -119,7 +127,6 @@ $userData = $stmt->fetch();
             font-family: 'Poppins', sans-serif; font-size: 14px; display: none;
         }
         
-        /* Perbaikan CSS: Memastikan teks hilang saat mode edit, input muncul */
         .data-row.editing .data-value { display: none !important; }
         .data-row.editing .data-input { display: block !important; }
         .data-row.editing .btn-edit-text { display: none !important; }
@@ -158,7 +165,7 @@ $userData = $stmt->fetch();
             .navbar-logo .brand-name { font-size: 18px; }
             .navbar-logo img { width: 40px; height: 40px; }
             .btn-header { padding: 7px 14px; font-size: 12px; }
-            .nav-hello { display: none; } /* Sembunyikan sapaan di HP agar muat */
+            .nav-hello { display: none; }
         }
     </style>
 </head>
@@ -181,17 +188,19 @@ $userData = $stmt->fetch();
         </div>
         
         <div class="navbar-actions">
-            <!-- TAMBAHAN BARU: TEKS SAPAAN -->
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                <small><?= ucfirst($user['role']) ?></small>
-            </div>
-
-            <button onclick="logoutDanRedirect()" class="btn-header">Logout</button>
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
+            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
+                <div class="nav-hello">
+                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                    <small><?= ucfirst($user['role']) ?></small>
+                </div>
+                <?php 
+                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                ?>
+                <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+            </a>
+            
+            <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
         </div>
     </nav>
 
@@ -379,7 +388,7 @@ $userData = $stmt->fetch();
 
                     for (let key in dataAsli) delete dataAsli[key];
                 } else {
-                    alert('Gagal: ' + result.message);
+                    alert('Gagal: ' + result.m  essage);
                 }
             } catch (error) {
                 console.error(error);
@@ -392,4 +401,4 @@ $userData = $stmt->fetch();
     </script>
 
 </body>
-</html>
+</html> 

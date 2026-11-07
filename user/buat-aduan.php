@@ -76,7 +76,6 @@ $userData = $stmt->fetch();
 
         .navbar-actions { display: flex; align-items: center; gap: 10px; }
         
-        /* TAMBAHAN BARU: CSS UNTUK TEKS SAPAAN & AVATAR */
         .nav-hello {
             color: #fff; font-weight: 600; font-size: 14px;
             margin-right: 6px; white-space: nowrap; line-height: 1.2;
@@ -89,7 +88,11 @@ $userData = $stmt->fetch();
             width: 42px; height: 42px; border-radius: 50%; 
             object-fit: cover; border: 2px solid #fff; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
+            transition: transform 0.2s ease;
         }
+
+        /* Efek Hover Profil */
+        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
@@ -233,17 +236,18 @@ $userData = $stmt->fetch();
         </div>
 
         <div class="navbar-actions">
-            <!-- TAMBAHAN BARU: TEKS SAPAAN & FOTO PROFIL -->
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                <small><?= ucfirst($user['role']) ?></small>
-            </div>
-            <button onclick="logoutDanRedirect()" class="btn-header">Logout</button>
-            
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
+            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
+                <div class="nav-hello">
+                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                    <small><?= ucfirst($user['role']) ?></small>
+                </div>
+                <?php 
+                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                ?>
+                <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+            </a>
+           <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
         </div>
     </nav>
 
@@ -318,7 +322,6 @@ $userData = $stmt->fetch();
             
             document.getElementById('popupMessage').textContent = pesan;
             
-            // Ubah warna tombol & judul berdasarkan status
             if (isSuccess) {
                 btn.style.background = 'var(--brand-green)';
                 btn.style.borderColor = 'var(--brand-green)';
@@ -410,19 +413,16 @@ $userData = $stmt->fetch();
             const result = await kirimAduan(formData);
 
             if (result.success) {
-                // Tampilkan Popup Sukses
                 tampilkanPopup("Aduan terkirim", true);
                 
                 document.getElementById('formAduan').reset();
                 previewFoto.style.display = 'none';
                 uploadText.style.display = 'block';
 
-                // Redirect setelah user klik OK di popup
                 setTimeout(() => {
                     window.location.href = 'beranda.php';
                 }, 1500);
             } else {
-                // Tampilkan Popup Gagal
                 tampilkanPopup("Aduan Gagal: " + (result.message || "Coba lagi nanti."), false);
                 
                 btn.disabled = false;
@@ -439,4 +439,4 @@ $userData = $stmt->fetch();
     </script>
 
 </body>
-</html>
+</html>s

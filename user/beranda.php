@@ -90,7 +90,11 @@ $userData = $stmt->fetch();
             width: 42px; height: 42px; border-radius: 50%;
             object-fit: cover; border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px;
+            transition: transform 0.2s ease;
         }
+
+        /* Efek Hover Profil */
+        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
 
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
@@ -219,7 +223,7 @@ $userData = $stmt->fetch();
         .table-row:last-child { border-bottom: none; }
         .table-row:hover { background: #f9fdfb; }
 
-        /* ====== CHIP KATEGORI (PASTEL - SESUAI LAMPIRAN 2) ====== */
+        /* ====== CHIP KATEGORI (PASTEL) ====== */
         .chip-kategori {
             display: inline-flex; align-items: center; justify-content: center; gap: 6px;
             padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
@@ -362,15 +366,18 @@ $userData = $stmt->fetch();
         </div>
 
         <div class="navbar-actions">
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                <small><?= ucfirst($user['role']) ?></small>
-            </div>
-            <button onclick="logoutDanRedirect()" class="btn-header btn-red">Logout</button>
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar" title="<?= htmlspecialchars($user['nama']) ?>">
+            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
+            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
+                <div class="nav-hello">
+                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                    <small><?= ucfirst($user['role']) ?></small>
+                </div>
+                <?php 
+                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                ?>
+                <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar" title="<?= htmlspecialchars($user['nama']) ?>">
+            </a>
+          <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;">Logout</a>
         </div>
     </nav>
 
@@ -380,7 +387,7 @@ $userData = $stmt->fetch();
         <div class="hero-overlay">
             <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
             <div class="hero-text">
-                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?>! 👋</h1>
+                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?></h1>
                 <p>Pantau aduanmu dan lihat balasan dari pihak desa di sini.</p>
             </div>
         </div>
@@ -504,7 +511,6 @@ $userData = $stmt->fetch();
                 const statusClass = a.status === 'dibalas' ? 'status-dibalas' : 'status-menunggu';
                 const statusLabel = a.status === 'dibalas' ? 'Dibalas' : 'Menunggu';
                 
-                // Gunakan Chip Warna
                 const namaKategori = a.kategori || 'Kebersihan';
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
                 const iconKategori = iconMap[namaKategori] || '📌';
@@ -547,7 +553,6 @@ $userData = $stmt->fetch();
                 const statusClass = a.status === 'dibalas' ? 'status-dibalas' : 'status-menunggu';
                 const statusLabel = a.status === 'dibalas' ? 'Dibalas' : 'Menunggu';
                 
-                // Gunakan Chip Warna
                 const namaKategori = a.kategori || 'Kebersihan';
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
                 const iconKategori = iconMap[namaKategori] || '📌';
@@ -583,14 +588,14 @@ $userData = $stmt->fetch();
 
         // =============================================
         // 4. AUTO-REFRESH
-        // ===================f==========================
+        // =============================================
         async function refreshAll() {
             await Promise.all([loadStatistik(), loadCuplikanRiwayat(), loadCardGrid()]);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             refreshAll();
-            setInterval(refreshAll, 8000);
+            setInterval(refreshAll, 60000); // Diubah ke 60 detik agar tidak terlalu membebani server
         });
     </script>
 

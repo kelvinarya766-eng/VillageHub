@@ -36,7 +36,7 @@ $userData = $stmt->fetch();
         * { box-sizing: border-box; margin: 0; padding: 0; }
               body {
             font-family: 'Poppins', 'Segoe UI', sans-serif;
-            background-color: #f5f2eb; /* Warna cream seperti profil */
+            background-color: #f5f2eb;
             color: #333;
             line-height: 1.6; overflow-x: hidden;
             min-height: 100vh; display: flex; flex-direction: column;
@@ -83,7 +83,15 @@ $userData = $stmt->fetch();
             margin-right: 6px; white-space: nowrap; line-height: 1.2;
         }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
-        .nav-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; }
+        .nav-avatar { 
+            width: 42px; height: 42px; border-radius: 50%; 
+            object-fit: cover; border: 2px solid #fff; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
+            transition: transform 0.2s ease;
+        }
+
+        /* Efek Hover Profil */
+        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
         
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
@@ -96,7 +104,7 @@ $userData = $stmt->fetch();
 
         /* ====== CONTAINER ====== */
                .main-content { 
-            max-width: 900px; /* Lebar disamakan dengan profil */
+            max-width: 900px; 
             width: 100%;
             margin: 40px auto; 
             padding: 0 20px; 
@@ -155,7 +163,7 @@ $userData = $stmt->fetch();
         }
         .table-row:hover { background: #f9fdfb; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        /* ====== STYLING BARU UNTUK KATEGORI (SESUAI LAMPIRAN 3) ====== */
+        /* ====== STYLING BARU UNTUK KATEGORI ====== */
         .cell-kategori {
             display: inline-flex; 
             align-items: center; 
@@ -167,11 +175,10 @@ $userData = $stmt->fetch();
             font-weight: 700;
             text-align: center; 
             border: 2px solid;
-            width: max-content; /* Menyesuaikan panjang teks */
+            width: max-content; 
             min-width: 100%;
         }
 
-        /* Warna Background & Teks (Disamakan dengan Beranda Publik) */
         .chip-kebersihan { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
         .chip-infrastruktur { background: #fff3e0; border-color: #ff9800; color: #e65100; }
         .chip-kesehatan { background: #e3f2fd; border-color: #2196f3; color: #1565c0; }
@@ -257,15 +264,18 @@ $userData = $stmt->fetch();
             </ul>
         </div>
         <div class="navbar-actions">
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                <small><?= ucfirst($user['role']) ?></small>
-            </div>
-            <button onclick="logoutDanRedirect()" class="btn-header">Logout</button>
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
+            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
+            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
+                <div class="nav-hello">
+                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                    <small><?= ucfirst($user['role']) ?></small>
+                </div>
+                <?php 
+                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                ?>
+                <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
+            </a>
+            <a href="../logout.php" class="btn-header" style="text-decoration: none;">Logout</a>
         </div>
     </nav>
 
@@ -312,7 +322,7 @@ $userData = $stmt->fetch();
             'Administrasi dan Pelayanan Publik': '📋'
         };
 
-        // ===== MAPPING WARNA CHIP (SAMA PERSIS BERANDA PUBLIK) =====
+        // ===== MAPPING WARNA CHIP =====
         const chipColorMap = {
             'Kebersihan': 'chip-kebersihan',
             'Infrastruktur': 'chip-infrastruktur',
@@ -343,20 +353,14 @@ $userData = $stmt->fetch();
                 return;
             }
 
-            // BATASI HANYA 10 DATA TERBARU
             const list = res.data.slice(0, 10);
 
             tbody.innerHTML = list.map(a => {
                 const statusClass = a.status === 'dibalas' ? 'status-dibalas' : 'status-menunggu';
                 const statusLabel = a.status === 'dibalas' ? 'Dibalas' : 'Menunggu';
                 
-                // LOGIKA WARNA & ICON
                 const namaKategori = a.kategori || 'Kebersihan';
-                
-                // Ambil Class Warna dari Mapping
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
-                
-                // Ambil Icon dari mapping
                 const iconKategori = iconMap[namaKategori] || '📌';
 
                 const tgl = new Date(a.tanggal_waktu);
@@ -366,7 +370,6 @@ $userData = $stmt->fetch();
 
                 return `
                     <div class="table-row">
-                        <!-- TAMPILKAN ICON DAN WARNA CHIP -->
                         <div><span class="cell-kategori ${catClass}">${iconKategori} ${namaKategori}</span></div>
                         <div class="cell-tanggal">${tanggal}</div>
                         <div class="cell-deskripsi">${(a.deskripsi || '').substring(0, 100)}${a.deskripsi.length > 100 ? '...' : ''}</div>
@@ -385,7 +388,6 @@ $userData = $stmt->fetch();
         async function konfirmasiHapus(id) {
             if (!confirm('Yakin ingin menghapus aduan ini?')) return;
 
-            // Panggil fungsi hapusAduan dari api.js
             const res = await hapusAduan(id);
 
             if (res.success) {
@@ -403,4 +405,4 @@ $userData = $stmt->fetch();
     </script>
 
 </body>
-</html>
+</html> 

@@ -81,7 +81,16 @@ $userData = $stmt->fetch();
             margin-right: 6px; white-space: nowrap; line-height: 1.2;
         }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
-        .nav-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; }
+        .nav-avatar { 
+            width: 42px; height: 42px; border-radius: 50%; 
+            object-fit: cover; border: 2px solid #fff; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
+            transition: transform 0.2s ease;
+        }
+        
+        /* Efek Hover Profil */
+        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
+
         .btn-header {
             padding: 9px 22px; border: 2px solid; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
@@ -130,7 +139,6 @@ $userData = $stmt->fetch();
             overflow: hidden; display: flex; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         
-        /* Sisi Kiri Kartu (Gambar & Info) */
         .card-left {
             width: 200px; padding: 20px; border-right: 2px solid #eee;
             display: flex; flex-direction: column; justify-content: space-between;
@@ -142,7 +150,6 @@ $userData = $stmt->fetch();
         }
         .card-left-date { font-size: 12px; color: #888; font-weight: 600; }
 
-        /* Sisi Kanan Kartu (Detail Balasan) */
         .card-right {
             flex: 1; background: var(--brand-green); padding: 20px; color: #fff;
             display: flex; flex-direction: column; gap: 15px;
@@ -173,7 +180,6 @@ $userData = $stmt->fetch();
         }
         .panel-title { font-size: 18px; font-weight: 800; text-align: center; text-transform: uppercase; margin-bottom: 15px; }
 
-        /* Panel Ringkasan */
         .summary-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
         }
@@ -185,7 +191,6 @@ $userData = $stmt->fetch();
         .summary-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
         .summary-value { font-size: 28px; font-weight: 900; }
 
-        /* Panel Statistik Kategori */
         .cat-stats-list { display: flex; flex-direction: column; gap: 10px; }
         .cat-stat-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -196,7 +201,6 @@ $userData = $stmt->fetch();
         }
         .cat-count { font-size: 24px; font-weight: 900; }
 
-        /* Panel Buat Aduan */
         .cta-card {
             background: #ffc107; border: 3px solid #e0a800; border-radius: 14px;
             padding: 20px; text-align: left;
@@ -220,7 +224,6 @@ $userData = $stmt->fetch();
         .cat-Pendidikan { background: #ab47bc; border: 2px solid #7b1fa2; color: #fff; }
         .cat-Administrasi { background: #673ab7; border: 2px solid #4527a0; color: #fff; }
 
-        /* Responsive */
         @media (max-width: 1000px) {
             .dashboard-layout { grid-template-columns: 1fr; }
             .navbar-menu { display: none; }
@@ -250,15 +253,18 @@ $userData = $stmt->fetch();
             </ul>
         </div>
         <div class="navbar-actions">
-            <div class="nav-hello">
-                Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                <small><?= ucfirst($user['role']) ?></small>
-            </div>
-            <button onclick="logoutDanRedirect()" class="btn-header btn-red">Logout</button>
-            <?php 
-                $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-            ?>
-            <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
+            <!-- Membungkus Sapaan dan Foto dengan Link ke profil.php -->
+            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
+                <div class="nav-hello">
+                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                    <small><?= ucfirst($user['role']) ?></small>
+                </div>
+                <?php 
+                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                ?>
+                <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
+            </a>
+           <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;">Logout</a>
         </div>
     </nav>
 
@@ -330,9 +336,6 @@ $userData = $stmt->fetch();
             'Administrasi': '📋', 'Administrasi dan Pelayanan Publik': '📋'
         };
 
-        // =============================================
-        // 1. LOAD DATA
-        // =============================================
         async function loadData() {
             const res = await getAduanSaya();
             const listContainer = document.getElementById('aduanList');
@@ -358,7 +361,7 @@ $userData = $stmt->fetch();
 
             // Render Statistik Kategori
             let statHtml = '';
-            const topCats = Object.entries(catCount).sort((a,b) => b[1] - a[1]).slice(0, 3); // Ambil 3 teratas
+            const topCats = Object.entries(catCount).sort((a,b) => b[1] - a[1]).slice(0, 3);
             topCats.forEach(([nama, jumlah]) => {
                 const slug = nama.toLowerCase().split(' ')[0];
                 const catClass = 'cat-' + slug;
@@ -379,13 +382,9 @@ $userData = $stmt->fetch();
                 return;
             }
 
-            // Tampilkan List Card
             let cardHtml = '';
-            
-            // Ambil nama user dari PHP yang sedang login
             const currentUserName = "<?= htmlspecialchars($user['nama']) ?>";
 
-            // Looping ambil detail balasan
             for (const [index, a] of listDibalas.entries()) {
                 const detailRes = await getAduanDetail(a.id_aduan);
                 
@@ -394,7 +393,7 @@ $userData = $stmt->fetch();
                 let tglBalas = "-";
                 
                 if (detailRes.success && detailRes.data.balasan && detailRes.data.balasan.length > 0) {
-                    const b = detailRes.data.balasan[0]; // Ambil balasan pertama
+                    const b = detailRes.data.balasan[0];
                     teksBalasan = b.balasan;
                     namaAdmin = b.admin_nama;
                     tglBalas = new Date(b.tanggal_waktu).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
@@ -409,7 +408,6 @@ $userData = $stmt->fetch();
 
                 cardHtml += `
                     <div class="aduan-card-detail">
-                        <!-- Sisi Kiri -->
                         <div class="card-left">
                             <div>
                                 <div class="tag-kategori ${catClass}" style="text-align:center; font-weight:700; font-size:12px; padding:4px 10px; border-radius:6px;">
@@ -420,7 +418,6 @@ $userData = $stmt->fetch();
                             <div class="card-left-date">${currentUserName} &nbsp;&nbsp; ${tgl}</div>
                         </div>
                         
-                        <!-- Sisi Kanan -->
                         <div class="card-right">
                             <div class="card-right-title">ADUAN ${noAduan}</div>
                             <div class="balasan-box">
@@ -435,10 +432,9 @@ $userData = $stmt->fetch();
             listContainer.innerHTML = cardHtml;
         }
 
-        // INIT
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
         });
     </script>
 </body>
-</html>
+</html> 
