@@ -11,6 +11,10 @@ $userData   = $_SESSION['user'] ?? null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VillageHub — Rukun Warganya, Maju Desanya</title>
+    
+    <!-- BOOTSTRAP 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -143,7 +147,6 @@ $userData   = $_SESSION['user'] ?? null;
         @media (max-width: 768px) {
             .navbar-logo .brand-name { font-size: 18px; }
             .navbar-logo img { width: 36px; height: 36px; }
-            .btn-masuk, .btn-daftar { padding: 8px 16px; font-size: 12px; }
             .hero-banner { height: 220px; }
             .hero-brand { gap: 12px; margin-bottom: 10px; }
             .hero-brand-logo { width: 68px; height: 68px; }
@@ -161,14 +164,26 @@ $userData   = $_SESSION['user'] ?? null;
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="index.php" class="navbar-logo">
-            <img src="asset/Logo_village_Hub-removebg-preview.png" alt="VillageHub Logo">
-            <div class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></div>
-        </a>
-        <div class="navbar-actions">
-            <a href="login.php" class="btn-masuk">Masuk</a>
-            <a href="register.php" class="btn-daftar">Daftar</a>
+    <!-- NAVBAR BOOTSTRAP -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
+                <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo" style="width: 50px; height: 50px; object-fit: contain;">
+                <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+            </a>
+            
+            <!-- Tombol Titik Tiga -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navPublic">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu Dropdown (Masuk & Daftar) -->
+            <div class="collapse navbar-collapse" id="navPublic">
+                <div class="navbar-nav ms-auto gap-2 text-center mt-3 mt-lg-0">
+                    <a href="login.php" class="btn btn-masuk">Masuk</a>
+                    <a href="register.php" class="btn btn-daftar">Daftar</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -179,7 +194,7 @@ $userData   = $_SESSION['user'] ?? null;
                 <img class="hero-brand-logo" src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo VillageHub">
                 <h1 class="brand-name hero-brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></h1>
             </div>
-            <p>Sampaikan aduanmu dan pantau balasan dari pihak desa kami.</p>
+            <p>Sampaikan aduanmu dan pantau balasan dari pihak desa.</p>
         </div>
     </section>
 
@@ -202,7 +217,9 @@ $userData   = $_SESSION['user'] ?? null;
         &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
     </footer>
 
-
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="assets/api.js?v=12"></script>
     <script>
        
@@ -332,7 +349,7 @@ $userData   = $_SESSION['user'] ?? null;
         // =============================================
         document.addEventListener('DOMContentLoaded', () => {
             loadKategori();
-            loadAduanTerbaru();
+            loadAduanTerbaru(); 
 
             // Tombol "Semua"
             document.querySelector('.chip-semua').addEventListener('click', function() {
@@ -342,4 +359,4 @@ $userData   = $_SESSION['user'] ?? null;
     </script>
 
 </body>
-</html>  
+</html>

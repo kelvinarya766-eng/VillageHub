@@ -20,177 +20,161 @@ $userData = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profil – VillageHub</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- GOOGLE FONTS: NUNITO -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Poppins', sans-serif; background-color: #f5f2eb; color: #333; }
+        body { font-family: 'Nunito', sans-serif; background-color: #f5f2eb; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         a { text-decoration: none; color: inherit; }
 
-        .navbar {
+        .navbar-custom {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; box-shadow: 0 3px 16px rgba(0,0,0,0.15);
-            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.15);
         }
-        .navbar-left { display: flex; align-items: center; gap: 20px; }
-        .navbar-logo { display: flex; align-items: center; gap: 10px; }
-        .navbar-logo img { width: 54px; height: 54px; object-fit: contain; }
-        .brand-name { font-weight: 800; line-height: 1.1; white-space: nowrap; }
-        .navbar-logo .brand-name { font-size: 22px; letter-spacing: 0.5px; }
+        .navbar-brand img { width: 50px !important; height: 50px !important; object-fit: contain; margin-right: 10px; }
+        .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; }
         .brand-village { color: #fff; }
         .brand-hub { color: var(--brand-yellow); }
-        .navbar-menu {
-            display: flex; align-items: center; gap: 4px;
-            list-style: none; margin-left: 10px;
+
+        /* Styling Menu Navbar */
+        .navbar-nav .nav-link { 
+            color: #fff; 
+            padding: 8px 16px;
+            border-radius: 8px; 
+            margin: 0 3px; 
+            font-size: 14px;
+            font-weight: 500; 
+            transition: all 0.3s ease; 
+            border-bottom: 3px solid transparent; 
         }
-        .navbar-menu a {
-            padding: 8px 14px; border-radius: 8px;
-            color: #fff; font-size: 13px; font-weight: 600;
-            transition: all 0.25s; white-space: nowrap;
-            border-bottom: 2px solid transparent;
+        .navbar-nav .nav-link.active { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            font-weight: 600;
+            color: #fff; 
         }
-        .navbar-menu a:hover { background: rgba(255,255,255,0.15); }
-        .navbar-menu a.active {
-            color: var(--brand-yellow);
-            border-bottom-color: var(--brand-yellow);
-            border-radius: 0; padding-bottom: 6px;
-            background: transparent;
+        .navbar-nav .nav-link:hover { 
+            color: var(--brand-yellow); 
+            border-bottom-color: var(--brand-yellow); 
         }
-        .navbar-actions { display: flex; align-items: center; gap: 10px; }
+
+        .profile-link { display: flex; align-items: center; text-decoration: none; }
+        .nav-hello { color: #fff; font-weight: 600; font-size: 14px; margin-right: 10px; line-height: 1.2; text-align: right; }
+        .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
+        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; transition: transform 0.2s ease; }
+        .profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
         
-        .nav-hello {
-            color: #fff; font-weight: 600; font-size: 14px;
-            margin-right: 6px; white-space: nowrap; line-height: 1.2;
+        .btn-logout { 
+            background: #c62828; 
+            color: #ffffff !important; 
+            border: none !important; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            padding: 8px 20px; 
+            text-decoration: none !important;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-        .nav-hello small {
-            display: block; font-weight: 400;
-            font-size: 11px; opacity: 0.85;
-        }
-
-        .nav-avatar { 
-            width: 42px; height: 42px; border-radius: 50%; 
-            object-fit: cover; border: 2px solid #fff; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
-            transition: transform 0.2s ease; 
-        }
-        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
-
-        .btn-header {
-            padding: 9px 22px; border: 2px solid; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
-            cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap; text-align: center;
-        }
-        .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
-        .btn-red:hover { background: #a31515; transform: translateY(-2px); }
-
-        .container { max-width: 700px; margin: 40px auto; padding: 0 20px; }
-        
-        .profile-card {
-            background: #fff; border-radius: 16px; padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border: 1px solid #e2dcd0;
+        .btn-logout:hover { 
+            background: #a31515; 
+            color: #ffffff !important; 
+            text-decoration: none !important;
+            border-bottom: none !important;
         }
 
-        .profile-photo-wrapper {
-            display: flex; justify-content: center; margin-bottom: 25px;
-        }
-        .profile-photo {
-            width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
-            border: 4px solid #e0e0e0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background-color: #f0f0f0; display: block; 
-        }
+        .container-profile { max-width: 700px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .profile-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2dcd0; }
+        .profile-photo-wrapper { display: flex; justify-content: center; margin-bottom: 25px; }
+        .profile-photo { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #e0e0e0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #f0f0f0; display: block; }
 
-        .data-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 15px; border: 1px solid #e2dcd0; border-radius: 8px;
-            margin-bottom: 10px; background: #fff; transition: all 0.2s;
-        }
+        .data-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border: 1px solid #e2dcd0; border-radius: 8px; margin-bottom: 10px; background: #fff; transition: all 0.2s; }
         .data-row.editing { background: #f9fdfb; border-color: var(--brand-green); }
-        
         .data-label { font-weight: 600; font-size: 14px; color: #555; }
         .data-value { font-weight: 600; font-size: 14px; color: #222; }
-        
-        .data-input {
-            width: 100%; padding: 8px 12px; border: 2px solid #ccc; border-radius: 6px;
-            font-family: 'Poppins', sans-serif; font-size: 14px; display: none;
-        }
+        .data-input { width: 100%; padding: 8px 12px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Nunito', sans-serif; font-size: 14px; display: none; }
         
         .data-row.editing .data-value { display: none !important; }
         .data-row.editing .data-input { display: block !important; }
         .data-row.editing .btn-edit-text { display: none !important; }
         .data-row.editing .data-label { display: none !important; }
 
-        .btn-edit-text {
-            background: transparent; border: none; color: #a0a0a0;
-            font-size: 12px; font-weight: 600; cursor: pointer;
-        }
+        .btn-edit-text { background: transparent; border: none; color: #a0a0a0; font-size: 12px; font-weight: 600; cursor: pointer; }
         .btn-edit-text:hover { color: var(--brand-green); text-decoration: underline; }
 
-        .btn-batal-text {
-            background: transparent; border: none; color: #c62828;
-            font-size: 12px; font-weight: 600; cursor: pointer;
-            display: none; margin-right: 8px;
-        }
+        .btn-batal-text { background: transparent; border: none; color: #c62828; font-size: 12px; font-weight: 600; cursor: pointer; display: none; margin-right: 8px; }
         .btn-batal-text:hover { text-decoration: underline; }
         .data-row.editing .btn-batal-text { display: inline-block; }
 
-        .btn-simpan {
-            display: block; margin: 30px 0 0 auto;
-            padding: 12px 30px; background: #4caf50; color: #fff;
-            border: none; border-radius: 8px; font-weight: 700; font-size: 16px;
-            cursor: pointer; transition: all 0.3s;
-        }
+        .btn-simpan { display: block; margin: 30px 0 0 auto; padding: 12px 30px; background: #4caf50; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s; }
         .btn-simpan:hover:not(:disabled) { background: #388e3c; transform: translateY(-2px); }
         .btn-simpan:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
-        @media (max-width: 1000px) { .navbar-menu { display: none; } }
-        @media (max-width: 768px) {
-            .navbar-logo .brand-name { font-size: 18px; }
-            .navbar-logo img { width: 40px; height: 40px; }
-            .btn-header { padding: 7px 14px; font-size: 12px; }
-            .nav-hello { display: none; }
-        }
+        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
+        .footer .brand-village { color: #fff; }
+        .footer .brand-hub { color: var(--brand-yellow); }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="../index.php" class="navbar-logo">
-                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="VillageHub Logo">
-                <div class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></div>
+    <!-- NAVBAR BOOTSTRAP -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <!-- KIRI: Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="../index.php">
+                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
             </a>
-            <ul class="navbar-menu">
-                <li><a href="beranda.php">Beranda</a></li>
-                <li><a href="buat-aduan.php">Form Aduan</a></li>
-                <li><a href="balasan-admin.php">Balasan Admin</a></li>
-                <li><a href="riwayat.php">Riwayat</a></li>
-                <li><a href="profil.php" class="active">Kelola Profil</a></li>
-            </ul>
-        </div>
-        
-        <div class="navbar-actions">
-            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
-                <div class="nav-hello">
-                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                    <small><?= ucfirst($user['role']) ?></small>
-                </div>
-                <?php 
-                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-                ?>
-                <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
-            </a>
-            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+            
+            <!-- KANAN: Profil, Logout Desktop, & Tombol Titik Tiga -->
+            <div class="d-flex align-items-center order-lg-3 gap-3">
+                
+                <!-- Foto Profil -->
+                <a href="profil.php" class="profile-link order-1 order-lg-2" title="Kelola Profil">
+                    <div class="nav-hello d-none d-lg-block">
+                        Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                        <small><?= ucfirst($user['role']) ?></small>
+                    </div>
+                    <?php 
+                        $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                    ?>
+                    <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+                </a>
+
+                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+
+                <!-- Tombol Titik Tiga (Hamburger) -->
+                <button class="navbar-toggler border-0 order-2 order-lg-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <!-- MENU DROPDOWN -->
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-3 mb-lg-0 text-center align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="beranda.php">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="buat-aduan.php">Form Aduan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="balasan-admin.php">Balasan Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="riwayat.php">Riwayat</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="profil.php">Kelola Profil</a></li>
+                    
+                    <!-- Tombol Logout untuk HP (Tetap di dalam dropdown) -->
+                    <li class="nav-item d-lg-none mt-3 w-100">
+                        <a href="../logout.php" class="btn-logout w-100 d-block" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-profile">
         <div class="profile-card">
-            
             <div class="profile-photo-wrapper">
                 <label for="uploadFoto" style="cursor: pointer; position: relative;">
                     <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="profile-photo" id="previewProfil">
@@ -252,10 +236,15 @@ $userData = $stmt->fetch();
 
                 <button type="submit" class="btn-simpan" id="btnSimpan" disabled>SIMPAN</button>
             </form>
-
         </div>
     </div>
+    
+    <!-- FOOTER -->
+    <footer class="footer">
+        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=4"></script>
     <script>
         const dataAsli = {};
@@ -356,6 +345,5 @@ $userData = $stmt->fetch();
             }
         });
     </script>
-
 </body>
 </html>

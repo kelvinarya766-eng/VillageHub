@@ -26,81 +26,84 @@ $userData = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balasan Admin – VillageHub</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- GOOGLE FONTS: NUNITO -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
             background-color: #f0f2f5; color: #333;
-            line-height: 1.6; overflow-x: hidden;
             min-height: 100vh; display: flex; flex-direction: column;
         }
         a { text-decoration: none; color: inherit; }
 
-        .navbar {
+        .navbar-custom {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; box-shadow: 0 3px 16px rgba(0,0,0,0.15);
-            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.15);
         }
-        .navbar-left { display: flex; align-items: center; gap: 20px; }
-        .navbar-logo { display: flex; align-items: center; gap: 10px; }
-        .navbar-logo img { width: 54px; height: 54px; object-fit: contain; }
-        .brand-name { font-weight: 800; line-height: 1.1; white-space: nowrap; }
-        .navbar-logo .brand-name { font-size: 22px; letter-spacing: 0.5px; }
+        .navbar-brand img { width: 50px !important; height: 50px !important; object-fit: contain; margin-right: 10px; }
+        .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; }
         .brand-village { color: #fff; }
         .brand-hub { color: var(--brand-yellow); }
 
-        .navbar-menu {
-            display: flex; align-items: center; gap: 4px;
-            list-style: none; margin-left: 10px;
+        /* Styling Menu Navbar */
+        .navbar-nav .nav-link { 
+            color: #fff; 
+            padding: 8px 16px;
+            border-radius: 8px; 
+            margin: 0 3px; 
+            font-size: 14px;
+            font-weight: 500; 
+            transition: all 0.3s ease; 
+            border-bottom: 3px solid transparent; 
         }
-        .navbar-menu a {
-            padding: 8px 14px; border-radius: 8px;
-            color: #fff; font-size: 13px; font-weight: 600;
-            transition: all 0.25s; white-space: nowrap;
-            border-bottom: 2px solid transparent;
+        .navbar-nav .nav-link.active { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            font-weight: 600;
+            color: #fff; 
         }
-        .navbar-menu a:hover { background: rgba(255,255,255,0.15); }
-        .navbar-menu a.active {
-            color: var(--brand-yellow);
-            border-bottom-color: var(--brand-yellow);
-            border-radius: 0; padding-bottom: 6px;
-            background: transparent;
+        .navbar-nav .nav-link:hover { 
+            color: var(--brand-yellow); 
+            border-bottom-color: var(--brand-yellow); 
         }
 
-        .navbar-actions { display: flex; align-items: center; gap: 10px; }
-        .nav-hello {
-            color: #fff; font-weight: 600; font-size: 14px;
-            margin-right: 6px; white-space: nowrap; line-height: 1.2;
-        }
+        .profile-link { display: flex; align-items: center; text-decoration: none; }
+        .nav-hello { color: #fff; font-weight: 600; font-size: 14px; margin-right: 10px; line-height: 1.2; text-align: right; }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
-        .nav-avatar { 
-            width: 42px; height: 42px; border-radius: 50%; 
-            object-fit: cover; border: 2px solid #fff; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px; 
-            transition: transform 0.2s ease;
+        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; transition: transform 0.2s ease; }
+        .profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
+        
+        .btn-logout { 
+            background: #c62828; 
+            color: #ffffff !important; 
+            border: none !important; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            padding: 8px 20px; 
+            text-decoration: none !important;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
-
-        .btn-header {
-            padding: 9px 22px; border: 2px solid; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
-            cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap; text-align: center;
+        .btn-logout:hover { 
+            background: #a31515; 
+            color: #ffffff !important; 
+            text-decoration: none !important;
+            border-bottom: none !important;
         }
-        .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
-        .btn-red:hover { background: #a31515; transform: translateY(-2px); }
 
         .main-content { max-width: 1300px; width: 100%; margin: 30px auto; padding: 0 5%; flex: 1; }
         .dashboard-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }
         .page-title { font-size: 28px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin-bottom: 5px; }
         .page-subtitle { font-size: 14px; color: #555; margin-bottom: 20px; font-weight: 500; }
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .filter-select { padding: 8px 12px; border: 2px solid #ccc; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; background: #fff; }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-select { padding: 8px 12px; border: 2px solid #ccc; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 13px; background: #fff; width: 100%; max-width: 250px; }
         .aduan-card-list { display: flex; flex-direction: column; gap: 20px; }
         .aduan-card-detail { background: #fff; border: 2px solid #e0e6ed; border-radius: 14px; overflow: hidden; display: flex; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .card-left { width: 200px; padding: 20px; border-right: 2px solid #eee; display: flex; flex-direction: column; justify-content: space-between; }
@@ -143,43 +146,68 @@ $userData = $stmt->fetch();
 
         @media (max-width: 1000px) {
             .dashboard-layout { grid-template-columns: 1fr; }
-            .navbar-menu { display: none; }
         }
         @media (max-width: 768px) {
             .aduan-card-detail { flex-direction: column; }
             .card-left { width: 100%; border-right: none; border-bottom: 2px solid #eee; }
-            .nav-hello { display: none; }
+            .filter-select { max-width: 100%; }
         }
+
+        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
+        .footer .brand-village { color: #fff; }
+        .footer .brand-hub { color: var(--brand-yellow); }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="../index.php" class="navbar-logo">
-                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="VillageHub Logo">
-                <div class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></div>
+    <!-- NAVBAR BOOTSTRAP -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <!-- KIRI: Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="../index.php">
+                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
             </a>
-            <ul class="navbar-menu">
-                <li><a href="beranda.php">Beranda</a></li>
-                <li><a href="buat-aduan.php">Form Aduan</a></li>
-                <li><a href="balasan-admin.php" class="active">Balasan Admin</a></li>
-                <li><a href="riwayat.php">Riwayat</a></li>
-                <li><a href="profil.php">Kelola Profil</a></li>
-            </ul>
-        </div>
-        <div class="navbar-actions">
-            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
-                <div class="nav-hello">
-                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                    <small><?= ucfirst($user['role']) ?></small>
-                </div>
-                <?php 
-                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-                ?>
-                <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar">
-            </a>
-            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+            
+            <!-- KANAN: Profil, Logout Desktop, & Tombol Titik Tiga -->
+            <div class="d-flex align-items-center order-lg-3 gap-3">
+                
+                <!-- Foto Profil -->
+                <a href="profil.php" class="profile-link order-1 order-lg-2" title="Kelola Profil">
+                    <div class="nav-hello d-none d-lg-block">
+                        Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                        <small><?= ucfirst($user['role']) ?></small>
+                    </div>
+                    <?php 
+                        $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                    ?>
+                    <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+                </a>
+
+                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+
+                <!-- Tombol Titik Tiga (Hamburger) -->
+                <button class="navbar-toggler border-0 order-2 order-lg-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <!-- MENU DROPDOWN -->
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-3 mb-lg-0 text-center align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="beranda.php">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="buat-aduan.php">Form Aduan</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="balasan-admin.php">Balasan Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="riwayat.php">Riwayat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profil.php">Kelola Profil</a></li>
+                    
+                    <!-- Tombol Logout untuk HP (Tetap di dalam dropdown) -->
+                    <li class="nav-item d-lg-none mt-3 w-100">
+                        <a href="../logout.php" class="btn-logout w-100 d-block" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -228,7 +256,13 @@ $userData = $stmt->fetch();
             </div>
         </div>
     </main>
+    
+    <!-- FOOTER -->
+    <footer class="footer">
+        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=12"></script>
     <script>
         const iconMap = {
@@ -244,7 +278,7 @@ $userData = $stmt->fetch();
             const statContainer = document.getElementById('statKategori');
             
             if (!res.success || !res.data || res.data.length === 0) {
-                listContainer.innerHTML = `<div class="empty-row">Belum ada aduan.</div>`;
+                listContainer.innerHTML = `<div class="empty-row text-center p-4 bg-white rounded">Belum ada aduan.</div>`;
                 return;
             }
 
@@ -276,7 +310,7 @@ $userData = $stmt->fetch();
             const listDibalas = res.data.filter(a => a.status === 'dibalas');
             
             if (listDibalas.length === 0) {
-                listContainer.innerHTML = `<div style="text-align:center; padding:20px; background:#fff; border-radius:10px;">Belum ada aduan yang dibalas.</div>`;
+                listContainer.innerHTML = `<div class="text-center p-4 bg-white rounded">Belum ada aduan yang dibalas.</div>`;
                 return;
             }
 

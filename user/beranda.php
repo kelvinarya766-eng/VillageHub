@@ -27,117 +27,110 @@ $userData = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beranda Warga – VillageHub</title>
+    
+    <!-- BOOTSTRAP 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- GOOGLE FONTS: NUNITO -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* ====== ROOT & RESET ====== */
-        :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
-            background-color: #f0f2f5; color: #333;
-            line-height: 1.6; overflow-x: hidden;
-            min-height: 100vh; display: flex; flex-direction: column;
+        :root {
+            --brand-green: #1b7a2b;
+            --brand-yellow: #ffc107;
         }
-        a { text-decoration: none; color: inherit; }
 
-        /* ====== NAVBAR ====== */
-        .navbar {
-            background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; box-shadow: 0 3px 16px rgba(0,0,0,0.15);
-            position: sticky; top: 0; z-index: 1000;
+        /* Menerapkan Font Nunito ke seluruh halaman */
+        body {
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .navbar-left { display: flex; align-items: center; gap: 20px; }
-        .navbar-logo { display: flex; align-items: center; gap: 10px; }
-        .navbar-logo img { width: 54px; height: 54px; object-fit: contain; }
-        .brand-name { font-weight: 800; line-height: 1.1; white-space: nowrap; }
-        .navbar-logo .brand-name { font-size: 22px; letter-spacing: 0.5px; }
+
+        /* ====== NAVBAR BOOTSTRAP ====== */
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
+            box-shadow: 0 3px 16px rgba(0,0,0,0.15);
+        }
+        .navbar-brand img { width: 50px !important; height: 50px !important; object-fit: contain; margin-right: 10px; }
+        .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; font-family: 'Nunito', sans-serif; }
         .brand-village { color: #fff; }
         .brand-hub { color: var(--brand-yellow); }
 
-        /* Menu Horizontal */
-        .navbar-menu {
-            display: flex; align-items: center; gap: 4px;
-            list-style: none; margin-left: 10px;
+        /* Styling Menu Navbar */
+        .navbar-nav .nav-link { 
+            color: #fff; 
+            padding: 8px 16px;
+            border-radius: 8px; 
+            margin: 0 3px; 
+            font-size: 14px; 
+            font-weight: 500; 
+            transition: all 0.3s ease; 
+            border-bottom: 3px solid transparent; 
         }
-        .navbar-menu a {
-            padding: 8px 14px; border-radius: 8px;
-            color: #fff; font-size: 13px; font-weight: 600;
-            transition: all 0.25s; white-space: nowrap;
-            border-bottom: 2px solid transparent;
-        }
-        .navbar-menu a:hover { background: rgba(255,255,255,0.15); }
-        .navbar-menu a.active {
-            color: var(--brand-yellow);
-            border-bottom-color: var(--brand-yellow);
-            border-radius: 0; padding-bottom: 6px;
-            background: transparent;
-        }
-
-        .navbar-actions { display: flex; align-items: center; gap: 10px; }
         
-        .nav-hello {
-            color: #fff; font-weight: 600; font-size: 14px;
-            margin-right: 6px; white-space: nowrap; line-height: 1.2;
+        /* Menu saat aktif */
+        .navbar-nav .nav-link.active { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            font-weight: 600; 
+            color: #fff; 
         }
+        
+        /* Efek saat kursor diarahkan */
+        .navbar-nav .nav-link:hover { 
+            color: var(--brand-yellow); 
+            border-bottom-color: var(--brand-yellow); 
+        }
+
+        /* Profil & Logout */
+        .profile-link { display: flex; align-items: center; text-decoration: none; }
+        .nav-hello { color: #fff; font-weight: 600; font-size: 14px; margin-right: 10px; line-height: 1.2; text-align: right; }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
-
-        .nav-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            object-fit: cover; border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-left: 5px;
-            transition: transform 0.2s ease;
+        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; transition: transform 0.2s ease; }
+        .profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
+        
+        .btn-logout { 
+            background: #c62828; 
+            color: #ffffff !important; 
+            border: none !important; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            padding: 8px 20px; 
+            text-decoration: none !important;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-
-        a.profile-link:hover .nav-avatar { transform: scale(1.1); border-color: var(--brand-yellow); }
-
-        .btn-header {
-            padding: 9px 22px; border: 2px solid; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
-            cursor: pointer; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap; text-align: center;
+        
+        .btn-logout:hover { 
+            background: #a31515; 
+            color: #ffffff !important; 
+            text-decoration: none !important;
+            border-bottom: none !important;
         }
-        .btn-red { background: #c62828; border-color: #c62828; color: #fff; }
-        .btn-red:hover { background: #a31515; transform: translateY(-2px); }
 
         /* ====== HERO BANNER ====== */
-        .hero {
-            position: relative; width: 100%; height: 220px;
-            overflow: hidden; margin-bottom: 30px;
-        }
-        .hero > img {
-            width: 100%; height: 100%; object-fit: cover;
-            object-position: center 40%; display: block;
-        }
+        .hero { position: relative; width: 100%; height: 220px; overflow: hidden; }
+        .hero > img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, rgba(0,80,0,0.75) 0%, rgba(0,60,0,0.55) 50%, rgba(0,40,0,0.35) 100%);
-            display: flex; align-items: center; padding: 0 6%; gap: 20px;
+            display: flex; align-items: center; padding: 0 5%; gap: 20px;
         }
-        .hero-overlay img {
-            width: 90px; height: 90px; object-fit: contain;
-            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.3));
-        }
-        .hero-text h1 {
-            font-size: 28px; font-weight: 800; color: #fff;
-            text-shadow: 2px 3px 6px rgba(0,0,0,0.3);
-            line-height: 1.2; margin-bottom: 4px;
-        }
-        .hero-text p {
-            font-size: 14px; color: rgba(255,255,255,0.9);
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-        }
+        .hero-overlay img { width: 90px; height: 90px; object-fit: contain; }
+        .hero-text h1 { font-size: 28px; font-weight: 800; color: #fff; text-shadow: 2px 3px 6px rgba(0,0,0,0.3); margin-bottom: 4px; }
+        .hero-text p { font-size: 14px; color: rgba(255,255,255,0.9); text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
 
-        /* ====== CONTAINER ====== */
-        .main-content { 
-            max-width: 1200px; width: 100%;
-            margin: 0 auto; padding: 0 5% 40px; flex: 1; 
-        }
+        /* ====== KONTEN UTAMA ====== */
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 30px 5%; flex: 1; width: 100%; }
 
         .section-title {
-            font-size: 22px; font-weight: 700; color: #1a1a2e;
+            font-size: 22px; font-weight: 800; color: #1a1a2e;
             margin-bottom: 20px; position: relative; padding-left: 14px;
         }
         .section-title::before {
@@ -147,19 +140,14 @@ $userData = $stmt->fetch();
             border-radius: 3px;
         }
 
-        /* ====== 3 KARTU STATISTIK ====== */
-        .stat-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 20px; margin-bottom: 40px;
-        }
-
+        /* ====== STATISTIK CARD ====== */
         .stat-card {
-            border-radius: 14px; overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            transition: all 0.3s ease; border: 3px solid;
+            border-radius: 14px; overflow: hidden; border: 3px solid;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08); transition: all 0.3s ease;
+            background: #fff;
         }
         .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.15); }
-
+        
         .stat-card.blue { border-color: #2196f3; }
         .stat-card.blue .stat-header { background: #2196f3; color: #fff; }
         .stat-card.blue .stat-value { color: #1565c0; }
@@ -175,58 +163,20 @@ $userData = $stmt->fetch();
         .stat-card.green .stat-value { color: #1b7a2b; }
         .stat-card.green .stat-link { color: #28a745; }
 
-        .stat-header { padding: 12px 20px; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; }
-        .stat-body { background: #fff; padding: 24px 20px; text-align: center; }
+        .stat-header { padding: 12px 20px; font-weight: 700; font-size: 14px; }
+        .stat-body { padding: 24px 20px; text-align: center; }
         .stat-value { font-size: 42px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-        .stat-label { font-size: 13px; color: #888; font-weight: 600; letter-spacing: 1px; }
-        .stat-link {
-            display: block; padding: 12px; background: #f8f9fa; text-align: center;
-            font-size: 13px; font-weight: 700; border-top: 1px solid #eee; transition: all 0.3s;
-        }
+        .stat-label { font-size: 13px; color: #888; font-weight: 600; }
+        .stat-link { display: block; padding: 12px; background: #f8f9fa; text-align: center; font-size: 13px; font-weight: 700; border-top: 1px solid #eee; text-decoration: none; }
         .stat-link:hover { background: #e9ecef; }
 
-        /* ====== TABEL RIWAYAT ====== */
-        .table-wrapper {
-            background: #fff; border-radius: 14px; overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-
-        .table-header {
-            background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 100%);
-            padding: 14px 20px; display: grid;
-            grid-template-columns: 1.2fr 1.2fr 3fr 1fr 0.8fr;
-            gap: 12px; color: #fff; font-weight: 700; font-size: 13px;
-        }
-
-        .table-header > div {
-            padding: 6px 12px; border-radius: 8px;
-            text-align: center; border: 2px solid rgba(255,255,255,0.3);
-        }
-        .th-kategori    { background: #2ea3a1; }
-        .th-tanggal     { background: #e39f3b; }
-        .th-deskripsi   { background: #1e6b8c; }
-        .th-status      { background: #5cb85c; }
-        .th-aksi        { background: #d9534f; }
-
-        .table-body { padding: 8px 0; }
-
-        .table-row {
-            display: grid; grid-template-columns: 1.2fr 1.2fr 3fr 1fr 0.8fr;
-            gap: 12px; padding: 14px 20px; align-items: center;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.2s;
-        }
-        .table-row:last-child { border-bottom: none; }
-        .table-row:hover { background: #f9fdfb; }
+        /* ====== TABEL & CARD ADUAN ====== */
+        .table-custom th { background: var(--brand-green); color: #fff; text-align: center; }
+        .table-custom td { vertical-align: middle; }
 
         .chip-kategori {
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
-            border: 2px solid; width: max-content; min-width: 100%;
-            white-space: nowrap;
+            display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid;
         }
-
         .chip-kebersihan { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
         .chip-infrastruktur { background: #fff3e0; border-color: #ff9800; color: #e65100; }
         .chip-kesehatan { background: #e3f2fd; border-color: #2196f3; color: #1565c0; }
@@ -236,143 +186,81 @@ $userData = $stmt->fetch();
         .chip-lingkungan { background: #f1f8e9; border-color: #8bc34a; color: #558b2f; }
         .chip-administrasi { background: #ede7f6; border-color: #673ab7; color: #4527a0; }
 
-        .cell-tanggal { font-size: 13px; font-weight: 600; color: #333; text-align: center; }
-        .cell-deskripsi { font-size: 13px; color: #555; }
-        .cell-status { text-align: center; }
-        .cell-aksi { text-align: center; }
-
-        .tag-status {
-            display: inline-block; padding: 5px 14px;
-            border-radius: 16px; font-size: 11px; font-weight: 700;
-            border: 2px solid;
-        }
+        .status-badge { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 2px solid; display: inline-block; }
         .status-dibalas { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
-        .status-menunggu { background: #fce4ec; border-color: #e91e63; color: #c2185b; }
-
-        .btn-edit {
-            display: inline-block; padding: 6px 14px;
-            background: transparent; border: 2px solid #999;
-            border-radius: 8px; font-size: 12px; font-weight: 700;
-            color: #666; cursor: pointer; transition: all 0.25s;
-        }
-        .btn-edit:hover { background: var(--brand-green); border-color: var(--brand-green); color: #fff; }
-
-        .empty-row, .loading-row {
-            text-align: center; padding: 40px; color: #999; font-size: 14px;
-        }
-
-        .lihat-semua {
-            display: block; text-align: right; padding: 8px 20px;
-            color: var(--brand-green); font-weight: 700; font-size: 13px;
-        }
-        .lihat-semua:hover { text-decoration: underline; }
-
-        .aduan-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
+        .status-menunggu { background: #fff3e0; border-color: #ff9800; color: #e65100; }
 
         .aduan-card {
-            background: #fff; border: 2px solid #e0e6ed; border-radius: 14px;
-            overflow: hidden; transition: all 0.3s ease;
-            display: flex; flex-direction: column;
+            border: 2px solid #e0e6ed; border-radius: 14px; overflow: hidden;
+            transition: all 0.3s ease; display: flex; flex-direction: column; height: 100%; background: #fff;
         }
         .aduan-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); border-color: #28a745; }
-        
-        .aduan-card-image { width: 100%; height: 180px; overflow: hidden; background: #f0f0f0; }
-        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        
-        .aduan-card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
-        .aduan-card-tags { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
-        
-        .tag-kategori-card { 
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid;
-        }
+        .aduan-card-image { height: 180px; overflow: hidden; }
+        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; }
 
-        .aduan-card-desc { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 14px; line-height: 1.5; }
-        
-        .aduan-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid #f0f0f0; }
-        .aduan-author { display: flex; align-items: center; gap: 8px; }
-        .author-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #28a745, #20c997); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 700; }
-        .author-name { font-size: 12px; font-weight: 600; color: #555; }
-        .aduan-date { font-size: 11px; color: #999; }
-        .link-balasan { font-size: 12px; color: #2196f3; font-weight: 600; text-decoration: underline; cursor: pointer; }
-        .link-balasan:hover { color: #1565c0; }
-
-        .footer { 
-            background: #1a1a2e; color: #a0a0b0; text-align: center; 
-            padding: 24px 5%; margin-top: auto; font-size: 13px; width: 100%;
-        }
+        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
         .footer .brand-village { color: #fff; }
         .footer .brand-hub { color: var(--brand-yellow); }
-
-        @media (max-width: 1100px) {
-            .navbar-menu a { padding: 8px 10px; font-size: 12px; }
-        }
-        @media (max-width: 1000px) {
-            .navbar-menu { display: none; }
-        }
-        @media (max-width: 900px) {
-            .table-header, .table-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            .table-header > div { text-align: left; }
-            .chip-kategori { width: max-content; }
-        }
-        @media (max-width: 768px) {
-            .navbar-logo .brand-name { font-size: 18px; }
-            .navbar-logo img { width: 40px; height: 40px; }
-            .btn-header { padding: 7px 14px; font-size: 12px; }
-            .stat-grid { grid-template-columns: 1fr; }
-            .hero { height: 160px; }
-            .hero-overlay img { width: 60px; height: 60px; }
-            .hero-text h1 { font-size: 20px; }
-            .hero-text p { font-size: 12px; }
-            .stat-value { font-size: 34px; }
-            .nav-hello { display: none; }
-            .aduan-grid { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- ====== NAVBAR ====== -->
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="../index.php" class="navbar-logo">
-                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="VillageHub Logo">
-                <div class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></div>
+    <!-- NAVBAR BOOTSTRAP -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            
+            <!-- KIRI: Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="../index.php">
+                <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
             </a>
+            
+            <!-- KANAN: Profil, Logout Desktop, & Tombol Titik Tiga -->
+            <div class="d-flex align-items-center order-lg-3 gap-3">
+                
+                <!-- Foto Profil -->
+                <a href="profil.php" class="profile-link order-1 order-lg-2" title="Kelola Profil">
+                    <div class="nav-hello d-none d-lg-block">
+                        Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
+                        <small><?= ucfirst($user['role']) ?></small>
+                    </div>
+                    <?php 
+                        $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
+                    ?>
+                    <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
+                </a>
 
-            <ul class="navbar-menu">
-                <li><a href="beranda.php" class="active">Beranda</a></li>
-                <li><a href="buat-aduan.php">Form Aduan</a></li>
-                <li><a href="balasan-admin.php">Balasan Admin</a></li>
-                <li><a href="riwayat.php">Riwayat</a></li>
-                <li><a href="profil.php">Kelola Profil</a></li>
-            </ul>
-        </div>
+                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
 
-        <div class="navbar-actions">
-            <a href="profil.php" class="profile-link" style="display: flex; align-items: center; text-decoration: none;" title="Kelola Profil">
-                <div class="nav-hello">
-                    Halo, <?= htmlspecialchars(explode(' ', $user['nama'])[0]) ?>
-                    <small><?= ucfirst($user['role']) ?></small>
-                </div>
-                <?php 
-                    $fotoProfil = !empty($userData['foto']) ? '../uploads/' . $userData['foto'] : '../asset/default-avatar.png';
-                ?>
-                <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="nav-avatar" title="<?= htmlspecialchars($user['nama']) ?>">
-            </a>
-            <a href="../logout.php" class="btn-header btn-red" style="text-decoration: none;" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+                <!-- Tombol Titik Tiga (Hamburger) -->
+                <button class="navbar-toggler border-0 order-2 order-lg-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <!-- MENU DROPDOWN -->
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                
+                <!-- Menu Navigasi (Tengah) -->
+                <ul class="navbar-nav mx-auto mb-3 mb-lg-0 text-center align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="beranda.php">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="buat-aduan.php">Form Aduan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="balasan-admin.php">Balasan Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="riwayat.php">Riwayat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profil.php">Kelola Profil</a></li>
+                    
+                    <!-- Tombol Logout untuk HP (Tetap di dalam dropdown) -->
+                    <li class="nav-item d-lg-none mt-3 w-100">
+                        <a href="../logout.php" class="btn-logout w-100 d-block" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </nav>
 
-    <!-- ====== HERO ====== -->
+    <!-- HERO SECTION -->
     <section class="hero">
         <img src="../asset/Gambar pedesaan.avif" alt="Pemandangan Desa">
         <div class="hero-overlay">
@@ -386,68 +274,78 @@ $userData = $stmt->fetch();
 
     <main class="main-content">
 
-        <!-- ====== 3 KARTU STATISTIK ====== -->
+        <!-- 3 KARTU STATISTIK -->
         <h2 class="section-title">Ringkasan Aduan</h2>
-        <div class="stat-grid">
-            <div class="stat-card blue">
-                <div class="stat-header">Total Aduan</div>
-                <div class="stat-body">
-                    <div class="stat-value" id="totalAduan">–</div>
-                    <div class="stat-label">ADUAN</div>
+        <div class="row g-3 mb-5">
+            <div class="col-12 col-md-4">
+                <div class="stat-card blue">
+                    <div class="stat-header">Total Aduan</div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="totalAduan">–</div>
+                        <div class="stat-label">ADUAN</div>
+                    </div>
+                    <a href="riwayat.php" class="stat-link">Lihat Riwayat →</a>
                 </div>
-                <a href="riwayat.php" class="stat-link">Lihat Riwayat →</a>
             </div>
-
-            <div class="stat-card orange">
-                <div class="stat-header">Menunggu Balasan</div>
-                <div class="stat-body">
-                    <div class="stat-value" id="menunggu">–</div>
-                    <div class="stat-label">ADUAN</div>
+            <div class="col-12 col-md-4">
+                <div class="stat-card orange">
+                    <div class="stat-header">Menunggu Balasan</div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="menunggu">–</div>
+                        <div class="stat-label">ADUAN</div>
+                    </div>
+                    <a href="riwayat.php?status=menunggu" class="stat-link">Lihat Riwayat →</a>
                 </div>
-                <a href="riwayat.php?status=menunggu" class="stat-link">Lihat Riwayat →</a>
             </div>
-
-            <div class="stat-card green">
-                <div class="stat-header">Dibalas</div>
-                <div class="stat-body">
-                    <div class="stat-value" id="dibalas">–</div>
-                    <div class="stat-label">ADUAN</div>
+            <div class="col-12 col-md-4">
+                <div class="stat-card green">
+                    <div class="stat-header">Dibalas</div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="dibalas">–</div>
+                        <div class="stat-label">ADUAN</div>
+                    </div>
+                    <a href="riwayat.php?status=dibalas" class="stat-link">Lihat Riwayat →</a>
                 </div>
-                <a href="riwayat.php?status=dibalas" class="stat-link">Lihat Riwayat →</a>
             </div>
         </div>
 
-        <!-- ====== CUPLIKAN RIWAYAT (TABEL) ====== -->
-        <h2 class="section-title"> 5 Aduan Terbaru</h2>
-
-        <div class="table-wrapper">
-            <div class="table-header">
-                <div class="th-kategori">Kategori</div>
-                <div class="th-tanggal">Tanggal diajukan</div>
-                <div class="th-deskripsi">Deskripsi Aduan</div>
-                <div class="th-status">Status</div>
-                <div class="th-aksi">Aksi</div>
-            </div>
-            <div class="table-body" id="tableBody">
-                <div class="loading-row">Memuat riwayat aduan...</div>
-            </div>
+        <!-- CUPLIKAN RIWAYAT (TABEL RESPONSIVE) -->
+        <h2 class="section-title">5 Aduan Terbaru</h2>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-hover table-custom">
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Tanggal</th>
+                        <th>Deskripsi</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="5" class="text-center py-4 text-muted">Memuat data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end mb-5">
+            <a href="riwayat.php" class="fw-bold text-success text-decoration-none">Lihat Semua Riwayat →</a>
         </div>
 
-        <a href="riwayat.php" class="lihat-semua">Lihat Semua Riwayat →</a>
-
-        <!-- ====== TAMBAHAN: CARD GRID ====== -->
-        <h2 class="section-title" style="margin-top: 50px;">Aduan Terbaru (Card)</h2>
-        <div class="aduan-grid" id="aduanGrid">
-            <div class="loading-row">Memuat aduan...</div>
+        <!-- GRID CARD ADUAN -->
+        <h2 class="section-title">Aduan Terbaru (Card)</h2>
+        <div class="row g-4" id="aduanGrid">
+            <div class="col-12 text-center py-4 text-muted">Memuat aduan...</div>
         </div>
 
     </main>
 
-    <!-- ====== FOOTER ====== -->
+    <!-- FOOTER -->
     <footer class="footer">
-        &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
     </footer>
 
+    <!-- BOOTSTRAP JS & SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=14"></script>
     <script>
         const iconMap = {
@@ -458,16 +356,11 @@ $userData = $stmt->fetch();
         };
 
         const chipColorMap = {
-            'Kebersihan': 'chip-kebersihan',
-            'Infrastruktur': 'chip-infrastruktur',
-            'Kesehatan': 'chip-kesehatan',
-            'Keamanan dan Ketertiban': 'chip-keamanan',
-            'Keamanan': 'chip-keamanan',
-            'Pendidikan': 'chip-pendidikan',
-            'Sosial': 'chip-sosial',
-            'Lingkungan': 'chip-lingkungan',
-            'Lingkungan Hidup': 'chip-lingkungan',
-            'Administrasi': 'chip-administrasi',
+            'Kebersihan': 'chip-kebersihan', 'Infrastruktur': 'chip-infrastruktur',
+            'Kesehatan': 'chip-kesehatan', 'Keamanan dan Ketertiban': 'chip-keamanan',
+            'Keamanan': 'chip-keamanan', 'Pendidikan': 'chip-pendidikan',
+            'Sosial': 'chip-sosial', 'Lingkungan': 'chip-lingkungan',
+            'Lingkungan Hidup': 'chip-lingkungan', 'Administrasi': 'chip-administrasi',
             'Administrasi dan Pelayanan Publik': 'chip-administrasi'
         };
 
@@ -485,34 +378,27 @@ $userData = $stmt->fetch();
             const tbody = document.getElementById('tableBody');
 
             if (!res.success || !res.data || res.data.length === 0) {
-                tbody.innerHTML = `<div class="empty-row">Belum ada aduan. <a href="buat-aduan.php" style="color:#28a745;font-weight:700;">Buat aduan pertama →</a></div>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Belum ada aduan. <a href="buat-aduan.php" class="text-success fw-bold">Buat aduan pertama →</a></td></tr>`;
                 return;
             }
 
             const list = res.data.slice(0, 5);
-
             tbody.innerHTML = list.map(a => {
                 const statusClass = a.status === 'dibalas' ? 'status-dibalas' : 'status-menunggu';
                 const statusLabel = a.status === 'dibalas' ? 'Dibalas' : 'Menunggu';
-                
                 const namaKategori = a.kategori || 'Kebersihan';
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
                 const iconKategori = iconMap[namaKategori] || '📌';
-
-                const tanggal = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', {
-                    day: '2-digit', month: '2-digit', year: 'numeric'
-                }).replace(/\//g, ' - ');
+                const tanggal = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, ' - ');
 
                 return `
-                    <div class="table-row">
-                        <div><span class="chip-kategori ${catClass}">${iconKategori} ${namaKategori}</span></div>
-                        <div class="cell-tanggal">${tanggal}</div>
-                        <div class="cell-deskripsi">${(a.deskripsi || '').substring(0, 100)}${a.deskripsi.length > 100 ? '...' : ''}</div>
-                        <div class="cell-status"><span class="tag-status ${statusClass}">${statusLabel}</span></div>
-                        <div class="cell-aksi">
-                            <a href="riwayat.php?id=${a.id_aduan}" class="btn-edit">Lihat ></a>
-                        </div>
-                    </div>
+                    <tr>
+                        <td class="text-center"><span class="chip-kategori ${catClass}">${iconKategori} ${namaKategori}</span></td>
+                        <td class="text-center fw-bold">${tanggal}</td>
+                        <td>${(a.deskripsi || '').substring(0, 100)}${a.deskripsi.length > 100 ? '...' : ''}</td>
+                        <td class="text-center"><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td class="text-center"><a href="riwayat.php?id=${a.id_aduan}" class="btn btn-sm btn-outline-success fw-bold">Lihat ></a></td>
+                    </tr>
                 `;
             }).join('');
         }
@@ -524,47 +410,46 @@ $userData = $stmt->fetch();
             const grid = document.getElementById('aduanGrid');
 
             if (!res.success || !res.data || res.data.length === 0) {
-                grid.innerHTML = `<div class="empty-row">Belum ada aduan untuk ditampilkan.</div>`;
+                grid.innerHTML = `<div class="col-12 text-center py-4 text-muted">Belum ada aduan untuk ditampilkan.</div>`;
                 return;
             }
 
             const list = res.data.slice(0, 5);
-
             grid.innerHTML = list.map(a => {
                 const statusClass = a.status === 'dibalas' ? 'status-dibalas' : 'status-menunggu';
                 const statusLabel = a.status === 'dibalas' ? 'Dibalas' : 'Menunggu';
-                
                 const namaKategori = a.kategori || 'Kebersihan';
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
                 const iconKategori = iconMap[namaKategori] || '📌';
-
-                const inisial     = currentUserName.charAt(0).toUpperCase();
-                const tanggal     = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                const foto        = a.foto ? `../uploads/${a.foto}` : '../asset/Gambar pedesaan.avif';
+                const inisial = currentUserName.charAt(0).toUpperCase();
+                const tanggal = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const foto = a.foto ? `../uploads/${a.foto}` : '../asset/Gambar pedesaan.avif';
 
                 return `
-                    <div class="aduan-card">
-                        <div class="aduan-card-image">
-                            <img src="${foto}" alt="Aduan ${namaKategori}">
-                        </div>
-                        <div class="aduan-card-body">
-                            <div class="aduan-card-tags">
-                                <span class="tag-kategori-card ${catClass}">${iconKategori} ${namaKategori}</span>
-                                <span class="tag-status ${statusClass}">${statusLabel}</span>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="aduan-card">
+                            <div class="aduan-card-image">
+                                <img src="${foto}" alt="Aduan">
                             </div>
-                            <p class="aduan-card-desc">${(a.deskripsi || '').substring(0, 80)}...</p>
-                            <div class="aduan-card-footer">
-                                <div class="aduan-author">
-                                    <div class="author-avatar">${inisial}</div>
-                                    <span class="author-name">${currentUserName}</span>
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="chip-kategori ${catClass}">${iconKategori} ${namaKategori}</span>
+                                    <span class="status-badge ${statusClass}">${statusLabel}</span>
                                 </div>
-                                <span class="aduan-date">${tanggal}</span>
-                                <a href="riwayat.php" class="link-balasan">Lihat balasan</a>
+                                <p class="text-dark fw-bold mb-3">${(a.deskripsi || '').substring(0, 80)}...</p>
+                                <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:28px; height:28px; font-size:12px;">${inisial}</div>
+                                        <span class="fw-semibold text-muted" style="font-size: 12px;">${currentUserName}</span>
+                                    </div>
+                                    <span class="text-muted" style="font-size: 11px;">${tanggal}</span>
+                                    <a href="riwayat.php" class="text-primary fw-bold" style="font-size: 12px;">Lihat balasan</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
-            }).join('')
+            }).join('');
         }
 
         async function refreshAll() {

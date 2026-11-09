@@ -18,9 +18,15 @@ if (!empty($_SESSION['user'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login – Village Hub</title>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     :root {
       --green: #1b7a2b;
@@ -29,100 +35,179 @@ if (!empty($_SESSION['user'])) {
       --ink: #1F2A22;
       --white: #FFFFFF;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Layout Body Utama */
     body {
-      min-height: 100vh; display: flex; flex-direction: column;
-      font-family: 'Nunito', sans-serif; color: var(--ink);
+      font-family: 'Nunito', sans-serif;
+      color: var(--ink);
       background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
     }
 
-    /* Navbar */
-    .navbar {
+    /* ===== NAVBAR ===== */
+    .navbar-vh {
       background: linear-gradient(135deg, var(--green) 0%, #28a745 50%, #2d8f3e 100%);
-      padding: 10px 5%; display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 3px 16px rgba(0,0,0,0.15); line-height: 1.6;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.15);
+      padding: 10px 0;
+      flex-shrink: 0;
     }
-    .brand {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; font-family: 'Poppins', sans-serif;
-      font-weight: 800; font-size: 22px; letter-spacing: 0.5px;
-      line-height: 1.1; white-space: nowrap;
+    .brand-vh {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: white;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
     }
-    .brand img { width: 54px; height: 54px; object-fit: contain; }
-    .brand-village { color: #fff; }
-    .brand-hub { color: var(--yellow); }
-    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .brand-vh img { width: 54px; height: 54px; object-fit: contain; }
+    .brand-vh .hub { color: var(--yellow); }
 
     .btn-masuk {
-      padding: 10px 28px; border: 2px solid var(--yellow); border-radius: 8px;
-      background: var(--yellow); color: #1a1a2e; font-size: 14px; font-weight: 600;
-      font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease;
-      text-decoration: none; display: inline-block;
+      padding: 8px 22px;
+      border: 2px solid var(--yellow);
+      border-radius: 8px;
+      background: var(--yellow);
+      color: #1a1a2e;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      white-space: nowrap;
     }
-    .btn-masuk:hover { background: #e0a800; transform: translateY(-2px); }
+    .btn-masuk:hover { background: #e0a800; border-color: #e0a800; color: #1a1a2e; transform: translateY(-2px); }
 
-    .btn-daftar {
-      padding: 10px 28px; border: 2px solid #ffffff; border-radius: 8px;
-      background: #ffffff; color: #1a1a2e; font-size: 14px; font-weight: 600;
-      font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease;
-      text-decoration: none; display: inline-block;
+    .btn-daftar-nav {
+      padding: 8px 22px;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #1a1a2e;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      white-space: nowrap;
     }
-    .btn-daftar:hover { background: #f0f0f0; transform: translateY(-2px); }
+    .btn-daftar-nav:hover { background: #f0f0f0; color: #1a1a2e; transform: translateY(-2px); }
 
-    /* Layout */
-    .login-page { flex: 1; display: flex; }
+    /* ===== PERBAIKAN JARAK GAMBAR & FOOTER ===== */
+    .login-page { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .login-page > .container-fluid {
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-page .row {
+      flex: 1; /* Memaksa row memenuhi tinggi container */
+    }
+
+    .login-page .col-12 {
+      display: flex;
+      flex-direction: column;
+    }
+
     .login-photo {
-      flex: 1; min-height: 420px;
+      flex: 1; /* Gambar mengisi sisa ruang di kolomnya */
+      min-height: 420px;
       background: url("asset/Gambar%20pedesaan.avif") center / cover no-repeat;
-      display: flex; align-items: center; padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5%;
+      width: 100%;
     }
+
+    .login-form {
+      flex: 1;
+      background: var(--cream);
+      padding: 40px clamp(20px, 6vw, 88px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* ===== STYLING FORM ===== */
     .login-brand { display: flex; align-items: center; gap: 18px; }
     .login-brand img {
-      width: clamp(110px, 14vw, 190px);
+      width: clamp(90px, 14vw, 190px);
       filter: drop-shadow(0 3px 6px rgba(0,0,0,.25));
     }
     .login-brand h2 {
-      font-family: 'Baloo 2', sans-serif; font-weight: 800;
-      font-size: clamp(30px, 4.2vw, 56px); line-height: 1;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 4.2vw, 56px);
+      line-height: 1;
       color: var(--white);
       text-shadow: 0 2px 6px rgba(0,0,0,.35);
       white-space: nowrap;
+      margin: 0;
     }
     .login-brand h2 span { color: var(--yellow); }
 
-    .login-form {
-      flex: 1; background: var(--cream);
-      padding: 40px clamp(24px, 6vw, 88px);
-      display: flex; flex-direction: column;
-      justify-content: center; gap: 24px;
-    }
     .login-form h1 {
-      font-family: 'Baloo 2', sans-serif; font-weight: 800;
-      font-size: clamp(28px, 3vw, 38px); text-align: center;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: clamp(24px, 3vw, 38px);
+      text-align: center;
+      margin-bottom: 20px;
     }
     .login-form form {
-      width: 100%; max-width: 420px; margin: 0 auto;
-      display: flex; flex-direction: column; gap: 6px;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
     }
     .login-form label {
-      font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 14px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
     }
-    .login-form input[type="email"],
-    .login-form input[type="password"],
-    .login-form input[type="text"] {
-      width: 100%; padding: 11px 14px; margin-bottom: 10px;
-      background: var(--white); border: 1px solid var(--ink);
-      border-radius: 10px; font: 500 14px 'Nunito', sans-serif;
+
+    /* Override Bootstrap form-control */
+    .login-form .form-control {
+      padding: 11px 14px;
+      background: var(--white);
+      border: 1px solid var(--ink);
+      border-radius: 10px;
+      font: 500 14px 'Nunito', sans-serif;
     }
-    .password-field { position: relative; margin-bottom: 10px; }
-    .password-field input[type="password"],
-    .password-field input[type="text"] {
-      margin-bottom: 0; padding-right: 44px;
+    .login-form .form-control:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
     }
+
+    /* Password field */
+    .password-field { position: relative; }
+    .password-field .form-control { padding-right: 44px; }
     .toggle-password {
-      position: absolute; top: 50%; right: 12px; transform: translateY(-50%);
-      display: flex; align-items: center; justify-content: center;
-      padding: 4px; border: 0; background: transparent; color: #53645a;
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border: 0;
+      background: transparent;
+      color: #53645a;
       cursor: pointer;
     }
     .toggle-password:focus-visible { outline: 2px solid var(--green); border-radius: 4px; }
@@ -130,135 +215,215 @@ if (!empty($_SESSION['user'])) {
     .toggle-password .icon-hidden { display: none; }
     .toggle-password[aria-pressed="true"] .icon-visible { display: none; }
     .toggle-password[aria-pressed="true"] .icon-hidden { display: block; }
-    .login-form input:focus { outline: 3px solid var(--yellow); }
 
+    /* Remember me + Lupa sandi */
+    .row-remember {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
     .remember {
-      display: flex; align-items: center; gap: 8px;
-      font-family: 'Nunito', sans-serif !important; font-size: 12px !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px !important;
+      margin-bottom: 0;
     }
-
-    .btn-login {
-      align-self: center; min-width: 150px; margin-top: 24px;
-      padding: 12px 30px; background: var(--green); color: white;
-      border: 2px solid var(--green); border-radius: 12px;
-      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 16px;
-      cursor: pointer; transition: all 0.3s;
+    .link-lupa {
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 700;
+      text-decoration: none;
     }
-    .btn-login:hover:not(:disabled) { background: #0f5c2f; transform: translateY(-2px); }
-    .btn-login:disabled { background: #999; border-color: #999; cursor: not-allowed; }
+    .link-lupa:hover { color: #0f5c2f; text-decoration: underline; }
 
+    /* Button */
+    .btn-vh {
+      background: var(--green);
+      color: white;
+      border: 2px solid var(--green);
+      border-radius: 12px;
+      padding: 12px 30px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    .btn-vh:hover:not(:disabled) {
+      background: #0f5c2f;
+      border-color: #0f5c2f;
+      color: white;
+      transform: translateY(-2px);
+    }
+    .btn-vh:disabled { background: #999; border-color: #999; cursor: not-allowed; }
+
+    /* Pesan */
     .pesan {
-      padding: 10px 14px; border-radius: 8px; font-size: 13px;
-      margin-top: 10px; display: none; text-align: center;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+      text-align: center;
     }
     .pesan.error { background: #ffebee; color: #c62828; display: block; }
     .pesan.success { background: #e8f5e9; color: #2e7d32; display: block; }
 
     .link-bawah {
-      text-align: center; margin-top: 15px;
-      font-size: 13px; color: #666;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+      color: #666;
     }
-    .link-bawah + .link-bawah { margin-top: -15px; }
     .link-bawah a { color: var(--green); font-weight: 700; text-decoration: none; }
     .link-bawah a:hover { text-decoration: underline; }
 
-    @media (max-width: 800px) {
-      .login-page { flex-direction: column; }
-      .login-photo { flex: none; min-height: 200px; justify-content: center; padding: 24px; }
-      .login-form h1 { text-align: center; }
+    /* Footer */
+    .footer-vh {
+      background: #1a1a2e;
+      color: #a0a0b0;
+      text-align: center;
+      padding: 24px 5%;
+      font-size: 13px;
+      flex-shrink: 0;
     }
-    @media (max-width: 768px) {
-      .navbar { padding: 10px 5%; }
-      .brand { font-size: 18px; }
-      .brand img { width: 36px; height: 36px; }
-      .btn-masuk, .btn-daftar { padding: 8px 16px; font-size: 12px; }
+    .footer-vh .hub { color: var(--yellow); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 767.98px) {
+      .login-photo { min-height: 180px; padding: 20px; }
+      .login-form { padding: 30px 20px; }
+      .brand-vh { font-size: 18px; }
+      .brand-vh img { width: 42px; height: 42px; }
+      .btn-masuk, .btn-daftar-nav { padding: 6px 14px; font-size: 12px; }
     }
-    /* ====== FOOTER (Sama seperti index.php) ====== */
-.footer {
-    background: #1a1a2e;
-    color: #a0a0b0;
-    text-align: center;
-    padding: 24px 5%;
-    margin-top: 0;   /* sebelumnya 50px: celah krem antara konten dan footer */
-    font-size: 13px;
-}
-.footer .brand-village { color: #fff; }
-.footer .brand-hub { color: var(--yellow); }
+    @media (max-width: 575.98px) {
+      .login-photo { min-height: 140px; }
+      .login-brand { gap: 10px; }
+      .login-brand h2 { font-size: 24px; }
+      .login-form { padding: 24px 16px; }
+      .btn-masuk, .btn-daftar-nav { padding: 5px 10px; font-size: 11px; }
+      .row-remember { flex-direction: column; align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header class="navbar">
-    <a class="brand" href="index.php">
-      <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo Village Hub">
-      <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
-    </a>
-    <div class="nav-actions">
-      <a class="btn-masuk" href="login.php">Masuk</a>
-      <a class="btn-daftar" href="register.php">Daftar</a>
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar-vh">
+    <div class="container-fluid px-3 px-md-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <a class="brand-vh" href="index.php">
+          <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo Village Hub">
+          <span>VILLAGE <span class="hub">HUB</span></span>
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <a class="btn-masuk" href="login.php">Masuk</a>
+          <a class="btn-daftar-nav" href="register.php">Daftar</a>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- Isi halaman -->
+  <!-- ===== MAIN ===== -->
   <main class="login-page">
+    <div class="container-fluid p-0">
+      <!-- PERBAIKAN: Hapus 'flex-grow-1', biarkan CSS yang mengatur tingginya -->
+      <div class="row g-0"> 
 
-    <!-- Kiri: gambar -->
-    <section class="login-photo">
-      <div class="login-brand">
-        <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
-        <h2>VILLAGE <span>HUB</span></h2>
+        <!-- FOTO -->
+        <div class="col-12 col-md-6">
+          <section class="login-photo">
+            <div class="login-brand">
+              <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+              <h2>VILLAGE <span>HUB</span></h2>
+            </div>
+          </section>
+        </div>
+
+        <!-- FORM -->
+        <div class="col-12 col-md-6">
+          <section class="login-form">
+            <div class="row justify-content-center">
+              <div class="col-12 col-lg-10 col-xl-8">
+
+                <h1>Masukkan Account</h1>
+
+                <form id="formLogin" autocomplete="off">
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           placeholder="Masukkan Email"
+                           autocomplete="off" readonly required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-field">
+                      <input type="password" class="form-control" id="password" name="password"
+                             placeholder="Masukkan Password"
+                             autocomplete="new-password" readonly required>
+                      <button type="button" class="toggle-password" id="togglePassword"
+                              aria-label="Tampilkan password" aria-pressed="false">
+                        <svg class="icon-visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="icon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="m3 3 18 18"></path>
+                          <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                          <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"></path>
+                          <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.2 0 2.3-.2 3.3-.6"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="row-remember">
+                    <label class="remember">
+                      <input type="checkbox" name="remember" value="1"> Remember me
+                    </label>
+                    <a href="lupa_sandi.php" class="link-lupa">Lupa Sandi?</a>
+                  </div>
+
+                  <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="btn btn-vh" id="btnLogin" style="min-width: 150px;">
+                      Login
+                    </button>
+                  </div>
+
+                  <div class="pesan" id="pesan"></div>
+                </form>
+
+                <p class="link-bawah">
+                  Belum punya akun? <a href="register.php">Daftar di sini</a>
+                </p>
+                <p class="link-bawah">
+                  <a href="index.php">kembali ke beranda -&gt;</a>
+                </p>
+
+              </div>
+            </div>
+          </section>
+        </div>
+
       </div>
-    </section>
-
-    <!-- Kanan: form -->
-    <section class="login-form">
-      <h1>Masukkan Account</h1>
-
-      <form id="formLogin" autocomplete="off">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Masukkan Email" autocomplete="off" readonly required>
-
-        <label for="password">Password</label>
-        <div class="password-field">
-          <input type="password" id="password" name="password" placeholder="Masukkan Password" autocomplete="new-password" readonly required>
-          <button type="button" class="toggle-password" id="togglePassword" aria-label="Tampilkan password" aria-pressed="false">
-            <svg class="icon-visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-            <svg class="icon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="m3 3 18 18"></path>
-              <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
-              <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"></path>
-              <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.2 0 2.3-.2 3.3-.6"></path>
-            </svg>
-          </button>
-        </div>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-          <label class="remember" style="margin-bottom: 0;">
-            <input type="checkbox" name="remember" value="1"> Remember me
-          </label>
-          <a href="lupa_sandi.php" style="font-size: 13px; color: var(--green); font-weight: 700; text-decoration: none;">Lupa Sandi?</a>
-        </div>
-
-        <button type="submit" class="btn-login" id="btnLogin">Login</button>
-
-        <div class="pesan" id="pesan"></div>
-      </form>
-
-      <p class="link-bawah">
-        Belum punya akun? <a href="register.php">Daftar di sini</a>
-      </p>
-      <p class="link-bawah">
-        <a href="index.php">kembali ke beranda -&gt;</a>
-      </p>
-    </section>
-
+    </div>
   </main>
 
-  <!-- SCRIPT -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer-vh">
+    &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script asli (logic tetap sama) -->
   <script src="assets/api.js"></script>
   <script>
     const emailInput = document.getElementById('email');
@@ -327,9 +492,5 @@ if (!empty($_SESSION['user'])) {
       }
     });
   </script>
-<!-- ====== FOOTER ====== -->
-<footer class="footer">
-    &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
-</footer>
 </body>
 </html>
