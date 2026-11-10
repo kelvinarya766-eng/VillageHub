@@ -140,9 +140,7 @@ $userData   = $_SESSION['user'] ?? null;
         .link-balasan { font-size: 12px; color: #2196f3; font-weight: 600; text-decoration: underline; cursor: pointer; }
         .link-balasan:hover { color: #1565c0; }
 
-        .footer { background: #1a1a2e; color: #a0a0b0; text-align: center; padding: 24px 5%; margin-top: 50px; font-size: 13px; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+     
 
         @media (max-width: 768px) {
             .navbar-logo .brand-name { font-size: 18px; }
@@ -160,6 +158,11 @@ $userData   = $_SESSION['user'] ?? null;
             to { opacity: 1; transform: translateY(0); }
         }
         .aduan-card { animation: fadeInUp 0.5s ease forwards; }
+
+
+         .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
+        .footer .brand-village { color: #fff; }
+        .footer .brand-hub { color: var(--brand-yellow); }
     </style>
 </head>
 <body>
@@ -213,8 +216,9 @@ $userData   = $_SESSION['user'] ?? null;
     </main>
 
   
+       <!-- FOOTER -->
     <footer class="footer">
-        &copy; 2026 <span class="brand-name footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
     </footer>
 
     <!-- BOOTSTRAP JS -->

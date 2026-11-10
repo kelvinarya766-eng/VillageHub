@@ -27,6 +27,7 @@ $userData = $stmt->fetch();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Aduan – VillageHub</title>
     
+    <!-- BOOTSTRAP 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- GOOGLE FONTS: NUNITO -->
@@ -35,20 +36,28 @@ $userData = $stmt->fetch();
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
+        :root { 
+            --brand-green: #1b7a2b; 
+            --brand-yellow: #ffc107; 
+        }
+        
         body {
             font-family: 'Nunito', 'Segoe UI', sans-serif;
-            background-color: #f5f2eb; color: #333;
-            min-height: 100vh; display: flex; flex-direction: column;
+            background-color: #f5f2eb; 
+            color: #333;
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column;
         }
         a { text-decoration: none; color: inherit; }
 
+        /* ====== NAVBAR BOOTSTRAP ====== */
         .navbar-custom {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             box-shadow: 0 3px 16px rgba(0,0,0,0.15);
         }
         .navbar-brand img { width: 50px !important; height: 50px !important; object-fit: contain; margin-right: 10px; }
-        .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; }
+        .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; font-family: 'Nunito', sans-serif; }
         .brand-village { color: #fff; }
         .brand-hub { color: var(--brand-yellow); }
 
@@ -58,21 +67,26 @@ $userData = $stmt->fetch();
             padding: 8px 16px;
             border-radius: 8px; 
             margin: 0 3px; 
-            font-size: 14px;
+            font-size: 14px; 
             font-weight: 500; 
             transition: all 0.3s ease; 
             border-bottom: 3px solid transparent; 
         }
+        
+        /* Menu saat aktif */
         .navbar-nav .nav-link.active { 
             background-color: rgba(255, 255, 255, 0.2); 
-            font-weight: 600;
+            font-weight: 600; 
             color: #fff; 
         }
+        
+        /* Efek saat kursor diarahkan */
         .navbar-nav .nav-link:hover { 
             color: var(--brand-yellow); 
             border-bottom-color: var(--brand-yellow); 
         }
 
+        /* Profil & Logout */
         .profile-link { display: flex; align-items: center; text-decoration: none; }
         .nav-hello { color: #fff; font-weight: 600; font-size: 14px; margin-right: 10px; line-height: 1.2; text-align: right; }
         .nav-hello small { display: block; font-weight: 400; font-size: 11px; opacity: 0.85; }
@@ -91,6 +105,7 @@ $userData = $stmt->fetch();
             text-align: center;
             transition: all 0.3s ease;
         }
+        
         .btn-logout:hover { 
             background: #a31515; 
             color: #ffffff !important; 
@@ -98,6 +113,7 @@ $userData = $stmt->fetch();
             border-bottom: none !important;
         }
 
+        /* ====== KONTEN UTAMA ====== */
         .main-content { max-width: 900px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
 
         .riwayat-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #e2dcd0; width: 100%; }
@@ -134,9 +150,10 @@ $userData = $stmt->fetch();
 </head>
 <body>
 
-    <!-- NAVBAR BOOTSTRAP -->
+    <!-- NAVBAR BOOTSTRAP (SAMA SEPERTI BERANDA & PROFIL) -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
+            
             <!-- KIRI: Logo -->
             <a class="navbar-brand d-flex align-items-center" href="../index.php">
                 <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
@@ -158,7 +175,7 @@ $userData = $stmt->fetch();
                     <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
                 </a>
 
-                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <!-- Tombol Logout untuk Desktop -->
                 <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
 
                 <!-- Tombol Titik Tiga (Hamburger) -->
@@ -169,6 +186,8 @@ $userData = $stmt->fetch();
 
             <!-- MENU DROPDOWN -->
             <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                
+                <!-- Menu Navigasi (Tengah) -->
                 <ul class="navbar-nav mx-auto mb-3 mb-lg-0 text-center align-items-center">
                     <li class="nav-item"><a class="nav-link" href="beranda.php">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="buat-aduan.php">Form Aduan</a></li>
@@ -181,6 +200,7 @@ $userData = $stmt->fetch();
                         <a href="../logout.php" class="btn-logout w-100 d-block" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
                     </li>
                 </ul>
+
             </div>
         </div>
     </nav>
@@ -208,10 +228,12 @@ $userData = $stmt->fetch();
         </div>
     </main>
 
+    <!-- FOOTER -->
      <footer class="footer">
         &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
     </footer>
 
+    <!-- BOOTSTRAP JS & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=9"></script>
     <script>

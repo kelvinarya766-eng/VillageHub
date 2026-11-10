@@ -1,5 +1,4 @@
 <?php
-// File: api/user/update_profil.php
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../config/response.php';
 require_once __DIR__ . '/../../config/auth.php';
@@ -54,6 +53,5 @@ try {
     jsonResponse(["success" => true, "message" => "Data sudah Terupdate"]);
 
 } catch (Exception $e) {
-    // Tangkap error database agar tidak merusak format JSON
     jsonResponse(["success" => false, "message" => "Database Error: " . $e->getMessage()], 500);
 }

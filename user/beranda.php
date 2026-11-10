@@ -266,7 +266,7 @@ $userData = $stmt->fetch();
         <div class="hero-overlay">
             <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
             <div class="hero-text">
-                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?>! 👋</h1>
+                <h1>Selamat Datang, <?= htmlspecialchars($user['nama']) ?></h1>
                 <p>Pantau aduanmu dan lihat balasan dari pihak desa di sini.</p>
             </div>
         </div>
@@ -332,7 +332,7 @@ $userData = $stmt->fetch();
         </div>
 
         <!-- GRID CARD ADUAN -->
-        <h2 class="section-title">Aduan Terbaru (Card)</h2>
+        <h2 class="section-title">Aduan Terbaru</h2>
         <div class="row g-4" id="aduanGrid">
             <div class="col-12 text-center py-4 text-muted">Memuat aduan...</div>
         </div>

@@ -21,8 +21,14 @@ if (!empty($_SESSION['user'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    :root { --green: #1b7a2b; --yellow: #ffc107; --cream: #FFF8E7; --ink: #1F2A22; }
+    :root { 
+      --green: #1b7a2b; 
+      --yellow: #ffc107; 
+      --cream: #FFF8E7; 
+      --ink: #1F2A22; 
+    }
 
+    /* Layout Body Utama */
     body {
       font-family: 'Nunito', sans-serif;
       color: var(--ink);
@@ -30,6 +36,7 @@ if (!empty($_SESSION['user'])) {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
 
     /* ===== NAVBAR ===== */
@@ -37,6 +44,7 @@ if (!empty($_SESSION['user'])) {
       background: linear-gradient(135deg, var(--green) 0%, #28a745 50%, #2d8f3e 100%);
       box-shadow: 0 3px 16px rgba(0,0,0,0.15);
       padding: 10px 0;
+      flex-shrink: 0;
     }
     .brand-vh {
       display: flex;
@@ -51,17 +59,38 @@ if (!empty($_SESSION['user'])) {
     .brand-vh img { width: 54px; height: 54px; object-fit: contain; }
     .brand-vh .hub { color: var(--yellow); }
 
-    /* ===== MAIN LAYOUT ===== */
-    .auth-page { flex: 1; display: flex; }
+    /* ===== PERBAIKAN LAYOUT GAMBAR & FORM ===== */
+    .auth-page { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      width: 100%;
+    }
+    
+    .auth-page > .container-fluid {
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-page .row {
+      flex: 1; /* Memaksa row memenuhi tinggi container */
+    }
+
+    .auth-page .col-12 {
+      display: flex;
+      flex-direction: column;
+    }
 
     .auth-photo {
-      flex: 1;
+      flex: 1; /* Gambar mengisi sisa ruang secara vertikal */
       background: url("asset/Gambar%20pedesaan.avif") center / cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0 5%;
       min-height: 300px;
+      width: 100%;
     }
     .auth-photo h2 {
       font-family: 'Baloo 2', sans-serif;
@@ -79,6 +108,7 @@ if (!empty($_SESSION['user'])) {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      width: 100%;
     }
     .auth-form h1 {
       font-family: 'Baloo 2', sans-serif;
@@ -176,18 +206,22 @@ if (!empty($_SESSION['user'])) {
 
     #step2, #step3 { display: none; }
 
+    /* ===== FOOTER (SAMA SEPERTI INDEX & LOGIN) ===== */
     .footer-vh {
       background: #1a1a2e;
       color: #a0a0b0;
       text-align: center;
       padding: 24px 5%;
       font-size: 13px;
+      width: 100%;
+      flex-shrink: 0;
     }
+    .footer-vh .brand-village { color: #fff; }
+    .footer-vh .brand-hub { color: var(--yellow); }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 767.98px) {
-      .auth-page { flex-direction: column; }
-      .auth-photo { min-height: 180px; flex: none; padding: 20px; }
+      .auth-photo { min-height: 180px; padding: 20px; }
       .auth-form { padding: 30px 20px; }
       .brand-vh { font-size: 18px; }
       .brand-vh img { width: 42px; height: 42px; }
@@ -214,17 +248,18 @@ if (!empty($_SESSION['user'])) {
   <!-- MAIN -->
   <main class="auth-page">
     <div class="container-fluid p-0">
-      <div class="row g-0 flex-grow-1">
+      <div class="row g-0">
 
         <!-- FOTO -->
         <div class="col-12 col-md-6">
-          <section class="auth-photo h-100">
+          <section class="auth-photo">
+            <h2>LUPA <span>SANDI?</span></h2>
           </section>
         </div>
 
         <!-- FORM -->
         <div class="col-12 col-md-6">
-          <section class="auth-form h-100">
+          <section class="auth-form">
             <div class="row justify-content-center">
               <div class="col-12 col-lg-10 col-xl-8">
 
@@ -318,9 +353,9 @@ if (!empty($_SESSION['user'])) {
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER (SUDAH DISAMAKAN) ===== -->
   <footer class="footer-vh">
-    &copy; 2026 VILLAGE HUB. Semua hak cipta dilindungi.
+    &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
   </footer>
 
   <!-- Bootstrap 5 JS -->

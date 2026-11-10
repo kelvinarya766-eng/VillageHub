@@ -106,6 +106,7 @@ if (!empty($_SESSION['user'])) {
       flex: 1; 
       display: flex; 
       flex-direction: column; 
+      width: 100%;
     }
     
     .login-page > .container-fluid {
@@ -281,16 +282,18 @@ if (!empty($_SESSION['user'])) {
     .link-bawah a { color: var(--green); font-weight: 700; text-decoration: none; }
     .link-bawah a:hover { text-decoration: underline; }
 
-    /* Footer */
-    .footer-vh {
-      background: #1a1a2e;
-      color: #a0a0b0;
-      text-align: center;
-      padding: 24px 5%;
-      font-size: 13px;
+    /* ===== PERBAIKAN FOOTER ===== */
+    .footer-vh { 
+      background: #1a1a2e; 
+      color: #a0a0b0; 
+      padding: 24px 5%; 
+      font-size: 13px; 
+      text-align: center; 
+      width: 100%;
       flex-shrink: 0;
     }
-    .footer-vh .hub { color: var(--yellow); }
+    .footer-vh .brand-village { color: #fff; }
+    .footer-vh .brand-hub { color: var(--yellow); }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 767.98px) {
@@ -331,7 +334,6 @@ if (!empty($_SESSION['user'])) {
   <!-- ===== MAIN ===== -->
   <main class="login-page">
     <div class="container-fluid p-0">
-      <!-- PERBAIKAN: Hapus 'flex-grow-1', biarkan CSS yang mengatur tingginya -->
       <div class="row g-0"> 
 
         <!-- FOTO -->
@@ -415,9 +417,9 @@ if (!empty($_SESSION['user'])) {
     </div>
   </main>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- ===== FOOTER (Sudah Diperbaiki Classnya) ===== -->
   <footer class="footer-vh">
-    &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    &copy; 2026 <span class="footer-brand"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
   </footer>
 
   <!-- Bootstrap 5 JS -->
