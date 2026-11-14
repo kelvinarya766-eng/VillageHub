@@ -3,15 +3,19 @@
 // Helper komunikasi Frontend → Backend VillageHub
 // ==================================================
 
-const API_BASE = '/villagehub2/api';
+// PERBAIKAN: Ubah ke '/api' karena di hosting (InfinityFree) 
+// folder project langsung berada di dalam htdocs.
+const API_BASE = '/api';
 
 // ==================================================
 // HELPER UTAMA
 // ==================================================
 async function apiFetch(endpoint, options = {}) {
+  const isFormData = options.body instanceof FormData;
+
   const defaultOptions = {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' }
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' }
   };
   const finalOptions = { ...defaultOptions, ...options };
 
@@ -124,49 +128,47 @@ async function getRiwayatAdmin(page = 1, limit = 10, status = '') {
 // UTILITY — Redirect & Alert
 // ==================================================
 
-// Redirect setelah login berhasil, sesuai role
+// PERBAIKAN: Ubah URL redirect (Hapus /villagehub2/)
 function redirectByRole(role) {
   if (role === 'admin') {
-    window.location.href = '/villagehub2/admin/dashboard.php';
+    window.location.href = '/admin/dashboard.php';
   } else if (role === 'warga') {
-    window.location.href = '/villagehub2/user/beranda.php';
+    window.location.href = '/user/beranda.php';
   } else {
     alert('Role tidak dikenali!');
   }
 }
 
-// Cek login — kalau belum login, redirect ke login.php
+// PERBAIKAN: Ubah URL redirect (Hapus /villagehub2/)
 function cekLoginAtauRedirect(roleYangDiizinkan = null) {
   cekLogin().then(res => {
     if (!res.success) {
-      window.location.href = '/villagehub2/login.php';
+      window.location.href = '/login.php';
       return;
     }
     if (roleYangDiizinkan && res.user.role !== roleYangDiizinkan) {
       alert('Akses ditolak');
-      window.location.href = '/villagehub2/login.php';
+      window.location.href = '/login.php';
     }
   });
 }
 
-// ✅ LOGOUT DENGAN SWEETALERT (DIARAHKAN KE LOGOUT.PHP)
+// PERBAIKAN: Ubah URL redirect (Hapus /villagehub2/)
 function logoutDanRedirect() {
-  // Konfirmasi dulu
   if (!confirm('Yakin ingin logout?')) {
     return;
   }
-
-  // Alihkan ke halaman logout.php yang berisi animasi SweetAlert
-  // Hapus panggilan API logout() karena halaman logout.php sudah menghancurkan session PHP
-  window.location.href = '/villagehub2/logout.php';
+  window.location.href = '/logout.php';
 }
 
-// Logout tanpa konfirmasi (kalau ada tombol logout langsung)
+// PERBAIKAN: Ubah URL redirect (Hapus /villagehub2/)
 function logoutLangsung() {
-  window.location.href = '/villagehub2/logout.php';
+  window.location.href = '/logout.php';
 }
 
-// ============ UPDATE PROFIL ============
+// ==================================================
+// USER — Update Profil & Foto
+// ==================================================
 async function updateProfil(dataUser) {
   return await apiFetch('/user/update_profil.php', {
     method: 'POST',
@@ -174,7 +176,6 @@ async function updateProfil(dataUser) {
   });
 }
 
-// ============ UPLOAD FOTO PROFIL ============
 async function updateFotoProfil(formData) {
   try {
     const res = await fetch(API_BASE + '/user/update_foto.php', {
@@ -188,8 +189,10 @@ async function updateFotoProfil(formData) {
     return { success: false, message: 'Gagal terhubung' };
   }
 }
-
-// ============ HAPUS ADUAN ============
+  
+// ==================================================
+// USER — Hapus Aduan
+// ==================================================
 async function hapusAduan(id_aduan) {
   return await apiFetch('/user/aduan_delete.php', {
     method: 'POST',
