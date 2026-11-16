@@ -35,6 +35,9 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- TAMBAHKAN BARIS INI UNTUK MEMUNCULKAN IKON -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
         body {
@@ -115,13 +118,42 @@ $userData = $stmt->fetch();
         .form-control:focus { outline: none; border-color: var(--brand-green); box-shadow: 0 0 0 4px rgba(40,167,69,0.1); }
         textarea.form-control { resize: vertical; min-height: 120px; }
 
-        .upload-area { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f8fafc; position: relative; }
+        /* ====== PERUBAHAN PADA UPLOAD AREA ====== */
+        .upload-area { 
+            border: 2px dashed #cbd5e1; 
+            border-radius: 12px; 
+            padding: 30px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            background: #f8fafc; 
+            position: relative; 
+            overflow: hidden; /* Agar gambar tidak keluar kotak */
+            min-height: 350px; /* Tinggi minimal kotak */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+        }
         .upload-area:hover { border-color: var(--brand-green); background: #f0fdf4; }
-        .upload-area input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .upload-area input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 20; }
+        
         .upload-icon { font-size: 40px; margin-bottom: 10px; display: block; }
         .upload-text { font-size: 14px; color: #64748b; font-weight: 500; }
         .upload-text span { color: var(--brand-green); font-weight: 700; }
-        .preview-img { display: none; max-width: 100%; max-height: 200px; margin-top: 15px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        /* CSS GAMBAR FULL */
+        .preview-img { 
+            display: none; 
+            position: absolute; /* Menutupi seluruh kotak */
+            top: 0; left: 0;
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; /* Gambar tidak gepeng */
+            z-index: 10; /* Di bawah input file, di atas ikon */
+            border-radius: 12px;
+            background-color: #1a1a2e;
+        }
 
         .btn-submit { width: 100%; padding: 14px; margin-top: 10px; background: var(--brand-green); color: #fff; border: none; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-submit:hover:not(:disabled) { background: #146c24; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27,122,43,0.3); }
@@ -141,9 +173,29 @@ $userData = $stmt->fetch();
             .form-card { padding: 25px 20px; }
         }
 
-        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+        /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
+            color: #a0a0b0;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
+        }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
 <body>
@@ -172,7 +224,7 @@ $userData = $stmt->fetch();
                     <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
                 </a>
 
-                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <!-- Tombol Logout untuk Desktop -->
                 <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
 
                 <!-- Tombol Titik Tiga (Hamburger) -->
@@ -190,7 +242,7 @@ $userData = $stmt->fetch();
                     <li class="nav-item"><a class="nav-link" href="riwayat.php">Riwayat</a></li>
                     <li class="nav-item"><a class="nav-link" href="profil.php">Kelola Profil</a></li>
                     
-                    <!-- Tombol Logout untuk HP (Tetap di dalam dropdown) -->
+                    <!-- Tombol Logout untuk HP -->
                     <li class="nav-item d-lg-none mt-3 w-100">
                         <a href="../logout.php" class="btn-logout w-100 d-block" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
                     </li>
@@ -223,11 +275,16 @@ $userData = $stmt->fetch();
                     <label>Foto Pendukung (Opsional)</label>
                     <div class="upload-area">
                         <input type="file" id="foto" name="foto" accept="image/jpeg, image/png, image/webp">
-                        <span class="upload-icon">📸</span>
-                        <div class="upload-text" id="uploadText">
-                            <span>Klik untuk upload</span> atau drag foto ke sini<br>
-                            <small style="font-size: 12px; color: #94a3b8;">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                        
+                        <!-- BUNGKUS IKON DAN TEKS DENGAN ID -->
+                        <div id="uploadPlaceholder">
+                            <span class="upload-icon">📸</span>
+                            <div class="upload-text" id="uploadText">
+                                <span>Klik untuk upload</span> atau drag foto ke sini<br>
+                                <small style="font-size: 12px; color: #94a3b8;">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                            </div>
                         </div>
+
                         <img id="previewFoto" class="preview-img" alt="Preview Foto">
                     </div>
                 </div>
@@ -239,11 +296,58 @@ $userData = $stmt->fetch();
         </div>
     </main>
     
-    <!-- FOOTER -->
-    <footer class="footer">
-        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
-    </footer>
+    <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Kolom 1: Info Brand -->
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                        <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
 
+                <!-- Kolom 2: Menu Cepat -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="beranda.php">Pengaduan Warga</a>
+                    <a href="buat-aduan.php">Buat Aduan Baru</a>
+                    <a href="riwayat.php">Riwayat Aduan</a>
+                    <a href="profil.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <!-- Kolom 3: Informasi -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                      <p><strong>VillageHub Support</strong></p>
+                    <p>+62 889-8549-3525</p>
+                </div>
+
+                <!-- Kolom 4: Sosial Media -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembang</h5>
+                    <div class="social-media">
+                        <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i> @Klvinarp_</a>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+    
+    <!-- BARIS COPYRIGHT -->
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
+    
     <div id="popupKustom">
         <div class="popup-box">
             <h3 class="popup-title" id="popupTitle">VillageHub</h3>
@@ -282,21 +386,36 @@ $userData = $stmt->fetch();
             }
         }
 
+        // ==========================================
+        // LOGIKA PREVIEW FOTO (SUDAH DIPERBAIKI)
+        // ==========================================
         const fotoInput = document.getElementById('foto');
         const previewFoto = document.getElementById('previewFoto');
-        const uploadText = document.getElementById('uploadText');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder'); // Ambil elemen pembungkus
 
         fotoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 2 * 1024 * 1024) { tampilkanPopup('Ukuran foto terlalu besar! Maksimal 2MB.', false); fotoInput.value = ''; return; }
+                if (file.size > 2 * 1024 * 1024) { 
+                    tampilkanPopup('Ukuran foto terlalu besar! Maksimal 2MB.', false); 
+                    fotoInput.value = ''; 
+                    return; 
+                }
+                
                 const reader = new FileReader();
-                reader.onload = function(e) { previewFoto.src = e.target.result; previewFoto.style.display = 'block'; uploadText.style.display = 'none'; };
+                reader.onload = function(e) { 
+                    previewFoto.src = e.target.result; 
+                    previewFoto.style.display = 'block'; 
+                    // Sembunyikan ikon kamera dan teks
+                    uploadPlaceholder.style.display = 'none'; 
+                };
                 reader.readAsDataURL(file);
             }
         });
 
-        document.getElementById('formAduan').addEventListener('submit', async (e) => {
+        // ==========================================
+        // SUBMIT ADUAN
+         document.getElementById('formAduan').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const id_kategori = document.getElementById('id_kategori').value;
@@ -314,7 +433,12 @@ $userData = $stmt->fetch();
             const result = await kirimAduan(formData);
             if (result.success) {
                 tampilkanPopup("Aduan terkirim", true);
-                document.getElementById('formAduan').reset(); previewFoto.style.display = 'none'; uploadText.style.display = 'block';
+                
+                // Reset Form & Munculkan Kembali Ikon
+                document.getElementById('formAduan').reset(); 
+                previewFoto.style.display = 'none'; 
+                uploadPlaceholder.style.display = 'block'; // <--- Tampilkan lagi ikonnya
+
                 setTimeout(() => { window.location.href = 'beranda.php'; }, 1500);
             } else {
                 tampilkanPopup("Aduan Gagal: " + (result.message || "Coba lagi nanti."), false);

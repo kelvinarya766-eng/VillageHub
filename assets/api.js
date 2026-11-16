@@ -3,9 +3,7 @@
 // Helper komunikasi Frontend → Backend VillageHub
 // ==================================================
 
-// PERBAIKAN: Ubah ke '/api' karena di hosting (InfinityFree) 
-// folder project langsung berada di dalam htdocs.
-const API_BASE = '/api';
+const API_BASE = new URL('../api', document.currentScript.src).pathname;
 
 // ==================================================
 // HELPER UTAMA
@@ -189,7 +187,7 @@ async function updateFotoProfil(formData) {
     return { success: false, message: 'Gagal terhubung' };
   }
 }
-  
+
 // ==================================================
 // USER — Hapus Aduan
 // ==================================================
@@ -198,4 +196,22 @@ async function hapusAduan(id_aduan) {
     method: 'POST',
     body: JSON.stringify({ id_aduan })
   });
+}
+
+// ============ HAPUS FOTO PROFIL ============
+async function hapusFotoProfil() {
+  const formData = new FormData();
+  formData.append('hapus_foto', '1');
+
+  try {
+    const res = await fetch(API_BASE + '/user/update_foto.php', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Gagal terhubung' };
+  }
 }

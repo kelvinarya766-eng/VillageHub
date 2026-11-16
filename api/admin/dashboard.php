@@ -26,4 +26,4 @@ jsonResponse([
         "dibalas"     => $dibalas
     ],
     "per_kategori" => $kategori
-]);
+]); 

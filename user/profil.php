@@ -29,6 +29,9 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
         :root { 
             --brand-green: #1b7a2b; 
@@ -49,6 +52,7 @@ $userData = $stmt->fetch();
         .navbar-custom {
             background: linear-gradient(135deg, var(--brand-green) 0%, #28a745 50%, #2d8f3e 100%);
             box-shadow: 0 3px 16px rgba(0,0,0,0.15);
+            z-index: 1030;
         }
         .navbar-brand img { width: 50px !important; height: 50px !important; object-fit: contain; margin-right: 10px; }
         .brand-name { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; font-family: 'Nunito', sans-serif; }
@@ -151,7 +155,8 @@ $userData = $stmt->fetch();
         .btn-edit-text {
             background: transparent; border: none; color: #a0a0a0;
             font-size: 12px; font-weight: 600; cursor: pointer;
-            position: relative; z-index: 9999; padding: 5px 10px;
+            position: relative; z-index: 1;
+            padding: 5px 10px;
         }
         .btn-edit-text:hover { color: var(--brand-green); text-decoration: underline; }
 
@@ -160,7 +165,8 @@ $userData = $stmt->fetch();
             background: transparent; border: none; color: #c62828;
             font-size: 12px; font-weight: 600; cursor: pointer;
             display: none; margin-right: 8px;
-            position: relative; z-index: 9999; padding: 5px 10px;
+            position: relative; z-index: 1;
+            padding: 5px 10px;
         }
         .btn-batal-text:hover { text-decoration: underline; }
         .data-row.editing .btn-batal-text { display: inline-block; }
@@ -175,15 +181,29 @@ $userData = $stmt->fetch();
         .btn-simpan:hover:not(:disabled) { background: #388e3c; transform: translateY(-2px); }
         .btn-simpan:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
-        /* Footer */
-        .footer-vh {
-            background: #1a1a2e;
+        /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
             color: #a0a0b0;
-            text-align: center;
-            padding: 24px 5%;
-            font-size: 13px;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
         }
-        .footer-vh .hub { color: var(--brand-yellow); }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
 <body>
@@ -247,38 +267,53 @@ $userData = $stmt->fetch();
     <div class="container-profile">
         <div class="profile-card">
             
-            <!-- FOTO PROFIL -->
+            <!-- FOTO PROFIL (DENGAN FITUR PENSIL) -->
             <div class="profile-photo-wrapper">
-                <label for="uploadFoto" style="cursor: pointer; position: relative;">
+                <div style="position: relative; display: inline-block;">
                     <img src="<?= $fotoProfil ?>" alt="Foto Profil" class="profile-photo" id="previewProfil">
-                    <div style="position: absolute; bottom: 5px; right: 5px; background: var(--brand-green); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 14px;">
-                        📷
+                    
+                    <!-- Dropdown Tombol Pensil -->
+                    <div class="dropdown" style="position: absolute; bottom: 5px; right: 5px;">
+                        <button class="btn btn-success btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 35px; height: 35px; background-color: var(--brand-green); border: 2px solid white; z-index: 10;" title="Opsi Foto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li>
+                                <button class="dropdown-item fw-bold text-dark" type="button" onclick="document.getElementById('uploadFoto').click()">
+                                    📷 Ganti Foto
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item fw-bold text-danger" type="button" onclick="eksekusiHapusFoto()">
+                                    🗑️ Hapus Foto
+                                </button>
+                            </li>
+                        </ul>
                     </div>
-                </label>
+                </div>
+                
                 <input type="file" id="uploadFoto" accept="image/*" style="display: none;">
             </div>
 
             <form id="formProfil">
-                <!-- Username / Nama -->
-                <div class="data-row" id="row-nama">
+                <!-- Username / Nama (DIKUNCI) -->
+                <div class="data-row">
                     <div style="width: 100%;">
                         <div class="data-label">Username / Nama</div>
                         <div class="data-value"><?= htmlspecialchars($userData['nama']) ?></div>
-                        <input type="text" class="data-input" id="input-nama" name="nama" value="<?= htmlspecialchars($userData['nama']) ?>">
                     </div>
-                    <button type="button" class="btn-batal-text" onclick="batalEdit('nama')">Batal</button>
-                    <button type="button" class="btn-edit-text" onclick="aktifkanEdit('nama')">Edit ></button>
+                    <span class="btn-edit-text" style="color:#ddd; cursor:not-allowed;">Terkunci</span>
                 </div>
 
-                <!-- No HP -->
-                <div class="data-row" id="row-telepon">
+                <!-- No HP (DIKUNCI) -->
+                <div class="data-row">
                     <div style="width: 100%;">
                         <div class="data-label">No. Hp</div>
                         <div class="data-value"><?= htmlspecialchars($userData['nomor_telepon'] ?? '-') ?></div>
-                        <input type="tel" class="data-input" id="input-telepon" name="nomor_telepon" value="<?= htmlspecialchars($userData['nomor_telepon'] ?? '') ?>">
                     </div>
-                    <button type="button" class="btn-batal-text" onclick="batalEdit('telepon')">Batal</button>
-                    <button type="button" class="btn-edit-text" onclick="aktifkanEdit('telepon')">Edit ></button>
+                    <span class="btn-edit-text" style="color:#ddd; cursor:not-allowed;">Terkunci</span>
                 </div>
 
                 <!-- Email (Readonly) -->
@@ -287,7 +322,7 @@ $userData = $stmt->fetch();
                         <div class="data-label">Email</div>
                         <div class="data-value"><?= htmlspecialchars($userData['email']) ?></div>
                     </div>
-                    <span class="btn-edit-text" style="color:#ddd; cursor:not-allowed;">Edit ></span>
+                    <span class="btn-edit-text" style="color:#ddd; cursor:not-allowed;">Terkunci</span>
                 </div>
 
                 <!-- Password -->
@@ -318,15 +353,61 @@ $userData = $stmt->fetch();
 
         </div>
     </div>
+    
+    <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Kolom 1: Info Brand -->
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                        <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
 
-    <!-- FOOTER -->
-    <footer class="footer-vh">
-        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+                <!-- Kolom 2: Menu Cepat -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="beranda.php">Pengaduan Warga</a>
+                    <a href="buat-aduan.php">Buat Aduan Baru</a>
+                    <a href="riwayat.php">Riwayat Aduan</a>
+                    <a href="profil.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <!-- Kolom 3: Informasi -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                      <p><strong>VillageHub Support</strong></p>
+                    <p>+62 889-8549-3525</p>
+                </div>
+
+                <!-- Kolom 4: Sosial Media -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembang</h5>
+                    <div class="social-media">
+                          <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i>@Klvinarp_</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </footer>
 
+    <!-- BARIS COPYRIGHT -->
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
+    
     <!-- BOOTSTRAP JS & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/api.js?v=4"></script>
+    <script src="../assets/api.js?v=5"></script>
     <script>
         // Menyimpan data asli sebelum diedit
         const dataAsli = {};
@@ -363,22 +444,20 @@ $userData = $stmt->fetch();
             }
         }
 
-        // --- VALIDASI REAL-TIME (Alamat & Nama) ---
+        // --- VALIDASI REAL-TIME (Hanya Alamat) ---
         function validasiTombol() {
             const btnSimpan = document.getElementById('btnSimpan');
-            const namaVal = document.getElementById('input-nama').value.trim();
             const alamatVal = document.getElementById('input-alamat').value.trim();
             const adaYangDiedit = document.querySelectorAll('.data-row.editing').length > 0;
 
-            if (namaVal === '' || alamatVal === '' || !adaYangDiedit) {
+            if (alamatVal === '' || !adaYangDiedit) {
                 btnSimpan.disabled = true;
             } else {
                 btnSimpan.disabled = false;
             }
         }
 
-        // Panggil validasi setiap kali user mengetik
-        document.getElementById('input-nama').addEventListener('input', validasiTombol);
+        // Panggil validasi setiap kali user mengetik alamat
         document.getElementById('input-alamat').addEventListener('input', validasiTombol);
 
         // --- FITUR UPLOAD FOTO ---
@@ -402,14 +481,40 @@ $userData = $stmt->fetch();
             }
         });
 
+        // --- FITUR HAPUS FOTO ---
+        async function eksekusiHapusFoto() {
+            if (!confirm('Apakah Anda yakin ingin menghapus foto profil?')) return;
+
+            const btnHapus = document.querySelector('button[onclick="eksekusiHapusFoto()"]');
+            if (btnHapus) { btnHapus.innerHTML = '⏳ Menghapus...'; btnHapus.disabled = true; }
+
+            try {
+                const res = await hapusFotoProfil(); 
+                
+                if (res.success) {
+                    alert('✅ Foto profil berhasil dihapus!');
+                    // Mengganti gambar ke foto default
+                    document.getElementById('previewProfil').src = '../asset/default-avatar.png';
+                    document.querySelector('.nav-avatar').src = '../asset/default-avatar.png';
+                } else {
+                    alert('❌ Gagal menghapus: ' + res.message);
+                }
+            } catch (error) {
+                console.error("Error Hapus Foto:", error);
+                alert('⚠️ Terjadi kesalahan sistem.');
+            } finally {
+                if (btnHapus) { btnHapus.innerHTML = '🗑️ Hapus Foto'; btnHapus.disabled = false; }
+            }
+        }
+
         // --- SUBMIT FORM SIMPAN DATA ---
         document.getElementById('formProfil').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const btn = document.getElementById('btnSimpan');
+            
+            // HANYA MENGIRIM ALAMAT DAN PASSWORD
             const dataUser = {
-                nama: document.getElementById('input-nama').value.trim(),
-                nomor_telepon: document.getElementById('input-telepon').value.trim(),
                 alamat: document.getElementById('input-alamat').value.trim(),
                 password: document.getElementById('input-password').value
             };
@@ -425,17 +530,10 @@ $userData = $stmt->fetch();
                     
                     document.querySelectorAll('.data-row').forEach(row => row.classList.remove('editing'));
                     
-                    document.getElementById('row-nama').querySelector('.data-value').textContent = dataUser.nama;
-                    document.getElementById('row-telepon').querySelector('.data-value').textContent = dataUser.nomor_telepon || '-';
                     document.getElementById('row-alamat').querySelector('.data-value').textContent = dataUser.alamat;
                     
                     document.getElementById('input-password').value = '';
                     
-                    const navHello = document.querySelector('.nav-hello');
-                    if (navHello) {
-                        navHello.childNodes[0].textContent = 'Halo, ' + dataUser.nama.split(' ')[0] + ' ';
-                    }
-
                     for (let key in dataAsli) delete dataAsli[key];
                 } else {
                     alert('❌ Gagal: ' + result.message);

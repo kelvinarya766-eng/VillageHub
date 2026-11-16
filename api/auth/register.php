@@ -88,7 +88,7 @@ if ($action === 'send_otp') {
         // ==========================================
         
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 2525; // Port SMTP Brevo
+        $mail->Port       = 587; // Port SMTP Brevo
 
         // Pengirim (Harus email yang sudah diverifikasi di Brevo)
         $mail->setFrom('kelvinarya766@gmail.com', 'VillageHub');

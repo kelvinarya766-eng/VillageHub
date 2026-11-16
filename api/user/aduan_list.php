@@ -10,9 +10,11 @@ $kategori = intval($_GET['kategori'] ?? 0);
 
 $sql = "SELECT a.id_aduan, a.tanggal_waktu, a.deskripsi, a.foto, a.status,
                k.golongan AS kategori,
+               u.nama AS nama_pengadu, u.foto AS foto_pengadu,
                (SELECT COUNT(*) FROM balasan b WHERE b.id_aduan=a.id_aduan) AS jumlah_balasan
         FROM aduan a
         JOIN kategori k ON k.id_kategori = a.id_kategori
+        JOIN users u ON u.id_user = a.id_user
         WHERE a.id_user = :u";
 $params = [':u'=>$user['id_user']];
 

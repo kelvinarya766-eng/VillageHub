@@ -62,7 +62,7 @@ if ($action === 'send_otp') {
         $mail->Username   = 'c17bbb001@smtp-brevo.com'; // Login Brevo kamu
         $mail->Password   = 'bskQDiSqYDpApOX';          // SMTP Key kamu
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 2525;
+        $mail->Port       = 587;
 
         $mail->setFrom('kelvinarya766@gmail.com', 'VillageHub');
         $mail->addAddress($email, $user['nama']);

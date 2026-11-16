@@ -218,14 +218,37 @@ $aduan_list = $stmt->fetchAll();
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .badge-kategori { padding: 8px 12px; border-radius: 8px; font-weight: 800; font-size: 13px; border: 1px solid #ccc; display: block; text-align: center; }
+        /* ====== DESAIN CARD ADUAN BARU ====== */
+        .aduan-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background: #fff;
+            transition: all 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .aduan-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        
+        .aduan-img-thumb {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .aduan-img-thumb:hover { opacity: 0.8; }
+        
+        .badge-kategori { padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; }
         .badge-kategori.hijau { background: #a5d6a7; color: #1b5e20; }
         .badge-kategori.kuning { background: var(--yellow); color: #000; }
         .badge-kategori.biru { background: #81d4fa; color: #01579b; }
         
-        .badge-status { padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; display: block; text-align: center; }
-        .badge-status.menunggu { background: var(--yellow); color: #000; }
-        .badge-status.dibalas { background: var(--green-dark); color: #fff; }
+        .badge-status { padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; }
+        .badge-status.menunggu { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .badge-status.dibalas { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 
         .btn-aksi { background: #fff; border: 2px solid #999; border-radius: 8px; font-weight: 700; color: #333; transition: 0.3s; }
         .btn-aksi:hover { background: var(--green-main); color: white; border-color: var(--green-main); }
@@ -250,10 +273,7 @@ $aduan_list = $stmt->fetchAll();
             
             <!-- KANAN: Tombol Logout Desktop & Tombol Titik Tiga -->
             <div class="d-flex align-items-center order-lg-3 gap-3">
-                <!-- Tombol Logout untuk Desktop (Dipindah ke sini) -->
                 <button onclick="logoutDanRedirect()" class="btn-logout d-none d-lg-block order-3 order-lg-3">Logout</button>
-
-                <!-- Tombol Hamburger -->
                 <button class="navbar-toggler border-0 order-2 order-lg-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -262,14 +282,8 @@ $aduan_list = $stmt->fetchAll();
             <!-- MENU DROPDOWN -->
             <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-3 mb-lg-0 text-center align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="dashboard.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="riwayat.php">Riwayat</a>
-                    </li>
-                    
-                    <!-- Tombol Logout untuk HP (Tetap di dalam dropdown) -->
+                    <li class="nav-item"><a class="nav-link active" href="dashboard.php">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="riwayat.php">Riwayat</a></li>
                     <li class="nav-item d-lg-none mt-3 w-100">
                         <button onclick="logoutDanRedirect()" class="btn-logout w-100 d-block">Logout</button>
                     </li>
@@ -281,7 +295,7 @@ $aduan_list = $stmt->fetchAll();
     <!-- KONTEN UTAMA -->
     <div class="container my-4 flex-grow-1">
         <div class="main-card p-3 p-md-5">
-            <h2 class="text-center fw-bold mb-4">Daftar Aduan</h2>
+            <h2 class="text-center fw-bold mb-4">Daftar Aduan Masuk</h2>
 
             <!-- Alert Bootstrap -->
             <?php if ($msg): ?>
@@ -298,38 +312,69 @@ $aduan_list = $stmt->fetchAll();
                 <a href="dashboard.php" class="btn btn-info fw-bold px-4 py-2 text-white">Semua</a>
             </div>
 
-            <!-- List Aduan -->
-            <div class="row g-3">
+            <!-- List Aduan (Bentuk Card Grid) -->
+            <div class="row g-4">
                 <?php if (empty($aduan_list)): ?>
-                    <div class="col-12 text-center py-4 text-muted fw-bold">Belum ada aduan.</div>
+                    <div class="col-12 text-center py-5 text-muted fw-bold">Belum ada aduan.</div>
                 <?php else: ?>
                     <?php foreach ($aduan_list as $aduan): ?>
-                        <div class="col-12">
-                            <div class="d-flex flex-column flex-lg-row align-items-lg-center bg-light p-3 rounded-3 border gap-3">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="aduan-card">
+                                <!-- FOTO ADUAN (Bisa diklik) -->
+                                <?php 
+                                    $fotoPath = !empty($aduan['foto']) ? '../uploads/' . $aduan['foto'] : '../asset/Gambar pedesaan.avif';
+                                ?>
+                                <img src="<?= $fotoPath ?>" class="aduan-img-thumb" alt="Foto Aduan" data-bs-toggle="modal" data-bs-target="#modalFoto<?= $aduan['id_aduan'] ?>">
                                 
-                                <div class="fw-bold text-dark" style="min-width: 100px;"><?= date('d/m/Y', strtotime($aduan['tanggal_waktu'])) ?></div>
-                                <div class="fw-bold text-dark text-truncate" style="min-width: 120px; max-width: 150px;"><?= htmlspecialchars($aduan['nama_pengadu']) ?></div>
-                                
-                                <div style="min-width: 120px;">
-                                    <div class="badge-kategori <?= strtolower($aduan['kategori']) == 'kebersihan' ? 'hijau' : (strtolower($aduan['kategori']) == 'infrastruktur' ? 'biru' : 'kuning') ?>">
-                                        <?= htmlspecialchars($aduan['kategori']) ?>
+                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                    <!-- Baris Kategori & Status -->
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge-kategori <?= strtolower($aduan['kategori']) == 'kebersihan' ? 'hijau' : (strtolower($aduan['kategori']) == 'infrastruktur' ? 'biru' : 'kuning') ?>">
+                                            <?= htmlspecialchars($aduan['kategori']) ?>
+                                        </span>
+                                        <span class="badge-status <?= $aduan['status'] ?>">
+                                            <?= strtoupper($aduan['status']) ?>
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Nama & Tanggal -->
+                                    <h6 class="fw-bold mb-1"><?= htmlspecialchars($aduan['nama_pengadu']) ?></h6>
+                                    <small class="text-muted mb-3 d-block"><?= date('d M Y', strtotime($aduan['tanggal_waktu'])) ?></small>
+                                    
+                                    <!-- Deskripsi Singkat -->
+                                    <p class="text-secondary mb-3" style="font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                        <?= htmlspecialchars($aduan['deskripsi']) ?>
+                                    </p>
+                                    
+                                    <!-- Tombol Aksi -->
+                                    <div class="mt-auto">
+                                        <?php if($aduan['status'] == 'dibalas'): ?>
+                                            <button class="btn-aksi edit w-100 py-2" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '<?= htmlspecialchars(addslashes($aduan['isi_balasan'] ?? '')) ?>', '<?= $fotoPath ?>')">
+                                                ✏️ Edit Balasan
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="btn-aksi w-100 py-2" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '', '<?= $fotoPath ?>')">
+                                                💬 Balas Aduan
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                                
-                                <div style="min-width: 110px;">
-                                    <span class="badge-status <?= $aduan['status'] ?>"><?= strtoupper($aduan['status']) ?></span>
-                                </div>
-                                
-                                <div class="ms-lg-auto w-100" style="max-width: 150px;">
-                                    <?php if($aduan['status'] == 'dibalas'): ?>
-                                        <button class="btn-aksi edit w-100 py-2" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '<?= htmlspecialchars(addslashes($aduan['isi_balasan'] ?? '')) ?>')">
-                                            ✏️ Edit
-                                        </button>
-                                    <?php else: ?>
-                                        <button class="btn-aksi w-100 py-2" onclick="bukaModal(<?= $aduan['id_aduan'] ?>, '<?= htmlspecialchars(addslashes($aduan['deskripsi'])) ?>', '<?= htmlspecialchars(addslashes($aduan['nama_pengadu'])) ?>', '')">
-                                            Balas
-                                        </button>
-                                    <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- MODAL UNTUK LIHAT FOTO BESAR (DENGAN BINGKAI) -->
+                        <div class="modal fade" id="modalFoto<?= $aduan['id_aduan'] ?>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bold">Foto Aduan - <?= htmlspecialchars($aduan['nama_pengadu']) ?></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <!-- BACKGROUND MODAL DIBERI WARNA AGAR BINGKAI TERLIHAT -->
+                                    <div class="modal-body text-center" style="background-color: #f0f2f5; padding: 30px; border-radius: 0 0 8px 8px;">
+                                        <!-- GAMBAR DIBERI PADDING & BACKGROUND PUTIH (BINGKAI) -->
+                                        <img src="<?= $fotoPath ?>" class="rounded shadow-sm" style="max-height: 330px; max-width: 100%; object-fit: contain; padding: 10px; background-color: #ffffff; border: 1px solid #ddd;" alt="Foto Besar">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -339,28 +384,37 @@ $aduan_list = $stmt->fetchAll();
         </div>
     </div>
 
-    <!-- MODAL BOOTSTRAP -->
+    <!-- MODAL BALAS (Didesain Ulang 2 Kolom) -->
     <div class="modal fade" id="modalBalas" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold text-success" id="modalTitle">Balas Aduan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Balas Aduan</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="">
                     <div class="modal-body">
-                        <p class="mb-2">Aduan dari: <strong id="modal-nama"></strong></p>
-                        <div class="bg-light p-3 rounded mb-3 border-start border-4 border-success" id="modal-deskripsi" style="max-height: 150px; overflow-y: auto;"></div>
-                        
-                        <input type="hidden" name="id_aduan" id="modal-id-aduan">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Balasan Anda</label>
-                            <textarea name="balasan" id="modal-isi-balasan" class="form-control" rows="4" placeholder="Ketik balasan..." required></textarea>
+                        <div class="row">
+                            <!-- Kolom Kiri: Info & Foto -->
+                            <div class="col-md-5 mb-3 mb-md-0">
+                                <img id="modal-foto-aduan" src="" class="img-fluid rounded mb-3 w-100" style="object-fit: cover; max-height: 200px; background-color: #f8f9fa; padding: 5px;">
+                                <p class="mb-1 text-muted small">Aduan dari: <strong id="modal-nama" class="text-dark"></strong></p>
+                                <div class="bg-light p-3 rounded border-start border-4 border-success small" id="modal-deskripsi" style="max-height: 120px; overflow-y: auto;"></div>
+                            </div>
+                            
+                            <!-- Kolom Kanan: Form Balasan -->
+                            <div class="col-md-7">
+                                <input type="hidden" name="id_aduan" id="modal-id-aduan">
+                                <div class="mb-3 h-100 d-flex flex-column">
+                                    <label class="form-label fw-bold">Tulis Balasan Anda:</label>
+                                    <textarea name="balasan" id="modal-isi-balasan" class="form-control flex-grow-1" style="min-height: 150px;" placeholder="Ketik balasan..." required></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="kirim_balasan" class="btn btn-success fw-bold">Simpan & Kirim</button>
+                        <button type="submit" name="kirim_balasan" class="btn btn-success fw-bold px-4">Simpan & Kirim</button>
                     </div>
                 </form>
             </div>
@@ -375,11 +429,20 @@ $aduan_list = $stmt->fetchAll();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=12"></script>
     <script>
-        function bukaModal(id, deskripsi, nama, balasanLama) {
+        // Fungsi membuka modal balas dengan tambahan parameter foto
+        function bukaModal(id, deskripsi, nama, balasanLama, fotoUrl) {
             document.getElementById('modal-id-aduan').value = id;
             document.getElementById('modal-deskripsi').innerText = deskripsi;
             document.getElementById('modal-nama').innerText = nama;
             document.getElementById('modal-isi-balasan').value = balasanLama;
+            
+            // Set foto di dalam modal
+            if(fotoUrl) {
+                document.getElementById('modal-foto-aduan').src = fotoUrl;
+                document.getElementById('modal-foto-aduan').style.display = 'block';
+            } else {
+                document.getElementById('modal-foto-aduan').style.display = 'none';
+            }
             
             if (balasanLama !== '') {
                 document.getElementById('modalTitle').innerText = 'Edit Balasan Aduan';

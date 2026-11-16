@@ -27,4 +27,4 @@ jsonResponse([
         "dibalas"       => (int)$dibalas->fetchColumn(),
         "total_balasan" => (int)$balasan->fetchColumn()
     ]
-]);
+]);s

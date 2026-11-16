@@ -153,11 +153,35 @@ $userData = $stmt->fetch();
             .filter-select { max-width: 100%; }
         }
 
-        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+         /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
+            color: #a0a0b0;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
+        }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
+     <!-- BOOTSTRAP 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- TAMBAHKAN BARIS INI UNTUK MEMUNCULKAN IKON -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <body>
 
     <!-- NAVBAR BOOTSTRAP -->
@@ -257,11 +281,60 @@ $userData = $stmt->fetch();
         </div>
     </main>
     
-    <!-- FOOTER -->
-    <footer class="footer">
-        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
-    </footer>
+     <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Kolom 1: Info Brand -->
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                        <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
 
+                <!-- Kolom 2: Menu Cepat -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="beranda.php">Pengaduan Warga</a>
+                    <a href="buat-aduan.php">Buat Aduan Baru</a>
+                    <a href="riwayat.php">Riwayat Aduan</a>
+                    <a href="profil.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <!-- Kolom 3: Informasi -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                      <p><strong>VillageHub Support</strong></p>
+                    <p>+62 889-8549-3525</p>
+                    
+                    
+                 
+                </div>
+
+                <!-- Kolom 4: Sosial Media -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembamg</h5>
+                    <div class="social-media">
+                          <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i>@Klvinarp_</a>
+                       
+                      
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+     <!-- BARIS COPYRIGHT -->
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/api.js?v=12"></script>
     <script>

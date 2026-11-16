@@ -35,6 +35,9 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
         :root { 
             --brand-green: #1b7a2b; 
@@ -139,18 +142,89 @@ $userData = $stmt->fetch();
         .btn-hapus { display: inline-block; padding: 6px 14px; background: #ffebee; border: 2px solid #c62828; border-radius: 8px; font-size: 12px; font-weight: 700; color: #c62828; cursor: pointer; transition: all 0.25s; }
         .btn-hapus:hover { background: #c62828; color: #fff; } 
 
+        /* =========================================
+           CSS KHUSUS TAMPILAN MOBILE (RESPONSIVE TABLE)
+           ========================================= */
         @media (max-width: 768px) {
             .riwayat-card { padding: 15px; }
+            
+            /* Sembunyikan header tabel */
+            .table-custom thead { display: none; }
+            
+            /* Ubah baris tabel menjadi block/card */
+            .table-custom tbody, .table-custom tr, .table-custom td {
+                display: block;
+                width: 100%;
+            }
+            
+            /* Styling Card */
+            .table-custom tr {
+                margin-bottom: 15px;
+                border: 1px solid #dee2e6;
+                border-radius: 10px;
+                background: #fff;
+                padding: 10px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+            
+            /* Styling isi data */
+            .table-custom td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px dashed #eee;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-size: 14px;
+            }
+            
+            /* Hilangkan border bawah di baris terakhir */
+            .table-custom td:last-child {
+                border-bottom: 0;
+            }
+            
+            /* Label buatan di sebelah kiri */
+            .table-custom td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 800;
+                color: var(--brand-green);
+            }
         }
 
-        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+         /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
+            color: #a0a0b0;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
+        }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR BOOTSTRAP (SAMA SEPERTI BERANDA & PROFIL) -->
+    <!-- NAVBAR BOOTSTRAP -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
             
@@ -214,6 +288,7 @@ $userData = $stmt->fetch();
                     <thead>
                         <tr>
                             <th>Kategori</th>
+                            <th>Foto Aduan</th> <!-- KOLOM BARU -->
                             <th>Tanggal diajukan</th>
                             <th>Deskripsi Aduan</th>
                             <th>Status</th>
@@ -221,17 +296,82 @@ $userData = $stmt->fetch();
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr><td colspan="5" class="text-center py-4 text-muted">Memuat riwayat aduan...</td></tr>
+                        <tr><td colspan="6" class="text-center py-4 text-muted">Memuat riwayat aduan...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <!-- FOOTER -->
-     <footer class="footer">
-        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+    <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Kolom 1: Info Brand -->
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                        <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
+
+                <!-- Kolom 2: Menu Cepat -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="beranda.php">Pengaduan Warga</a>
+                    <a href="buat-aduan.php">Buat Aduan Baru</a>
+                    <a href="riwayat.php">Riwayat Aduan</a>
+                    <a href="profil.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <!-- Kolom 3: Informasi -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                    <p><strong>VillageHub Support</strong></p>
+                    <p>+62 889-8549-3525</p>
+                </div>
+
+                <!-- Kolom 4: Sosial Media -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembang</h5>
+                    <div class="social-media">
+                        <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i>@Klvinarp_</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </footer>
+    
+    <!-- BARIS COPYRIGHT -->
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL LIHAT FOTO (DENGAN BINGKAI) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalLihatFoto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark">Foto Aduan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- BODY DENGAN LATAR ABU-ABU -->
+                <div class="modal-body text-center" style="background-color: #f0f2f5; padding: 30px; border-radius: 0 0 8px 8px;">
+                    <!-- GAMBAR DENGAN BINGKAI PUTIH DAN ONERROR -->
+                    <img id="imgModalFoto" src="" class="rounded shadow-sm" style="max-height: 70vh; max-width: 100%; object-fit: contain; padding: 10px; background-color: #ffffff; border: 1px solid #ddd;" alt="Foto Besar" onerror="this.src='../asset/Gambar pedesaan.avif'">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BOOTSTRAP JS & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -253,12 +393,21 @@ $userData = $stmt->fetch();
             'Administrasi dan Pelayanan Publik': 'chip-administrasi'
         };
 
+        // ==========================================
+        // FUNGSI MEMBUKA MODAL FOTO
+        // ==========================================
+        function bukaModalFoto(urlGambar) {
+            document.getElementById('imgModalFoto').src = urlGambar;
+            var myModal = new bootstrap.Modal(document.getElementById('modalLihatFoto'));
+            myModal.show();
+        }
+
         async function loadRiwayat() {
             const res = await getAduanSaya();
             const tbody = document.getElementById('tableBody');
 
             if (!res.success || !res.data || res.data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Belum ada riwayat aduan. <a href="buat-aduan.php" class="text-success fw-bold">Buat aduan sekarang →</a></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada riwayat aduan. <a href="buat-aduan.php" class="text-success fw-bold">Buat aduan sekarang →</a></td></tr>`;
                 return;
             }
 
@@ -277,13 +426,21 @@ $userData = $stmt->fetch();
                     day: '2-digit', month: '2-digit', year: 'numeric'
                 }).replace(/\//g, ' - ');
 
+                // LOGIKA FOTO ADUAN DENGAN ONERROR
+                const fotoUrl = a.foto ? `../uploads/${a.foto}` : '../asset/Gambar pedesaan.avif';
+                const fotoHtml = `<img src="${fotoUrl}" alt="Foto Aduan" style="width: 100px; height: 80px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer;" onclick="bukaModalFoto('${fotoUrl}')" onerror="this.src='../asset/Gambar pedesaan.avif'">`;
+
                 return `
                     <tr>
-                        <td class="text-center"><span class="chip-kategori ${catClass}">${iconKategori} ${namaKategori}</span></td>
-                        <td class="text-center fw-bold">${tanggal}</td>
-                        <td>${(a.deskripsi || '').substring(0, 100)}${a.deskripsi.length > 100 ? '...' : ''}</td>
-                        <td class="text-center"><span class="tag-status ${statusClass}">${statusLabel}</span></td>
-                        <td class="text-center"><button class="btn-hapus" onclick="konfirmasiHapus(${a.id_aduan})">Hapus</button></td>
+                        <td class="text-center" data-label="Kategori"><span class="chip-kategori ${catClass}">${iconKategori} ${namaKategori}</span></td>
+                        
+                        <!-- MENAMPILKAN FOTO -->
+                        <td class="text-center" data-label="Foto">${fotoHtml}</td>
+
+                        <td class="text-center fw-bold" data-label="Tanggal">${tanggal}</td>
+                        <td data-label="Deskripsi">${(a.deskripsi || '').substring(0, 100)}${a.deskripsi.length > 100 ? '...' : ''}</td>
+                        <td class="text-center" data-label="Status"><span class="tag-status ${statusClass}">${statusLabel}</span></td>
+                        <td class="text-center" data-label="Aksi"><button class="btn-hapus" onclick="konfirmasiHapus(${a.id_aduan})">Hapus</button></td>
                     </tr>
                 `;
             }).join('');

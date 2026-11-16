@@ -36,6 +36,9 @@ $userData = $stmt->fetch();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
         :root {
             --brand-green: #1b7a2b;
@@ -195,12 +198,33 @@ $userData = $stmt->fetch();
             transition: all 0.3s ease; display: flex; flex-direction: column; height: 100%; background: #fff;
         }
         .aduan-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); border-color: #28a745; }
-        .aduan-card-image { height: 180px; overflow: hidden; }
-        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; }
+        .aduan-card-image { height: 180px; overflow: hidden; cursor: pointer; }
+        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .aduan-card-image:hover img { transform: scale(1.05); }
 
-        .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+        /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
+            color: #a0a0b0;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
+        }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
 <body>
@@ -230,7 +254,7 @@ $userData = $stmt->fetch();
                     <img src="<?= $fotoProfil ?>" alt="Foto" class="nav-avatar">
                 </a>
 
-                <!-- Tombol Logout untuk Desktop (Dipindah ke kanan profil) -->
+                <!-- Tombol Logout untuk Desktop -->
                 <a href="../logout.php" class="btn-logout d-none d-lg-block order-3 order-lg-3" onclick="return confirm('Apakah anda yakin ingin keluar?');">Logout</a>
 
                 <!-- Tombol Titik Tiga (Hamburger) -->
@@ -339,10 +363,74 @@ $userData = $stmt->fetch();
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+     <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Kolom 1: Info Brand -->
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="../asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                       <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
+
+                <!-- Kolom 2: Menu Cepat -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="beranda.php">Pengaduan Warga</a>
+                    <a href="buat-aduan.php">Buat Aduan Baru</a>
+                    <a href="riwayat.php">Riwayat Aduan</a>
+                    <a href="profil.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <!-- Kolom 3: Informasi -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                      <p><strong>VillageHub Support</strong></p>
+                    <p>+62 889-8549-3525</p>
+                </div>
+
+                <!-- Kolom 4: Sosial Media -->
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembang</h5>
+                    <div class="social-media">
+                          <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i>@Klvinarp_</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </footer>
+     <!-- BARIS COPYRIGHT -->
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL LIHAT FOTO (DENGAN BINGKAI) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalLihatFoto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark">Foto Aduan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- BODY DENGAN LATAR ABU-ABU -->
+                <div class="modal-body text-center" style="background-color: #f0f2f5; padding: 30px; border-radius: 0 0 8px 8px;">
+                    <!-- GAMBAR DENGAN BINGKAI PUTIH -->
+                    <img id="imgModalFoto" src="" class="rounded shadow-sm" style="max-height: 70vh; max-width: 100%; object-fit: contain; padding: 10px; background-color: #ffffff; border: 1px solid #ddd;" alt="Foto Besar">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BOOTSTRAP JS & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -363,6 +451,15 @@ $userData = $stmt->fetch();
             'Lingkungan Hidup': 'chip-lingkungan', 'Administrasi': 'chip-administrasi',
             'Administrasi dan Pelayanan Publik': 'chip-administrasi'
         };
+
+        // ==========================================
+        // FUNGSI MEMBUKA MODAL FOTO
+        // ==========================================
+        function bukaModalFoto(urlGambar) {
+            document.getElementById('imgModalFoto').src = urlGambar;
+            var myModal = new bootstrap.Modal(document.getElementById('modalLihatFoto'));
+            myModal.show();
+        }
 
         async function loadStatistik() {
             const res = await getDashboardUser();
@@ -421,14 +518,22 @@ $userData = $stmt->fetch();
                 const namaKategori = a.kategori || 'Kebersihan';
                 const catClass = chipColorMap[namaKategori] || 'chip-kebersihan';
                 const iconKategori = iconMap[namaKategori] || '📌';
+                
+                // LOGIKA FOTO PROFIL
                 const inisial = currentUserName.charAt(0).toUpperCase();
+                const fotoPengadu = a.foto_pengadu ? `../uploads/${a.foto_pengadu}` : null;
+                const avatarHtml = fotoPengadu 
+                    ? `<img src="${fotoPengadu}" alt="Foto" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">` 
+                    : `<div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:28px; height:28px; font-size:12px;">${inisial}</div>`;
+
                 const tanggal = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 const foto = a.foto ? `../uploads/${a.foto}` : '../asset/Gambar pedesaan.avif';
 
                 return `
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="aduan-card">
-                            <div class="aduan-card-image">
+                            <!-- TAMBAHKAN ONCLICK UNTUK MEMBUKA MODAL -->
+                            <div class="aduan-card-image" onclick="bukaModalFoto('${foto}')">
                                 <img src="${foto}" alt="Aduan">
                             </div>
                             <div class="p-3 d-flex flex-column flex-grow-1">
@@ -439,7 +544,7 @@ $userData = $stmt->fetch();
                                 <p class="text-dark fw-bold mb-3">${(a.deskripsi || '').substring(0, 80)}...</p>
                                 <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:28px; height:28px; font-size:12px;">${inisial}</div>
+                                        ${avatarHtml}
                                         <span class="fw-semibold text-muted" style="font-size: 12px;">${currentUserName}</span>
                                     </div>
                                     <span class="text-muted" style="font-size: 11px;">${tanggal}</span>

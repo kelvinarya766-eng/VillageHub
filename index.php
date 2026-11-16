@@ -18,8 +18,11 @@ $userData   = $_SESSION['user'] ?? null;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
-        /* ===== SEMUA CSS ANDA TETAP SAMA ===== */
         :root { --brand-green: #1b7a2b; --brand-yellow: #ffc107; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', 'Segoe UI', sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; overflow-x: hidden; }
@@ -115,8 +118,10 @@ $userData   = $_SESSION['user'] ?? null;
             display: flex; flex-direction: column;
         }
         .aduan-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); border-color: #28a745; }
-        .aduan-card-image { width: 100%; height: 180px; overflow: hidden; background: #f0f0f0; }
-        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .aduan-card-image { width: 100%; height: 180px; overflow: hidden; background: #f0f0f0; cursor: pointer; }
+        .aduan-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+        .aduan-card-image:hover img { transform: scale(1.05); }
+        
         .aduan-card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
         .aduan-card-tags { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
         .tag-kategori { padding: 4px 14px; border-radius: 16px; font-size: 12px; font-weight: 600; color: #fff; }
@@ -140,7 +145,22 @@ $userData   = $_SESSION['user'] ?? null;
         .link-balasan { font-size: 12px; color: #2196f3; font-weight: 600; text-decoration: underline; cursor: pointer; }
         .link-balasan:hover { color: #1565c0; }
 
-     
+        /* ===== CSS UNTUK KOTAK BALASAN ADMIN ===== */
+        .admin-reply-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--brand-green);
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #333;
+        }
+        .admin-reply-header {
+            font-weight: 700;
+            color: var(--brand-green);
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
 
         @media (max-width: 768px) {
             .navbar-logo .brand-name { font-size: 18px; }
@@ -159,10 +179,29 @@ $userData   = $_SESSION['user'] ?? null;
         }
         .aduan-card { animation: fadeInUp 0.5s ease forwards; }
 
+        /* ====== FOOTER BARU (MEGA FOOTER) ====== */
+        .footer-mega {
+            background-color: #1a1a2e; 
+            color: #a0a0b0;
+            padding: 50px 5% 20px 5%;
+            font-family: 'Nunito', sans-serif;
+            margin-top: auto;
+        }
+        .footer-mega h5 { font-weight: 800; font-size: 18px; margin-bottom: 20px; color: #fff; }
+        .footer-mega p, .footer-mega a { font-size: 14px; color: #a0a0b0; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 8px; }
+        .footer-mega a:hover { color: var(--brand-yellow); text-decoration: underline; }
+        .footer-mega .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-mega .footer-brand img { width: 40px; height: 40px; object-fit: contain; }
+        .footer-mega .social-media a { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
-         .footer { background: #1a1a2e; color: #a0a0b0; padding: 24px 5%; font-size: 13px; text-align: center; }
-        .footer .brand-village { color: #fff; }
-        .footer .brand-hub { color: var(--brand-yellow); }
+        .footer-copyright {
+            background-color: #141424; color: #a0a0b0; text-align: center;
+            padding: 15px 0; font-size: 13px; font-weight: 600;
+        }
+        .brand-village { color: #ffffff; font-weight: 800; }
+        .brand-hub { color: var(--brand-yellow); font-weight: 800; }
+        .hub { color: var(--brand-yellow); font-weight: 800; }
+        .bi-instagram { color: #E1306C; }
     </style>
 </head>
 <body>
@@ -175,12 +214,10 @@ $userData   = $_SESSION['user'] ?? null;
                 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
             </a>
             
-            <!-- Tombol Titik Tiga -->
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navPublic">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <!-- Menu Dropdown (Masuk & Daftar) -->
             <div class="collapse navbar-collapse" id="navPublic">
                 <div class="navbar-nav ms-auto gap-2 text-center mt-3 mt-lg-0">
                     <a href="login.php" class="btn btn-masuk">Masuk</a>
@@ -208,25 +245,80 @@ $userData   = $_SESSION['user'] ?? null;
             </div>
         </div>
 
-    
         <h2 class="section-title">Aduan Terbaru</h2>
         <div class="aduan-grid" id="aduan-grid">
             <p style="text-align: center; color: #999; grid-column: 1/-1;">Memuat aduan...</p>
         </div>
     </main>
 
-  
-       <!-- FOOTER -->
-    <footer class="footer">
-        &copy; 2026 <span class="brand-name"><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>. Semua hak cipta dilindungi.
+    <!-- FOOTER BARU (4 KOLOM) -->
+    <footer class="footer-mega">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-3 mb-4">
+                    <div class="footer-brand">
+                        <img src="asset/Logo_village_Hub-removebg-preview.png" alt="Logo">
+                        <span><span class="brand-village">VILLAGE</span> <span class="brand-hub">HUB</span></span>
+                    </div>
+                    <p><strong>Sistem Pengaduan Desa</strong></p>
+                    <p>Jawa Tengah 57143</p>
+                    <p>Telp. +62 889-85493525</p>
+                </div>
+
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Program & Layanan</h5>
+                    <a href="login.php">Pengaduan Warga</a>
+                    <a href="login.php">Buat Aduan Baru</a>
+                    <a href="login.php">Riwayat Aduan</a>
+                    <a href="login.php">Pengaturan Profil</a>
+                    <a href="https://wa.me/6288985493525">Bantuan</a>
+                </div>
+
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Informasi</h5>
+                    <p><strong>VillageHub Support</strong></p>
+                    <a href="https://wa.me/6288985493525">+62 889-8549-3525</a>
+                </div>
+
+                <div class="col-12 col-md-3 mb-4">
+                    <h5>Info Pengembang</h5>
+                    <div class="social-media">
+                        <h6>Instagram</h6>
+                 	    <a href="https://www.instagram.com/klvinarp_?cplk=MTRvOHE4bTFsNTkxdg%3D%3D"><i class="bi bi-instagram"></i>@Klvinarp_</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <div class="footer-copyright">
+        &copy; 2026 <span class="footer-brand"><span style="color:#fff;">VILLAGE</span> <span class="hub">HUB</span></span>. Semua hak cipta dilindungi.
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL LIHAT FOTO (DENGAN BINGKAI) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalLihatFoto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark">Foto Aduan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- BODY DENGAN LATAR ABU-ABU -->
+                <div class="modal-body text-center" style="background-color: #f0f2f5; padding: 30px; border-radius: 0 0 8px 8px;">
+                    <!-- GAMBAR DENGAN BINGKAI PUTIH -->
+                    <img id="imgModalFoto" src="" class="rounded shadow-sm" style="max-height: 70vh; max-width: 100%; object-fit: contain; padding: 10px; background-color: #ffffff; border: 1px solid #ddd;" alt="Foto Besar">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BOOTSTRAP JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script src="assets/api.js?v=12"></script>
+    <script src="assets/api.js?v=13"></script>
     <script>
-       
         const chipColorMap = {
             'Kebersihan': 'chip-kebersihan',
             'Infrastruktur': 'chip-infrastruktur',
@@ -250,6 +342,15 @@ $userData   = $_SESSION['user'] ?? null;
 
         let allAduan = []; 
 
+        // ==========================================
+        // FUNGSI MEMBUKA MODAL FOTO
+        // ==========================================
+        function bukaModalFoto(urlGambar) {
+            document.getElementById('imgModalFoto').src = urlGambar;
+            var myModal = new bootstrap.Modal(document.getElementById('modalLihatFoto'));
+            myModal.show();
+        }
+
         async function loadKategori() {
             const res = await getKategori();
             const container = document.getElementById('category-filters');
@@ -268,12 +369,10 @@ $userData   = $_SESSION['user'] ?? null;
             }
         }
 
-
         async function loadAduanTerbaru() {
             const res = await apiFetch('/public/aduan_terbaru.php', { method: 'GET' });
             const grid = document.getElementById('aduan-grid');
 
-            // Fallback: kalau endpoint belum ada, pakai dummy
             if (!res.success) {
                 grid.innerHTML = '<p style="text-align:center;color:#999;grid-column:1/-1;">Belum ada aduan. <a href="login.php" style="color:#28a745;">Login</a> untuk mulai.</p>';
                 return;
@@ -300,7 +399,6 @@ $userData   = $_SESSION['user'] ?? null;
                 const inisial     = (a.nama_pengadu || 'A').charAt(0).toUpperCase();
                 const fotoPengadu = a.foto_pengadu ? `uploads/${a.foto_pengadu}` : null;
                 
-                // Jika ada foto, tampilkan img. Jika tidak, tampilkan huruf.
                 const avatarHtml = fotoPengadu 
                     ? `<img src="${fotoPengadu}" alt="Foto" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">` 
                     : `<div class="author-avatar">${inisial}</div>`;
@@ -308,9 +406,23 @@ $userData   = $_SESSION['user'] ?? null;
                 const tanggal     = new Date(a.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 const foto        = a.foto ? `uploads/${a.foto}` : 'asset/Gambar pedesaan.avif';
 
+                // LOGIKA MENAMPILKAN BALASAN ADMIN
+                let balasanHtml = '';
+                if (a.status === 'dibalas' && a.isi_balasan) {
+                    balasanHtml = `
+                        <div class="admin-reply-box">
+                            <div class="admin-reply-header">
+                                💬 Balasan Admin (${a.nama_admin || 'Admin'})
+                            </div>
+                            "${a.isi_balasan}"
+                        </div>
+                    `;
+                }
+
                 return `
                     <div class="aduan-card" data-kategori="${a.id_kategori}" style="animation-delay:${i*0.1}s;">
-                        <div class="aduan-card-image">
+                        <!-- TAMBAHKAN ONCLICK UNTUK MEMBUKA MODAL -->
+                        <div class="aduan-card-image" onclick="bukaModalFoto('${foto}')">
                             <img src="${foto}" alt="Aduan ${a.kategori}">
                         </div>
                         <div class="aduan-card-body">
@@ -319,13 +431,16 @@ $userData   = $_SESSION['user'] ?? null;
                                 <span class="tag-status ${statusClass}">${statusLabel}</span>
                             </div>
                             <p class="aduan-card-desc">${(a.deskripsi || '').substring(0, 80)}...</p>
+                            
+                            <!-- TAMPILKAN BALASAN DI SINI -->
+                            ${balasanHtml} 
+
                             <div class="aduan-card-footer">
                                 <div class="aduan-author">
-                                    ${avatarHtml} <!-- TAMPILKAN FOTO/HURUF DI SINI -->
+                                    ${avatarHtml}
                                     <span class="author-name">${a.nama_pengadu || 'Anonim'}</span>
                                 </div>
-                                <span class="aduan-date">${tanggal}</span>
-                                <a href="login.php" class="link-balasan">Lihat balasan</a>
+                                <span class="aduan-date ms-auto">${tanggal}</span>                              
                             </div>
                         </div>
                     </div>
@@ -333,9 +448,6 @@ $userData   = $_SESSION['user'] ?? null;
             }).join('');
         }
 
-        // =============================================
-        // 3. FILTER KATEGORI
-        // =============================================
         function filterByKategori(id, chipEl) {
             document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
             chipEl.classList.add('active');
@@ -348,14 +460,10 @@ $userData   = $_SESSION['user'] ?? null;
             }
         }
 
-        // =============================================
-        // 4. JALANKAN SAAT HALAMAN DIBUKA
-        // =============================================
         document.addEventListener('DOMContentLoaded', () => {
             loadKategori();
             loadAduanTerbaru(); 
 
-            // Tombol "Semua"
             document.querySelector('.chip-semua').addEventListener('click', function() {
                 filterByKategori(0, this);
             });
